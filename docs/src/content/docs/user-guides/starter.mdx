@@ -1,0 +1,95 @@
+---
+title: Starter Guide
+description: A guide for absolute beginners
+sidebar:
+    badge:
+        text: Start here!
+        variant: tip
+    order: 1
+---
+
+import { LinkCard } from "@astrojs/starlight/components";
+import { Card } from "@astrojs/starlight/components";
+import { LinkButton } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
+
+:::note
+owvision is still in development. There is no fully working version yet.
+:::
+
+### What Is owvision?
+
+**open weather vision** (in short _owvision_) is an open source software system, that allows you to build up your own weather control center.
+
+The _bare metal_ version (without plugins) has four main features.
+
+<Card title="Bare Metal Features">
+    <ol>
+        <li>⏲️ View your station's most recent sensor readings in realtime</li>
+        <li>〽️ Navigate through your recorded historic weather data</li>
+        <li>🏆 Checkout your most extreme sensor readings</li>
+        <li>☁️ View a 7 day forecast for your weather station's set up location (via [Open-Meteo](https://open-meteo.com/))</li>
+    </ol>
+
+</Card>
+
+With plugins you can add more cool features, for example:
+
+<LinkCard
+    title="Rain Radar Plugin"
+    description="Add a live rain radar map for your location"
+    href="/docs/plugins/rain-radar/"
+/>
+
+<LinkCard
+    title="Live Webcam Plugin"
+    description="Add a live webcam"
+    href="/docs/plugins/live-webcam/"
+/>
+
+<LinkCard
+    title="DWD Weather Warnings Plugin"
+    description="Include weather warnings from the DWD (german weather service)"
+    href="/docs/plugins/dwd-weather-warnings/"
+/>
+
+And all this for free, in an easy to use modern user interface. That's the idea behind owvision. Cool, isn't it😎?
+
+### Getting Started
+
+<Steps>
+
+1.  **Check if your weather station is supported**
+
+    _owvision_ just got released, that's why only a few weather stations are supported yet. If you are a developer, adding support isn't difficult.
+
+    <LinkButton
+        target="_blank"
+        href="/docs/reference/supported-stations"
+        variant="secondary"
+    >
+        Check support
+    </LinkButton>
+
+    :::note
+    There is an [official guide](/docs/developer-guides/station-interface) that explains how to write your own interface and add support for your weather station.
+    :::
+
+2.  **Download an installer**
+
+    _owvision_ is a software system, that consists of multiple software pieces. You don't need all of them, it depends on your personal use case. To make installation easy, we created an installer, that handles all the difficult stuff for you:
+
+    -   _Raspberry Pi OS_: [Debian package]() | [Docker Container]()
+    -   _Ubuntu_: [Debian package]() | [Docker Container]()
+
+3.  **Open owvision.local in your webbrowser**
+
+    The most easiest way to interact with _owvision_ is to open [owvision.local](http://owvision.local) on your webbrowser. On the first startup the graphical user interface will guide you through everything. After a few steps you will have your weather station control center up and running.
+
+    :::note
+    There is also a [cli](/docs/cli) (command line interface) that offers the same features as the gui in a more condensed way.
+    :::
+
+</Steps>
+
+The next guide will explain in more detail how to configure _owvision_ and how to add a new weather station.
