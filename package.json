@@ -1,0 +1,23 @@
+{
+    "name": "owvision",
+    "version": "0.0.0",
+    "description": "Software system to build your very own weather station control center🪄",
+    "type": "module",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "release": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/open-weather-vision/owvision.git"
+    },
+    "keywords": [],
+    "author": "open-weather-vision",
+    "license": "GPL-3.0-only",
+    "bugs": {
+        "url": "https://github.com/open-weather-vision/owvision/issues"
+    },
+    "homepage": "https://github.com/open-weather-vision/owvision#readme"
+}
