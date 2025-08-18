@@ -14,7 +14,7 @@ and
 
 the weather data of your _personal weather station(s)_. It is a self-hostable, open source solution. You only need a Raspberry Pi visible in your network (or in the whole world😉) to get started!
 
-**[To get started read the official documentation!](https://open-weather-vision.github.io/docs/)**
+**[To get started read the official documentation!](https://open-weather-vision.github.io/owvision/)**
 
 ## About this repository
 
