@@ -7,7 +7,7 @@
         "doc": "docs"
     },
     "scripts": {
-        "release": "echo \"Error: no test specified\" && exit 1"
+        "release": "echo \"Release script not implemented yet\" && exit 1"
     },
     "repository": {
         "type": "git",
