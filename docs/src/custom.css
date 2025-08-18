@@ -1,0 +1,30 @@
+.your-own {
+    color: var(--sl-color-accent-high);
+    font-weight: 700;
+    transform: scale(1);
+    animation: test 1s 1 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    display: inline-block;
+    position: relative;
+    opacity: 0;
+}
+
+@keyframes test {
+    0% {
+        opacity: 0;
+        transform: translateY(-30%);
+    }
+    100% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+.sl-link-button {
+    transition: 0.3s;
+}
+
+.sl-link-button:hover {
+    transform: scale(1.05);
+}

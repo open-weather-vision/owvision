@@ -38,6 +38,6 @@ This is the entry point for most users. Live and historic weather data is **visu
 
 It also comes with an admin panel, that allows you to manage your weather station's and their data🛠️.
 
-### 🤓👾 A clean and easy to use cli - In short "owvi"
+### 🤓👾 A concise and easy to use cli - In short "owvi"
 
 Allows you to manage your weather station and analyze live data via a command line interface. Developer friendly🤓. Communicates with the "demon" in the background.
