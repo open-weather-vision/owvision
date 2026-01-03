@@ -1,0 +1,20 @@
+{
+    "name": "specification",
+    "version": "0.1.0",
+    "type": "module",
+    "private": true,
+    "dependencies": {
+        "@typespec/compiler": "latest",
+        "@typespec/http": "latest",
+        "@typespec/http-client-js": "^0.12.0",
+        "@typespec/http-client-python": "^0.23.1",
+        "@typespec/openapi": "latest",
+        "@typespec/openapi3": "latest",
+        "@typespec/rest": "latest",
+        "@typespec/versioning": "^0.77.0"
+    },
+    "scripts": {
+        "build": "tsp compile ."
+    },
+    "packageManager": "npm@11.7.0+sha512.c22099a6fff8d5b2286c2a09df5352b4858a7c0c716320f58989d60ad8b29ecf2ce6fdfe97ccb41c23ffb1272e1fa079f868487dd6b81d02a2a9e199c095a117"
+}

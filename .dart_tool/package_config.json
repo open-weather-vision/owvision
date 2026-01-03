@@ -1,0 +1,742 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "_fe_analyzer_shared",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-92.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "analyzer",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-9.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "ansi_regex",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/ansi_regex-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "ansi_strip",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/ansi_strip-0.1.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "ansicolor",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/ansicolor-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "args",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "async",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.13.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "boolean_selector",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/boolean_selector-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "build",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/build-4.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "build_config",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/build_config-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "build_daemon",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/build_daemon-4.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "build_runner",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner-2.10.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "built_collection",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/built_collection-5.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "built_value",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/built_value-8.12.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "chalk",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/chalk-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "chalkdart",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/chalkdart-3.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "characters",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "charcode",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/charcode-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "checked_yaml",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/checked_yaml-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "cli_config",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/cli_config-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cli_util",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/cli_util-0.4.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "clock",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/clock-1.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "code_builder",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/code_builder-4.11.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "collection",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.19.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "convert",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/convert-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "copy_with_extension",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/copy_with_extension-11.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "copy_with_extension_gen",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/copy_with_extension_gen-11.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "coverage",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/coverage-1.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "crypto",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "csslib",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/csslib-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "dart_console",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/dart_console-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "dart_style",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/dart_style-3.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "dio",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "dio_web_adapter",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/dio_web_adapter-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "drift",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/drift-2.30.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "drift_dev",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/drift_dev-2.30.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "east_asian_width",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/east_asian_width-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "emoji_regex",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/emoji_regex-0.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "event_bus",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/event_bus-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "events_emitter",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/events_emitter-0.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "ffi",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/ffi-2.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "file",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/file-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "fixnum",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/fixnum-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "frontend_server_client",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/frontend_server_client-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "get_it",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/get_it-9.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "glob",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/glob-2.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "google_identity_services_web",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/google_identity_services_web-0.3.3+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "googleapis_auth",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/googleapis_auth-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "graphs",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/graphs-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "grpc",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/grpc-5.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "hotreloader",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/hotreloader-4.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "html",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/html-0.15.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "http",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "http2",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/http2-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "http_methods",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/http_methods-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "http_multi_server",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/http_multi_server-3.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "injectable",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/injectable-2.7.1+4",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "injectable_generator",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/injectable_generator-2.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "interact",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/interact-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "io",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/io-1.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "json_annotation",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "json_serializable",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/json_serializable-6.11.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "lean_builder",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/lean_builder-0.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "lints",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/lints-6.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "matcher",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.18",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "meta",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.17.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "mime",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/mime-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "mqtt5_client",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/mqtt5_client-4.15.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "node_preamble",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/node_preamble-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "package_config",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/package_config-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "path",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "pool",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/pool-1.5.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "protobuf",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/protobuf-6.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "pub_semver",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/pub_semver-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "pubspec_parse",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/pubspec_parse-1.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "recase",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/recase-4.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "rxdart",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.28.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "shelf",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/shelf-1.4.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "shelf_limiter",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_limiter-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "shelf_packages_handler",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_packages_handler-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "shelf_router",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_router-1.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "shelf_static",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_static-1.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "shelf_web_socket",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "source_gen",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-4.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "source_helper",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.9",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "source_map_stack_trace",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/source_map_stack_trace-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "source_maps",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/source_maps-0.10.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "source_span",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.10.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "sqlite3",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/sqlite3-2.9.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "sqlparser",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/sqlparser-0.43.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "stack_trace",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.12.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "stream_channel",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/stream_channel-2.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "stream_transform",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/stream_transform-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "string_scanner",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/string_scanner-1.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "string_width",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/string_width-0.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "term_glyph",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/term_glyph-1.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "test",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/test-1.29.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "test_api",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.9",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "test_core",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/test_core-0.6.15",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "tint",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/tint-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "typed_data",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "universal_html",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/universal_html-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "universal_io",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/universal_io-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "uuid",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.5.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "vm_service",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-15.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "watcher",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/watcher-1.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "web",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "web_socket",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "web_socket_channel",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-3.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "webkit_inspection_protocol",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/webkit_inspection_protocol-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "win32",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "xxh3",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/xxh3-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "yaml",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/yaml-3.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "yaml_edit",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/yaml_edit-2.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "owvision",
+      "rootUri": "../",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "daemon",
+      "rootUri": "../daemon",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "recorder",
+      "rootUri": "../recorder",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "shared",
+      "rootUri": "../shared",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "owvision_daemon_client_dart",
+      "rootUri": "../daemon/clients/daemon_client_dart",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    }
+  ],
+  "generator": "pub",
+  "generatorVersion": "3.9.2",
+  "flutterRoot": "file:///C:/Users/harry/Flutter/flutter",
+  "flutterVersion": "3.35.7",
+  "pubCache": "file:///C:/Users/harry/AppData/Local/Pub/Cache"
+}

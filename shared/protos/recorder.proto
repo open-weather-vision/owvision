@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package recorder;
+
+service DaemonService {
+    rpc CreateStation (StationDefinition) returns (Station) {}
+    rpc GetStation (GetStationRequest) returns (Station) {}
+    rpc UpdateStation (UpdateStationRequest) returns (Station) {}
+    rpc UpdateSensors (UpdateSensorsRequest) returns (UpdateSensorsResponse) {}
+    rpc Ping(PingMessage) returns (PingMessage){}
+}
+
+message PingMessage{
+    int64 randomId = 1;
+}
+
+message GetStationRequest{
+    int64 stationId = 1;
+}
+
+message UpdateSensorsRequest{
+    repeated UpdateSensorRequest updates = 1;
+}
+
+message UpdateSensorRequest{
+    int64 sensorId = 1;
+    SensorState newState = 2;
+}
+
+message UpdateSensorsResponse {
+    repeated string errors = 1;
+    repeated int32 processed = 2;
+}
+
+message UpdateStationRequest{
+    int64 stationId = 1;
+    StationDefinition definition = 2; 
+}
+
+service StationInterface {
+    rpc GetStationDefinition (GetStationDefinitionRequest) returns (StationDefinition) {}
+    rpc GetSensorState (GetSensorStateRequest) returns (SensorState) {}
+}
+
+message GetStationDefinitionRequest{
+
+}
+
+message StationDefinition{
+    string name = 1;
+    repeated SensorDefinition sensors = 2;
+    double longitude = 3;
+    double latitude = 4;
+    int32 version = 5;
+}
+
+message SensorDefinition{
+    string name = 1;
+    string element = 2;
+    int64 recordIntervalSeconds = 3;
+}
+
+message Station{
+    int64 id = 1;
+    repeated Sensor sensors = 2;
+    int32 version = 3;
+}
+
+message Sensor{
+    int64 id = 1;
+    string name = 2;
+    int64 recordIntervalSeconds = 3;
+}
+
+message GetSensorStateRequest{
+    string name = 1;
+}
+
+message SensorState {
+    string unitId = 2;
+    optional double value = 3;
+    int64 created_at = 4;
+    optional int64 intervalStart = 5;
+}

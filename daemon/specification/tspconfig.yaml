@@ -1,0 +1,12 @@
+emit:
+    - "@typespec/openapi3"
+    - "@typespec/http-client-js"
+options:
+    "@typespec/openapi3":
+        emitter-output-dir: "{cwd}"
+        output-file: "specification.yaml"
+        openapi-versions:
+            - 3.1.0
+    "@typespec/http-client-js":
+        emitter-output-dir: "{cwd}/../clients/daemon-client-ts"
+        package-name: "@ovision/daemon-client-ts"

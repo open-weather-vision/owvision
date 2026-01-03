@@ -1,0 +1,56 @@
+name: Build and publish binaries
+
+on:
+    release:
+        types: [published]
+    workflow_dispatch:
+
+jobs:
+    build-and-upload:
+        runs-on: windows-latest
+
+        permissions:
+            contents: write
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup dart
+              uses: dart-lang/setup-dart@v1
+              with:
+                  sdk: stable
+
+            - name: Install derry
+              run: dart pub global activate derry
+
+            - name: Install protoc
+              uses: arduino/setup-protoc@v3
+              with:
+                  version: "25.3"
+
+            - name: Install dart protoc plugin
+              run: dart pub global activate protoc_plugin
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "24"
+
+            - name: Install dependencies
+              run: dart pub get
+
+            - name: Build code
+              run: dart run ./bin/manager.dart build -y
+
+            - name: Compile binaries
+              run: dart run ./bin/manager.dart compile
+
+            - name: Upload binaries
+              uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      daemon/out/*
+                      recorder/out/*
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
