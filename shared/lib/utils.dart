@@ -14,7 +14,7 @@ String getOwvisionHomeDirectory() {
     home = envVars['UserProfile']!;
   }
 
-  return "$home/.owvision/";
+  return "$home/.owvision";
 }
 
 Future<void> runShellCommand(

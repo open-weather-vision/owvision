@@ -77,6 +77,9 @@ class DaemonConfig {
       _$DaemonConfigFromJson(json);
 
   Future<void> saveToFile() async {
+    if (!await _daemonConfigFile.exists()) {
+      await _daemonConfigFile.create(recursive: true);
+    }
     await _daemonConfigFile.writeAsString(jsonEncode(toJson()));
   }
 
