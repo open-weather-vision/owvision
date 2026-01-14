@@ -66,6 +66,9 @@ class RecorderConfig {
       _$RecorderConfigFromJson(json);
 
   Future<void> saveToFile() async {
+    if (!await _recorderConfigFile.exists()) {
+      await _recorderConfigFile.create(recursive: true);
+    }
     await _recorderConfigFile.writeAsString(jsonEncode(toJson()));
   }
 

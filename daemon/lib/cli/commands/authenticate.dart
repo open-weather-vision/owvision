@@ -17,7 +17,7 @@ class AuthenticateCommand extends Command<int> {
     cliConfig.apiToken = Input(
       prompt: "Please enter your access token",
     ).interact();
-    cliConfig.save();
+    cliConfig.saveToFile();
     print("✅ Successfully configured token!");
     exit(0);
   }

@@ -128,7 +128,7 @@ class StationSelectCommand extends Command<int> {
       }
     }
     cliConfig.selectedStationId = selectedStation.id.toInt();
-    cliConfig.save();
+    cliConfig.saveToFile();
     reset();
     exit(0);
   }

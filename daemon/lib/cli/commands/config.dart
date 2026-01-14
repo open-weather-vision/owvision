@@ -33,7 +33,7 @@ class HostCommand extends Command<int> {
     final String? hostName = argResults?['set'];
     if (hostName != null) {
       cliConfig.daemonHost = hostName;
-      cliConfig.save();
+      cliConfig.saveToFile();
     }
     print(
       chalk.green(

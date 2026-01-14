@@ -20,8 +20,7 @@ class CliConfig {
       apiToken = json['apiToken'];
       daemonHost = json['daemonHost'] ?? OwvisionDaemonClientDart.basePath;
     } else {
-      _configFile.createSync(recursive: true);
-      save();
+      saveToFile();
     }
   }
 
@@ -31,7 +30,10 @@ class CliConfig {
     } catch (_) {}
   }
 
-  void save() {
+  void saveToFile() {
+    if (!_configFile.existsSync()) {
+      _configFile.createSync(recursive: true);
+    }
     String json = jsonEncode({
       "selectedStationId": selectedStationId,
       "apiToken": apiToken,

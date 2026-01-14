@@ -165,7 +165,7 @@ class RunCommand extends Command<int> {
           await Future.delayed(Duration(seconds: 1));
           final response = await api.tokensGenerate(role: TokenRole.admin);
           cliConfig.apiToken = response.data!;
-          cliConfig.save();
+          cliConfig.saveToFile();
           authenticated = true;
         } catch (e) {
           tries++;
