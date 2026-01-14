@@ -24,7 +24,11 @@ class StationLiveState {
   factory StationLiveState.fromJson(Map<String, dynamic> json) {
     final result = StationLiveState();
     for (final sensorName in json.keys) {
-      result.update(sensorName, SensorState.fromJson(json[sensorName]));
+      final state = json[sensorName];
+      result.update(
+        sensorName,
+        state == null ? null : SensorState.fromJson(json[sensorName]),
+      );
     }
     return result;
   }
@@ -32,7 +36,11 @@ class StationLiveState {
   Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
     for (final sensorName in _sensorStates.keys) {
-      result[sensorName] = _sensorStates[sensorName]!.toJson();
+      if (_sensorStates[sensorName] != null) {
+        result[sensorName] = _sensorStates[sensorName]!.toJson();
+      } else {
+        result[sensorName] = null;
+      }
     }
     return result;
   }

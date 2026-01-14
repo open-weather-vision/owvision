@@ -73,9 +73,23 @@ class LiveSensorStateService {
       "User listening to weather station live data of '${station.name}'",
     );
 
-    webSocket.sink.add(jsonEncode(_liveState[station.id]));
+    final currentLiveState = _liveState[station.id];
+    if (currentLiveState == null) {
+      logger.severe(
+        "No live state available for station with id ${station.id}!",
+      );
+    } else {
+      webSocket.sink.add(jsonEncode(currentLiveState.toJson()));
+    }
     final timer = Timer.periodic(Duration(seconds: 10), (_) {
-      webSocket.sink.add(jsonEncode(_liveState[station.id]));
+      final currentLiveState = _liveState[station.id];
+      if (currentLiveState == null) {
+        logger.severe(
+          "No live state available for station with id ${station.id}!",
+        );
+      } else {
+        webSocket.sink.add(jsonEncode(currentLiveState.toJson()));
+      }
     });
 
     webSocket.stream.listen(

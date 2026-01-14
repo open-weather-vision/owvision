@@ -7,8 +7,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 
 enum Versions {
-      @JsonValue(r'0.0.5')
-      n0period0Period5(r'0.0.5');
+      @JsonValue(r'0.0.6')
+      n0period0Period6(r'0.0.6');
 
   const Versions(this.value);
 

@@ -27,7 +27,10 @@ class StationController {
     if (idParsed == null) {
       return Response.notFound(
         jsonEncode(
-          ErrorResponse(ErrorCode.notFound, "Station id must be an integer!"),
+          ErrorResponse(
+            ErrorCode.notFound,
+            "Station id must be an integer!",
+          ).toJson(),
         ),
       );
     }
@@ -37,11 +40,13 @@ class StationController {
 
     if (stationAndSensors == null) {
       return Response.notFound(
-        jsonEncode(ErrorResponse(ErrorCode.notFound, "Invalid station id!")),
+        jsonEncode(
+          ErrorResponse(ErrorCode.notFound, "Invalid station id!").toJson(),
+        ),
       );
     }
 
-    final jsonBody = jsonEncode(stationAndSensors);
+    final jsonBody = jsonEncode(stationAndSensors.toJson());
     return Response.ok(jsonBody);
   }
 
@@ -50,14 +55,19 @@ class StationController {
     if (idParsed == null) {
       return Response.notFound(
         jsonEncode(
-          ErrorResponse(ErrorCode.notFound, "Station id must be an integer!"),
+          ErrorResponse(
+            ErrorCode.notFound,
+            "Station id must be an integer!",
+          ).toJson(),
         ),
       );
     }
     final station = await _stationService.getById(id: idParsed);
     if (station == null) {
       return Response.notFound(
-        jsonEncode(ErrorResponse(ErrorCode.notFound, "Invalid station id!")),
+        jsonEncode(
+          ErrorResponse(ErrorCode.notFound, "Invalid station id!").toJson(),
+        ),
       );
     }
 

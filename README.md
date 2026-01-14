@@ -1,7 +1,5 @@
 # Create your own weather control center, for free!
 
-![screenshot of the owvision ui](./docs/img/screen-1.png)
-
 **open weather vision** (_owvision_ in short) is a _software system_ that allows you to
 
 -   record

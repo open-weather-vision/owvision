@@ -91,61 +91,21 @@ class RecorderService {
         }
       }
       for (final sensor in _station.sensors) {
+        _fetchSensor(sensor);
         _timers.add(
           Timer.periodic(
             Duration(seconds: sensor.recordIntervalSeconds.toInt()),
             (_) async {
-              try {
-                final state = await _stationInterfaceClient.getSensorState(
-                  GetSensorStateRequest(name: sensor.name),
-                );
-                _statusService.stationResponded();
-                _queue.enqueueUpdate(
-                  UpdateSensorRequest(sensorId: sensor.id, newState: state),
-                );
-              } catch (e) {
-                _statusService.stationDidntRespond();
-                logger.warning(
-                  "Failed to get value from sensor ${sensor.name} (${_station.id}): $e",
-                );
-              }
+              _fetchSensor(sensor);
             },
           ),
         );
       }
       logger.info("Successfully scheduled record timers!");
-
+      await _processLatestBatch();
       _timers.add(
         Timer.periodic(Duration(seconds: 10), (_) async {
-          final batch = _queue.takeBatch();
-          final processed = <UpdateSensorRequest>[];
-          if (batch.isNotEmpty) {
-            String? error;
-            try {
-              final response = await _daemonClient.updateSensors(
-                UpdateSensorsRequest(updates: batch),
-              );
-              _statusService.daemonResponded();
-              if (response.errors.isNotEmpty) {
-                error = response.errors.join("\n");
-              }
-              for (final updateIndex in response.processed) {
-                processed.add(batch.elementAt(updateIndex));
-              }
-            } catch (e) {
-              _statusService.daemonDidntRespond();
-              error = "Failed to connect to daemon server ($e)!";
-            }
-            if (error != null) {
-              logger.warning(
-                "An error occurred while processing an update batch: $error",
-              );
-            }
-            _queue.removeBatch(processed);
-            logger.info(
-              "Successfully processed ${processed.length}/${batch.length} updates!",
-            );
-          }
+          await _processLatestBatch();
         }),
       );
     } catch (e) {
@@ -156,6 +116,55 @@ class RecorderService {
       pause();
       await Future.delayed(Duration(seconds: 10));
       return start();
+    }
+  }
+
+  Future<void> _fetchSensor(Sensor sensor) async {
+    try {
+      final state = await _stationInterfaceClient.getSensorState(
+        GetSensorStateRequest(name: sensor.name),
+      );
+      _statusService.stationResponded();
+      _queue.enqueueUpdate(
+        UpdateSensorRequest(sensorId: sensor.id, newState: state),
+      );
+    } catch (e) {
+      _statusService.stationDidntRespond();
+      logger.warning(
+        "Failed to get value from sensor ${sensor.name} (${_station.id}): $e",
+      );
+    }
+  }
+
+  Future<void> _processLatestBatch() async {
+    final batch = _queue.takeBatch();
+    final processed = <UpdateSensorRequest>[];
+    if (batch.isNotEmpty) {
+      String? error;
+      try {
+        final response = await _daemonClient.updateSensors(
+          UpdateSensorsRequest(updates: batch),
+        );
+        _statusService.daemonResponded();
+        if (response.errors.isNotEmpty) {
+          error = response.errors.join("\n");
+        }
+        for (final updateIndex in response.processed) {
+          processed.add(batch.elementAt(updateIndex));
+        }
+      } catch (e) {
+        _statusService.daemonDidntRespond();
+        error = "Failed to connect to daemon server ($e)!";
+      }
+      if (error != null) {
+        logger.warning(
+          "An error occurred while processing an update batch: $error",
+        );
+      }
+      _queue.removeBatch(processed);
+      logger.info(
+        "Successfully processed ${processed.length}/${batch.length} updates!",
+      );
     }
   }
 

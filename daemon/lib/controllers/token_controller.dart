@@ -62,7 +62,10 @@ class TokenController {
     if (token == null) {
       return Response.internalServerError(
         body: jsonEncode(
-          ErrorResponse(ErrorCode.internalError, "Failed to generate token!"),
+          ErrorResponse(
+            ErrorCode.internalError,
+            "Failed to generate token!",
+          ).toJson(),
         ),
       );
     }

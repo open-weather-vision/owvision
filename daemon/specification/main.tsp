@@ -11,7 +11,7 @@ using Versioning;
 namespace DaemonRestApi;
 
 enum Versions {
-  v1: "0.0.5"
+  v1: "0.0.6"
 }
 
 model Station {

@@ -18,7 +18,9 @@ Middleware authMiddleware({required bool disabled}) {
       final authHeader = request.headers['Authorization'];
       if (authHeader == null || !authHeader.startsWith('Bearer ')) {
         return Response.unauthorized(
-          jsonEncode(ErrorResponse(ErrorCode.unauthorized, "Missing token!")),
+          jsonEncode(
+            ErrorResponse(ErrorCode.unauthorized, "Missing token!").toJson(),
+          ),
         );
       }
 
@@ -29,7 +31,9 @@ Middleware authMiddleware({required bool disabled}) {
       if (token == null) {
         logger.warning("Blocked user because of invalid token.");
         return Response.unauthorized(
-          jsonEncode(ErrorResponse(ErrorCode.unauthorized, "Invalid token!")),
+          jsonEncode(
+            ErrorResponse(ErrorCode.unauthorized, "Invalid token!").toJson(),
+          ),
         );
       }
       final updatedRequest = request.change(context: {'token': token});
@@ -46,7 +50,9 @@ Middleware requireRole(List<TokenRole> roles) {
       if (token == null) {
         logger.warning("Blocked user because of invalid token.");
         return Response.unauthorized(
-          jsonEncode(ErrorResponse(ErrorCode.unauthorized, 'Invalid token!')),
+          jsonEncode(
+            ErrorResponse(ErrorCode.unauthorized, 'Invalid token!').toJson(),
+          ),
         );
       }
 
@@ -59,7 +65,7 @@ Middleware requireRole(List<TokenRole> roles) {
             ErrorResponse(
               ErrorCode.unauthorized,
               "Your token has not enough privileges!",
-            ),
+            ).toJson(),
           ),
         );
       }
