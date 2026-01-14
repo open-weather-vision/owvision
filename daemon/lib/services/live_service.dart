@@ -145,6 +145,9 @@ class RecorderService extends grpc.DaemonServiceBase {
           );
         }).toList(),
       );
+      if (result == null) {
+        throw Exception("Internal error!");
+      }
       return grpc.Station(
         id: Int64(result.station.id),
         sensors: result.sensors.map(
@@ -176,6 +179,12 @@ class RecorderService extends grpc.DaemonServiceBase {
         final sensor = await _sensorService.getById(
           id: update.sensorId.toInt(),
         );
+        if (sensor == null) {
+          logger.severe(
+            "Didn't find sensor for update (sensor id = ${update.sensorId})",
+          );
+          continue;
+        }
         _events.emit(
           "sensor_update",
           SensorUpdate(sensor: sensor, request: update),

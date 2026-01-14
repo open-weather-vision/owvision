@@ -8,7 +8,7 @@ class SensorService {
 
   SensorService(this._sensorRepository);
 
-  Future<Sensor> getById({required int id}) {
+  Future<Sensor?> getById({required int id}) {
     return _sensorRepository.getById(id: id);
   }
 }

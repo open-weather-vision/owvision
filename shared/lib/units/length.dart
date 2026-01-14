@@ -36,4 +36,8 @@ class Length {
     " Inch",
     " Inches",
   );
+
+  static List<Unit> units() {
+    return [inch, ft, m, cm];
+  }
 }

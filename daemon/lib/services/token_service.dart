@@ -11,7 +11,7 @@ class TokenService {
 
   TokenService(this._tokenRepository, this._configService);
 
-  Future<String> generateToken({required TokenRole role}) {
+  Future<String?> generateToken({required TokenRole role}) {
     return _tokenRepository.generateToken(role: role);
   }
 

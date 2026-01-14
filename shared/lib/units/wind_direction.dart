@@ -50,4 +50,8 @@ class WindDirection {
 
     return directions[index];
   }
+
+  static List<Unit> units() {
+    return [degrees, radians];
+  }
 }

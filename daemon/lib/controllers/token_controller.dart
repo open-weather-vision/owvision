@@ -44,15 +44,27 @@ class TokenController {
       );
     }
 
-    late final String token;
+    late final String? token;
     if (!_configService.config.initialized) {
-      logger.info("Successfully initialized daemon!");
       _configService.config.initialized = true;
       await _configService.config.saveToFile();
       token = await _tokenService.generateToken(role: TokenRole.admin);
+      if (token != null) {
+        logger.info("Successfully initialized daemon!");
+      }
     } else {
       token = await _tokenService.generateToken(role: role);
-      logger.info("Successfully generated $role token!");
+      if (token != null) {
+        logger.info("Successfully generated $role token!");
+      }
+    }
+
+    if (token == null) {
+      return Response.internalServerError(
+        body: jsonEncode(
+          ErrorResponse(ErrorCode.internalError, "Failed to generate token!"),
+        ),
+      );
     }
 
     return Response.ok(jsonEncode(token));

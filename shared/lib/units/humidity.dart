@@ -9,4 +9,8 @@ class Humidity {
     " percent",
     " percent",
   );
+
+  static List<Unit> units() {
+    return [percent];
+  }
 }

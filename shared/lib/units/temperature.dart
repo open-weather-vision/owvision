@@ -27,4 +27,8 @@ class Temperature {
     "° Fahrenheit",
     "° Fahrenheit",
   );
+
+  static List<Unit> units() {
+    return [fahrenheit, kelvin, celsius];
+  }
 }

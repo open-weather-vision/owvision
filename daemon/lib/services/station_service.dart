@@ -60,7 +60,7 @@ class StationService {
   }
 
   /// Creates a weather station and its sensors.
-  Future<StationAndSensors> create({
+  Future<StationAndSensors?> create({
     required Station station,
     required List<Sensor> sensors,
   }) async {
@@ -71,7 +71,9 @@ class StationService {
         station: station,
         sensors: sensors,
       );
-      _events.emit("station_create", result.station.id.toString());
+      if (result != null) {
+        _events.emit("station_create", result.station.id.toString());
+      }
       return result;
     }
   }

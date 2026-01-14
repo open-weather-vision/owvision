@@ -54,4 +54,8 @@ class WindSpeed {
     " knot",
     " knots",
   );
+
+  static List<Unit> units() {
+    return [bft, kmh, kn, mph, ms];
+  }
 }

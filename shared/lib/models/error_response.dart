@@ -15,4 +15,4 @@ class ErrorResponse {
   Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 }
 
-enum ErrorCode { unauthorized, notFound, badRequest }
+enum ErrorCode { unauthorized, notFound, badRequest, internalError }

@@ -18,4 +18,8 @@ class PrecipitationRate {
     " Inch per hour",
     " Inches per hour",
   );
+
+  static List<Unit> units() {
+    return [mmph, inph];
+  }
 }

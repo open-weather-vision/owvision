@@ -18,4 +18,8 @@ class Pressure {
     " Inch of Mercury",
     " Inches of Mercury",
   );
+
+  static List<Unit> units() {
+    return [hpa, inhg];
+  }
 }

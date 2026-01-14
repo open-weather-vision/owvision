@@ -27,4 +27,8 @@ class Precipitation {
     " Liter per square meter",
     " Liters per square meter",
   );
+
+  static List<Unit> units() {
+    return [inch, lpm2, mm];
+  }
 }

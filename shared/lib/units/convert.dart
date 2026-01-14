@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import "package:shared/units/convertible.dart";
+import "package:shared/units/precipation.dart";
+import "package:shared/units/precipation_rate.dart";
+import "package:shared/units/wind_direction.dart";
 import "humidity.dart";
 import "length.dart";
 import "pressure.dart";
@@ -15,21 +18,14 @@ class Unit {
   final String longNamePl;
 
   static final Map<String, Unit> units = _mapUnits([
-    Temperature.fahrenheit,
-    Temperature.celsius,
-    Temperature.kelvin,
-    Humidity.percent,
-    Length.cm,
-    Length.ft,
-    Length.inch,
-    Length.m,
-    Pressure.hpa,
-    Pressure.inhg,
-    WindSpeed.bft,
-    WindSpeed.kmh,
-    WindSpeed.kn,
-    WindSpeed.mph,
-    WindSpeed.ms,
+    ...Humidity.units(),
+    ...Length.units(),
+    ...PrecipitationRate.units(),
+    ...Precipitation.units(),
+    ...Pressure.units(),
+    ...Temperature.units(),
+    ...WindDirection.units(),
+    ...WindSpeed.units(),
   ]);
 
   static Map<String, Unit> _mapUnits(List<Unit> units) => {
@@ -64,6 +60,9 @@ class Unit {
   }
 
   factory Unit.fromId(String id) {
+    if (!units.containsKey(id)) {
+      throw Exception("Invalid unit id '$id'!");
+    }
     return units[id]!;
   }
 }

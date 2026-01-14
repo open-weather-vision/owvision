@@ -1,5 +1,6 @@
 import 'package:daemon/database/database.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared/logger/logger.dart';
 import 'package:shared/models/sensor.dart';
 import 'package:shared/units/convert.dart';
 
@@ -20,17 +21,27 @@ class SensorRepository {
 
   SensorRepository(this._database);
 
-  Future<Sensor> getById({required int id}) async {
-    final result = await (_database.select(
-      _database.sensorTable,
-    )..where((s) => s.id.equals(id))).getSingle();
-    return fromResult(result: result);
+  Future<Sensor?> getById({required int id}) async {
+    try {
+      final result = await (_database.select(
+        _database.sensorTable,
+      )..where((s) => s.id.equals(id))).getSingle();
+      return fromResult(result: result);
+    } catch (e) {
+      logger.severe(e);
+      return null;
+    }
   }
 
   Future<List<Sensor>> getByStationId({required int stationId}) async {
-    final result = await (_database.select(
-      _database.sensorTable,
-    )..where((s) => s.stationId.equals(stationId))).get();
-    return result.map((s) => fromResult(result: s)).toList();
+    try {
+      final result = await (_database.select(
+        _database.sensorTable,
+      )..where((s) => s.stationId.equals(stationId))).get();
+      return result.map((s) => fromResult(result: s)).toList();
+    } catch (e) {
+      logger.severe(e);
+      return [];
+    }
   }
 }

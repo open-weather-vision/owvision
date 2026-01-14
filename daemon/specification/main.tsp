@@ -47,7 +47,9 @@ model Error {
 
 enum ErrorCode{
   unauthorized: "unauthorized",
-  notFound: "notFound"
+  notFound: "notFound",
+  internalError: "internalError",
+  badRequest: "badRequest"
 }
 
 enum TokenRole{
