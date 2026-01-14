@@ -10,7 +10,11 @@ enum ErrorCode {
       @JsonValue(r'unauthorized')
       unauthorized(r'unauthorized'),
       @JsonValue(r'notFound')
-      notFound(r'notFound');
+      notFound(r'notFound'),
+      @JsonValue(r'internalError')
+      internalError(r'internalError'),
+      @JsonValue(r'badRequest')
+      badRequest(r'badRequest');
 
   const ErrorCode(this.value);
 

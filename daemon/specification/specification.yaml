@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Daemon REST API
-  version: 0.0.4
+  version: 0.0.5
 tags:
   - name: Token
   - name: Station
@@ -140,6 +140,8 @@ components:
       enum:
         - unauthorized
         - notFound
+        - internalError
+        - badRequest
     Sensor:
       type: object
       required:
@@ -208,7 +210,7 @@ components:
     Versions:
       type: string
       enum:
-        - 0.0.4
+        - 0.0.5
   securitySchemes:
     BearerAuth:
       type: http

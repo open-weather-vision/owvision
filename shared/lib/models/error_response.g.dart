@@ -22,4 +22,5 @@ const _$ErrorCodeEnumMap = {
   ErrorCode.unauthorized: 'unauthorized',
   ErrorCode.notFound: 'notFound',
   ErrorCode.badRequest: 'badRequest',
+  ErrorCode.internalError: 'internalError',
 };
