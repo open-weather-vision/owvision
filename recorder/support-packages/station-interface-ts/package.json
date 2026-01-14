@@ -1,28 +1,32 @@
 {
-  "name": "@owvision/station-interface-ts",
-  "version": "0.0.0",
-  "description": "gRPC client to communicate with the owvision local recorder.",
-  "main": "dist/index.js",
-  "scripts": {
-    "update": "protoc --plugin=protoc-gen-ts_proto=\"node_modules\\.bin\\protoc-gen-ts_proto.cmd\" --ts_proto_out=\"src\\generated\" --ts_proto_opt=outputServices=grpc-js,esModuleInterop=true -I \"..\\..\\..\\shared\\protos\" \"..\\..\\..\\shared\\protos\\recorder.proto\" && tsc",
-    "build": "tsc"
-  },
-  "keywords": [
-    "grpc",
-    "owvision",
-    "recorder",
-    "weather",
-    "client",
-    "protobuf"
-  ],
-  "author": "owvision",
-  "license": "ISC",
-  "type": "module",
-  "devDependencies": {
-    "ts-proto": "^2.10.1",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "@grpc/grpc-js": "^1.14.3"
-  }
+    "name": "@owvision/station-interface-ts",
+    "version": "0.0.2",
+    "description": "Support package thats helps you to write a station interface that gets automatically detected by the owvision recorder.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "update": "protoc --plugin=protoc-gen-ts_proto=\"node_modules\\.bin\\protoc-gen-ts_proto.cmd\" --ts_proto_out=\"src\\generated\" --ts_proto_opt=outputServices=grpc-js,esModuleInterop=true -I \"..\\..\\..\\shared\\protos\" \"..\\..\\..\\shared\\protos\\recorder.proto\" && tsc",
+        "build": "tsc"
+    },
+    "keywords": [
+        "grpc",
+        "owvision",
+        "recorder",
+        "weather",
+        "client",
+        "protobuf"
+    ],
+    "author": "owvision",
+    "license": "ISC",
+    "type": "module",
+    "devDependencies": {
+        "ts-proto": "^2.10.1",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "@grpc/grpc-js": "^1.14.3"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

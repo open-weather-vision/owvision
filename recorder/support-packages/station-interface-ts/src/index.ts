@@ -1,10 +1,7 @@
 import * as grpc from "@grpc/grpc-js";
-import * as generated from "./index.js";
-import type { UnaryCallback } from "@grpc/grpc-js/build/src/client.js";
 import {
     GetSensorStateRequest,
     GetStationDefinitionRequest,
-    SensorDefinition,
     SensorState,
     StationDefinition,
     StationInterfaceService,
@@ -58,42 +55,3 @@ export function startInterface(
         );
     });
 }
-
-async function getSensorState(req: GetSensorStateRequest) {
-    if (req.name === "temp_in") {
-        return SensorState.create({
-            createdAt: Date.now(),
-            unitId: "celsius",
-            value: 12, // Query the temperature inside from your station here
-        });
-    } else {
-        return SensorState.create({
-            createdAt: Date.now(),
-            unitId: "celsius",
-            value: 23.1, // Query the temperature outside from your station here
-        });
-    }
-}
-
-async function getStationDefinition(req: GetStationDefinitionRequest) {
-    return StationDefinition.create({
-        sensors: [
-            SensorDefinition.create({
-                name: "temp_in",
-                element: "temperature",
-                recordIntervalSeconds: 60,
-            }),
-            SensorDefinition.create({
-                name: "temp_out",
-                element: "temperature",
-                recordIntervalSeconds: 60,
-            }),
-        ],
-        version: 1,
-    });
-}
-
-await startInterface({
-    getSensorState,
-    getStationDefinition,
-});

@@ -9,7 +9,7 @@
   "packages": [
     {
       "name": "owvision",
-      "version": "0.0.0",
+      "version": "0.0.2",
       "dependencies": [],
       "devDependencies": [
         "args",
@@ -24,7 +24,7 @@
     },
     {
       "name": "daemon",
-      "version": "0.0.0",
+      "version": "0.0.2",
       "dependencies": [
         "args",
         "chalkdart",
@@ -61,7 +61,7 @@
     },
     {
       "name": "recorder",
-      "version": "0.0.0",
+      "version": "0.0.2",
       "dependencies": [
         "args",
         "chalkdart",
@@ -86,7 +86,7 @@
     },
     {
       "name": "shared",
-      "version": "0.0.0",
+      "version": "0.0.2",
       "dependencies": [
         "chalkdart",
         "json_annotation",
@@ -103,7 +103,7 @@
     },
     {
       "name": "owvision_daemon_client_dart",
-      "version": "0.0.0",
+      "version": "0.0.2",
       "dependencies": [
         "copy_with_extension",
         "dio",

@@ -54,3 +54,9 @@ jobs:
                       recorder/out/*
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publish typescript interface support package
+              run: npm publish
+              working-directory: ./recorder/support-packages/station-interface-ts
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
