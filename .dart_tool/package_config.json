@@ -176,12 +176,6 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "csslib",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/csslib-1.0.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
-    },
-    {
       "name": "dart_console",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/dart_console-1.2.0",
       "packageUri": "lib/",
@@ -226,12 +220,6 @@
     {
       "name": "emoji_regex",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/emoji_regex-0.0.5",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "event_bus",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/event_bus-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -306,12 +294,6 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/hotreloader-4.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
-    },
-    {
-      "name": "html",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/html-0.15.6",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
     },
     {
       "name": "http",
@@ -422,12 +404,6 @@
       "languageVersion": "3.2"
     },
     {
-      "name": "mqtt5_client",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/mqtt5_client-4.15.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.8"
-    },
-    {
       "name": "node_preamble",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/node_preamble-2.0.2",
       "packageUri": "lib/",
@@ -525,7 +501,7 @@
     },
     {
       "name": "source_helper",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.9",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.10",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -626,18 +602,6 @@
       "languageVersion": "3.5"
     },
     {
-      "name": "universal_html",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/universal_html-2.3.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.6"
-    },
-    {
-      "name": "universal_io",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/universal_io-2.3.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.6"
-    },
-    {
       "name": "uuid",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.5.2",
       "packageUri": "lib/",
@@ -735,8 +699,8 @@
     }
   ],
   "generator": "pub",
-  "generatorVersion": "3.9.2",
+  "generatorVersion": "3.10.7",
   "flutterRoot": "file:///C:/Users/harry/Flutter/flutter",
-  "flutterVersion": "3.35.7",
+  "flutterVersion": "3.38.7",
   "pubCache": "file:///C:/Users/harry/AppData/Local/Pub/Cache"
 }

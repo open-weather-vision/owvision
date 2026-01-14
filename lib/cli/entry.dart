@@ -7,7 +7,6 @@ Future<void> cliEntry(List<String> arguments) async {
     'manager',
     'CLI for building and publishing',
   );
-
   runner.addCommand(BuildCommand());
   runner.addCommand(CompileCommand());
 

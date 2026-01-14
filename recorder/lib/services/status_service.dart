@@ -22,13 +22,13 @@ class StatusService {
     await _recorderStatus.saveToFile();
   }
 
-  Future<void> daemonDidntRespond() async {
+  Future<void> daemonResponded() async {
     _recorderStatus.daemonConnected = true;
     _recorderStatus.latestDaemonConnection = DateTime.now();
     await _recorderStatus.saveToFile();
   }
 
-  Future<void> daemonResponded() async {
+  Future<void> daemonDidntRespond() async {
     _recorderStatus.daemonConnected = false;
     await _recorderStatus.saveToFile();
   }

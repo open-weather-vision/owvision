@@ -9,7 +9,7 @@
   "packages": [
     {
       "name": "owvision",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": [],
       "devDependencies": [
         "args",
@@ -24,7 +24,7 @@
     },
     {
       "name": "daemon",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": [
         "args",
         "chalkdart",
@@ -38,7 +38,6 @@
         "injectable",
         "interact",
         "logging",
-        "mqtt5_client",
         "owvision_daemon_client_dart",
         "path",
         "shared",
@@ -61,7 +60,7 @@
     },
     {
       "name": "recorder",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": [
         "args",
         "chalkdart",
@@ -86,7 +85,7 @@
     },
     {
       "name": "shared",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": [
         "chalkdart",
         "json_annotation",
@@ -103,7 +102,7 @@
     },
     {
       "name": "owvision_daemon_client_dart",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": [
         "copy_with_extension",
         "dio",
@@ -406,6 +405,33 @@
       ]
     },
     {
+      "name": "sqlite3",
+      "version": "2.9.4",
+      "dependencies": [
+        "collection",
+        "ffi",
+        "meta",
+        "path",
+        "typed_data",
+        "web"
+      ]
+    },
+    {
+      "name": "drift",
+      "version": "2.30.1",
+      "dependencies": [
+        "async",
+        "collection",
+        "convert",
+        "meta",
+        "path",
+        "sqlite3",
+        "stack_trace",
+        "stream_channel",
+        "web"
+      ]
+    },
+    {
       "name": "shelf_limiter",
       "version": "2.0.1",
       "dependencies": [
@@ -453,47 +479,6 @@
       "version": "0.6.0",
       "dependencies": [
         "rxdart"
-      ]
-    },
-    {
-      "name": "mqtt5_client",
-      "version": "4.15.2",
-      "dependencies": [
-        "characters",
-        "crypto",
-        "event_bus",
-        "meta",
-        "path",
-        "typed_data",
-        "universal_html",
-        "web"
-      ]
-    },
-    {
-      "name": "sqlite3",
-      "version": "2.9.4",
-      "dependencies": [
-        "collection",
-        "ffi",
-        "meta",
-        "path",
-        "typed_data",
-        "web"
-      ]
-    },
-    {
-      "name": "drift",
-      "version": "2.30.1",
-      "dependencies": [
-        "async",
-        "collection",
-        "convert",
-        "meta",
-        "path",
-        "sqlite3",
-        "stack_trace",
-        "stream_channel",
-        "web"
       ]
     },
     {
@@ -733,7 +718,7 @@
     },
     {
       "name": "source_helper",
-      "version": "1.3.9",
+      "version": "1.3.10",
       "dependencies": [
         "analyzer",
         "source_gen"
@@ -1039,6 +1024,11 @@
       "dependencies": []
     },
     {
+      "name": "ffi",
+      "version": "2.1.5",
+      "dependencies": []
+    },
+    {
       "name": "web_socket",
       "version": "1.0.1",
       "dependencies": [
@@ -1048,31 +1038,6 @@
     {
       "name": "rxdart",
       "version": "0.28.0",
-      "dependencies": []
-    },
-    {
-      "name": "universal_html",
-      "version": "2.3.0",
-      "dependencies": [
-        "async",
-        "charcode",
-        "collection",
-        "csslib",
-        "html",
-        "meta",
-        "source_span",
-        "typed_data",
-        "universal_io"
-      ]
-    },
-    {
-      "name": "event_bus",
-      "version": "2.0.1",
-      "dependencies": []
-    },
-    {
-      "name": "ffi",
-      "version": "2.1.5",
       "dependencies": []
     },
     {
@@ -1195,30 +1160,6 @@
       "dependencies": [
         "meta",
         "web"
-      ]
-    },
-    {
-      "name": "universal_io",
-      "version": "2.3.1",
-      "dependencies": [
-        "collection",
-        "meta",
-        "typed_data"
-      ]
-    },
-    {
-      "name": "html",
-      "version": "0.15.6",
-      "dependencies": [
-        "csslib",
-        "source_span"
-      ]
-    },
-    {
-      "name": "csslib",
-      "version": "1.0.2",
-      "dependencies": [
-        "source_span"
       ]
     }
   ],

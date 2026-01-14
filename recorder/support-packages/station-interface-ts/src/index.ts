@@ -9,6 +9,42 @@ import {
 } from "./generated/recorder.js";
 export * from "./generated/recorder.js";
 
+export enum UnitId {
+    humidity_percent = "hum_percent",
+    length_m = "m",
+    length_cm = "cm",
+    length_ft = "ft",
+    length_in = "in",
+    precipation_rate_mmph = "mmph",
+    precipation_rate_inph = "inph",
+    precipation_mm = "mm",
+    precipation_lpm2 = "lpm2",
+    precipation_inch = "inch",
+    pressure_hpa = "hpa",
+    pressure_inhg = "inhg",
+    temperature_celsius = "celsius",
+    temperature_kelvin = "kelvin",
+    temperature_fahrenheit = "fahrenheit",
+    winddir_degrees = "degrees",
+    winddir_radians = "radians",
+    windspeed_kmh = "kmh",
+    windspeed_ms = "ms",
+    windspeed_bft = "bft",
+    windspeed_mph = "mph",
+    windspeed_kn = "kn",
+}
+
+export enum SensorElement {
+    precipationAccumulated = "precipationAccumulated",
+    precipationRate = "precipationRate",
+    snowHeight = "snowHeight",
+    pressure = "pressure",
+    temperature = "temperature",
+    windSpeed = "windSpeed",
+    windDirection = "windDirection",
+    humidity = "humidity",
+}
+
 interface StationInterface {
     /** Should read a value from the passed sensor. */
     getSensorState(request: GetSensorStateRequest): Promise<SensorState>;

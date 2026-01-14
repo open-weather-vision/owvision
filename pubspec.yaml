@@ -1,6 +1,6 @@
 name: owvision
 description: Software system to record, archive, analyze and share your weather station's data with anyone!
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/open-weather-vision/owvision
 
 environment:

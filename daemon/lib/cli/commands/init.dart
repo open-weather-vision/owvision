@@ -84,6 +84,7 @@ class RunCommand extends Command<int> {
             "libsqlite3-dev",
             "caddy",
           ]);
+          await runShellCommand("sudo", ["ldconfig"]);
 
           await runShellCommand("sudo", ["caddy", "start"]);
         } else {
