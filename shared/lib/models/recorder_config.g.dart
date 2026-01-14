@@ -13,7 +13,7 @@ RecorderConfig _$RecorderConfigFromJson(Map<String, dynamic> json) =>
       daemonGrpcHost: json['daemonGrpcHost'] as String,
       daemonGrpcPort: (json['daemonGrpcPort'] as num).toInt(),
       daemonGrpcToken: json['daemonGrpcToken'] as String,
-      trustSelfSignedCertificate: json['allowSelfSignedCertificate'] as bool,
+      trustSelfSignedCertificate: json['trustSelfSignedCertificate'] as bool,
       active: json['active'] as bool,
       stationId: (json['stationId'] as num?)?.toInt(),
     );
@@ -25,7 +25,7 @@ Map<String, dynamic> _$RecorderConfigToJson(RecorderConfig instance) =>
       'daemonGrpcPort': instance.daemonGrpcPort,
       'daemonGrpcHost': instance.daemonGrpcHost,
       'daemonGrpcToken': instance.daemonGrpcToken,
-      'allowSelfSignedCertificate': instance.trustSelfSignedCertificate,
+      'trustSelfSignedCertificate': instance.trustSelfSignedCertificate,
       'stationId': ?instance.stationId,
       'active': instance.active,
     };

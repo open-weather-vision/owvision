@@ -34,4 +34,4 @@ It comes packed with a _cli_ called **owrec**.
 
 The [**dashboard**](./dashboard/README.md) is the entry point for most users. Live and historic weather data is **visualized** in a modern, intuitive way by default✨. There is support for themes, light☀️ and dark mode🌙. Communicates with the "daemon" in the background.
 
-It also comes with an admin panel, that allows you to manage your weather station's and their data🛠️.
+It also comes with an admin panel, that allows you to manage your weather stations and their data🛠️.
