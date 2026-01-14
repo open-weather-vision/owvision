@@ -25,6 +25,12 @@ class RecorderStatus {
     required this.latestDaemonConnection,
   });
 
+  static void removeFile() {
+    if (_recorderStatusFile.existsSync()) {
+      _recorderStatusFile.deleteSync();
+    }
+  }
+
   static RecorderStatus fromFileSync() {
     logger.info("Reading recorder status from file");
     late final RecorderStatus config;

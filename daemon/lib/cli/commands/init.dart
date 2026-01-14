@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:chalkdart/chalkstrings.dart';
 import 'package:daemon/cli/entry.dart';
+import 'package:daemon/utils/fix_libsqlite.dart';
 import 'package:interact/interact.dart';
 import 'package:logging/logging.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
@@ -42,6 +43,8 @@ class RunCommand extends Command<int> {
   FutureOr<int> run() async {
     final bool runTemporary = argResults?['temporary'];
     if (runTemporary) {
+      fixLibsqlite();
+
       logger.level = Level.ALL;
       // load injectable services
       configureDependencies();
@@ -85,8 +88,6 @@ class RunCommand extends Command<int> {
             "caddy",
           ]);
           await runShellCommand("sudo", ["ldconfig"]);
-
-          await runShellCommand("sudo", ["caddy", "start"]);
         } else {
           print(
             chalk.yellow(
@@ -102,6 +103,8 @@ class RunCommand extends Command<int> {
           }
         }
       }
+      await runShellCommand("sudo", ["caddy", "stop"]);
+      await runShellCommand("sudo", ["caddy", "start"]);
 
       final option = Select(
         prompt: "Which option fits your situation?",

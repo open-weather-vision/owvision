@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Daemon REST API
-  version: 0.0.3
+  version: 0.0.4
 tags:
   - name: Token
   - name: Station
@@ -208,7 +208,7 @@ components:
     Versions:
       type: string
       enum:
-        - 0.0.3
+        - 0.0.4
   securitySchemes:
     BearerAuth:
       type: http

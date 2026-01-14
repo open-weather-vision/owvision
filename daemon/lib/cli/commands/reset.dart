@@ -20,6 +20,7 @@ class ResetCommand extends Command<int> {
   FutureOr<int> run() async {
     if (Platform.isLinux) {
       await SystemCtlService("ow_daemon").remove();
+      await runShellCommand("sudo", ["caddy", "stop"]);
     }
     await CliConfig.removeConfigFile();
     await DaemonConfig.removeConfigFile();

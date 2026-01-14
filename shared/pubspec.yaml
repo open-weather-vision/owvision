@@ -1,6 +1,6 @@
 name: shared
 description: A sample command-line application.
-version: 0.0.3
+version: 0.0.4
 publish_to: "none"
 
 environment:
