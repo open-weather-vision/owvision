@@ -1,0 +1,10 @@
+# MacOS
+.DS_Store
+
+# Default TypeSpec output
+tsp-output/
+openapi.1.0.0.yaml
+dist/
+
+# Dependency directories
+node_modules/

@@ -1,0 +1,46 @@
+name: daemon
+description: A sample command-line application.
+version: 0.0.0
+publish_to: "none"
+
+environment:
+    sdk: ^3.9.2
+
+dependencies:
+    path: ^1.9.0
+    shared: any
+    shelf: ^1.4.2
+    shelf_router: ^1.1.4
+    get_it: ^9.2.0
+    injectable: ^2.7.1+4
+    drift: ^2.30.0
+    sqlite3: ^2.9.4
+    mqtt5_client: ^4.15.2
+    grpc: ^5.1.0
+    fixnum: ^1.1.1
+    events_emitter: ^0.6.0
+    dio: ^5.9.0
+    shelf_web_socket: ^3.0.0
+    web_socket_channel: ^3.0.3
+    uuid: ^4.5.2
+    crypto: ^3.0.7
+    chalkdart: ^3.0.5
+    string_width: ^0.1.5
+    shelf_limiter: ^2.0.1
+    args: ^2.7.0
+    owvision_daemon_client_dart: any
+    interact: ^2.2.0
+    logging: ^1.3.0
+
+dev_dependencies:
+    drift_dev: ^2.30.0
+    lints: ^6.0.0
+    test: ^1.25.6
+    build_runner: ^2.10.4
+    injectable_generator: ^2.12.0
+
+resolution: workspace
+
+scripts:
+    "build": dart run build_runner build
+    "clean": dart run build_runner clean

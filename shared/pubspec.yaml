@@ -1,0 +1,26 @@
+name: shared
+description: A sample command-line application.
+version: 0.0.0
+publish_to: "none"
+
+environment:
+    sdk: ^3.9.2
+
+# Add regular dependencies here.
+dependencies:
+    path: ^1.9.0
+    json_annotation: ^4.9.0
+    chalkdart: ^3.0.5
+    logging: ^1.3.0
+    string_width: ^0.1.5
+
+dev_dependencies:
+    lints: ^6.0.0
+    build_runner: ^2.10.4
+    json_serializable: ^6.11.3
+    test: ^1.25.6
+
+resolution: workspace
+
+scripts:
+    "build": protoc --dart_out=grpc:lib/grpc -Iprotos protos/recorder.proto && dart run build_runner build

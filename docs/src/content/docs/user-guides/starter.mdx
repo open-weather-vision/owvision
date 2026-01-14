@@ -12,46 +12,30 @@ import { LinkCard } from "@astrojs/starlight/components";
 import { Card } from "@astrojs/starlight/components";
 import { LinkButton } from "@astrojs/starlight/components";
 import { Steps } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 
 :::note
-owvision is still in development. There is no fully working version yet.
+owvision is still in development. There is no stable release yet.
 :::
 
 ### What Is owvision?
 
-**open weather vision** (in short _owvision_) is an open source software system, that allows you to build up your own weather control center.
+**open weather vision** (in short _owvision_) is an open source software system, that allows you to build your own weather control center.
 
-The _bare metal_ version (without plugins) has four main features.
+Currently it has four main features.
 
 <Card title="Bare Metal Features">
     <ol>
         <li>⏲️ View your station's most recent sensor readings in realtime</li>
-        <li>〽️ Navigate through your recorded historic weather data</li>
-        <li>🏆 Checkout your most extreme sensor readings</li>
-        <li>☁️ View a 7 day forecast for your weather station's set up location (via [Open-Meteo](https://open-meteo.com/))</li>
+        <li>〽️ Navigate through your recorded historic weather data*</li>
+        <li>🏆 Checkout historic highs and lows*</li>
+        <li>
+            ☁️ View a 7 day forecast for your weather station's set up location
+            (via [Open-Meteo](https://open-meteo.com/))*
+        </li>
     </ol>
-
+    <i style="font-size:0.8em">*Still in development.</i>
 </Card>
-
-With plugins you can add more cool features, for example:
-
-<LinkCard
-    title="Rain Radar Plugin"
-    description="Add a live rain radar map for your location"
-    href="/owvision/plugins/rain-radar/"
-/>
-
-<LinkCard
-    title="Live Webcam Plugin"
-    description="Add a live webcam"
-    href="/owvision/plugins/live-webcam/"
-/>
-
-<LinkCard
-    title="DWD Weather Warnings Plugin"
-    description="Include weather warnings from the DWD (german weather service)"
-    href="/owvision/plugins/dwd-weather-warnings/"
-/>
 
 And all this for free, in an easy to use modern user interface. That's the idea behind owvision. Cool, isn't it😎?
 
@@ -64,6 +48,7 @@ And all this for free, in an easy to use modern user interface. That's the idea 
     _owvision_ just got released, that's why only a few weather stations are supported yet. If you are a developer, adding support isn't difficult.
 
     <LinkButton
+        icon="external"
         target="_blank"
         href="/owvision/reference/supported-stations"
         variant="secondary"
@@ -71,25 +56,186 @@ And all this for free, in an easy to use modern user interface. That's the idea 
         Check support
     </LinkButton>
 
+2.  **Download the daemon (_owvi_)**
+
+    _owvision_ is a software system, that consists of multiple components. The core component is the **daemon**. In short it manages the weather database and therefore should be always running. Don't install this component on your personal computer, instead prefer a Rapberry Pi or a (virtual) Linux server.
+    Added to that this host should be visible in your network (or better the whole internet).
+
+    Currently only **debian based** systems are fully supported.
+
+    <Tabs>
+        <TabItem label="linux/arm">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_linarm"
+            >
+                Download daemon
+            </LinkButton>
+        </TabItem>
+        <TabItem label="linux/arm64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_linarm64"
+            >
+                Download daemon
+            </LinkButton>
+        </TabItem>
+        <TabItem label="linux/x64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_linx64"
+            >
+                Download daemon
+            </LinkButton>
+        </TabItem>
+        <TabItem label="windows/x64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_winx64.exe"
+            >
+                Download daemon
+            </LinkButton>
+        </TabItem>
+    </Tabs>
+
+3.  **Start the daemon**
+
+    After downloading the binary simply run following command to initialize the daemon. This will run the setup guide. If you have any issues here, don't hesitate to ask for help on our [discord server]().
+
+    ```sh
+    owvi init
+    ```
+
+    <i style="font-size: 0.8rem">
+        \*owvi refers to the previously downloaded binary.
+    </i>
+
+4.  **Download the recorder (_owrec_)**
+
+    The second very important component is the **recorder**. It is basically a simple buffer that is responsible for reading the station's current sensor readings using an interface and forwarding
+    this information to the daemon.
+
+    Install this component on the device that is directly connected to your weather station. This may be your server, but this is not mandatory.
+    The recorder pushes data to the daemon, so the daemon has to be visible to the recorder.
+
+    Currently only **debian based** systems are fully supported.
+
+    <Tabs>
+        <TabItem label="linux/arm">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_linarm"
+            >
+                Download recorder
+            </LinkButton>
+        </TabItem>
+        <TabItem label="linux/arm64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_linarm64"
+            >
+                Download recorder
+            </LinkButton>
+        </TabItem>
+        <TabItem label="linux/x64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_linx64"
+            >
+                Download recorder
+            </LinkButton>
+        </TabItem>
+        <TabItem label="windows/x64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_winx64.exe"
+            >
+                Download recorder
+            </LinkButton>
+        </TabItem>
+    </Tabs>
+
+5.  **Start the recorder**
+
+    After downloading the binary simply run following command to initialize the recorder. This will run the setup guide. If you have any issues here, don't hesitate to ask for help on our [discord server]().
+
+    ```sh
+    owrec init
+    ```
+
+    <i style="font-size: 0.8rem">
+        \*owrec refers to the previously downloaded binary.
+    </i>
+
+6.  **Find, download and start your interface**
+
+    Interfaces are community written. That's why their installation procedure is dependent on the particular station. Find your interface [here](/owvision/reference/supported-stations).
+
+    To check if the recorder detected your weather station run:
+
+    ```sh
+    owrec status
+    ```
+
+    After some time the daemon should also detect your weather station, check it (on your server) using:
+
+    ```sh
+    owvi station list
+    ```
+
+7.  **Download the official (mobile/desktop) app**
+
     :::note
-    There is an [official guide](/owvision/developer-guides/station-interface) that explains how to write your own interface and add support for your weather station.
+    Downloads are not available yet.
     :::
 
-2.  **Download an installer**
+    Finally you are ready to download the official dashboard.
 
-    _owvision_ is a software system, that consists of multiple software pieces. You don't need all of them, it depends on your personal use case. To make installation easy, we created an installer, that handles all the difficult stuff for you:
-
-    -   _Raspberry Pi OS_: [Debian package]() | [Docker Container]()
-    -   _Ubuntu_: [Debian package]() | [Docker Container]()
-
-3.  **Open owvision.local in your webbrowser**
-
-    The most easiest way to interact with _owvision_ is to open [owvision.local](http://owvision.local) on your webbrowser. On the first startup the graphical user interface will guide you through everything. After a few steps you will have your weather station control center up and running.
-
-    :::note
-    There is also a [cli](/owvision/user-guides/owvi) (command line interface) that offers the same features as the dashboard in a more developer friendly way.
-    :::
+    <Tabs>
+        <TabItem label="android">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owdashboard.apk"
+            >
+                Download app
+            </LinkButton>
+        </TabItem>
+        <TabItem label="windows/x64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owdashboard_x64.exe"
+            >
+                Download app
+            </LinkButton>
+        </TabItem>
+        <TabItem label="linux/x64">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owdashboard_linx64"
+            >
+                Download app
+            </LinkButton>
+        </TabItem>
+        <TabItem label="ios">
+            <LinkButton
+                icon="download"
+                iconPlacement="start"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owdashboard.ipa"
+            >
+                Download app
+            </LinkButton>
+        </TabItem>
+    </Tabs>
 
 </Steps>
-
-The next guide will explain in more detail how to configure _owvision_ and how to add a new weather station.

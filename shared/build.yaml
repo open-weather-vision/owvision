@@ -1,0 +1,9 @@
+targets:
+    $default:
+        builders:
+            json_serializable:
+                options:
+                    include_if_null: false
+                generate_for:
+                    exclude:
+                        - lib/grpc/**.dart
