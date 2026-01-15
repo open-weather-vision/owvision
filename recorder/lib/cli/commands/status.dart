@@ -25,11 +25,17 @@ class StatusCommand extends Command<int> {
     final latestDaemonPingAgo = status.latestDaemonConnection != null
         ? " (${formatDuration(DateTime.now().difference(status.latestDaemonConnection!))} ago)"
         : "";
+    final latestOpenMeteoPingAgo = status.latestOpenMeteoConnection != null
+        ? " (${formatDuration(DateTime.now().difference(status.latestOpenMeteoConnection!))} ago)"
+        : "";
     print(
-      "Weather station: ${chalk.bold(status.stationConnected ? chalk.green("connected") : chalk.red("disconnected"))}${chalk.dim(latestStationPingAgo)}",
+      "${chalk.underline("Weather station")}: ${chalk.bold(status.stationConnected ? chalk.green("connected") : chalk.red("disconnected"))}${chalk.dim(latestStationPingAgo)}",
     );
     print(
-      "Daemon: ${chalk.bold(status.daemonConnected ? chalk.green("connected") : chalk.red("disconnected"))}${chalk.dim(latestDaemonPingAgo)}",
+      "${chalk.underline("Daemon")}: ${chalk.bold(status.daemonConnected ? chalk.green("connected") : chalk.red("disconnected"))}${chalk.dim(latestDaemonPingAgo)}",
+    );
+    print(
+      "${chalk.underline("Open meteo")}: ${chalk.bold(status.openMeteoConnected ? chalk.green("connected") : chalk.red("disconnected"))}${chalk.dim(latestOpenMeteoPingAgo)}",
     );
 
     exit(0);

@@ -10,12 +10,16 @@ RecorderStatus _$RecorderStatusFromJson(Map<String, dynamic> json) =>
     RecorderStatus(
       daemonConnected: json['daemonConnected'] as bool,
       stationConnected: json['stationConnected'] as bool,
+      openMeteoConnected: json['openMeteoConnected'] as bool,
       latestStationConnection: json['latestStationConnection'] == null
           ? null
           : DateTime.parse(json['latestStationConnection'] as String),
       latestDaemonConnection: json['latestDaemonConnection'] == null
           ? null
           : DateTime.parse(json['latestDaemonConnection'] as String),
+      latestOpenMeteoConnection: json['latestOpenMeteoConnection'] == null
+          ? null
+          : DateTime.parse(json['latestOpenMeteoConnection'] as String),
     );
 
 Map<String, dynamic> _$RecorderStatusToJson(
@@ -23,7 +27,10 @@ Map<String, dynamic> _$RecorderStatusToJson(
 ) => <String, dynamic>{
   'daemonConnected': instance.daemonConnected,
   'stationConnected': instance.stationConnected,
+  'openMeteoConnected': instance.openMeteoConnected,
   'latestDaemonConnection': instance.latestDaemonConnection?.toIso8601String(),
   'latestStationConnection': instance.latestStationConnection
+      ?.toIso8601String(),
+  'latestOpenMeteoConnection': instance.latestOpenMeteoConnection
       ?.toIso8601String(),
 };

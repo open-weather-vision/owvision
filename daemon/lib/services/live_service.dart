@@ -170,18 +170,16 @@ class RecorderService extends grpc.DaemonServiceBase {
     grpc.UpdateSensorsRequest request,
   ) async {
     final errors = <String>[];
-    final processed = <int>[];
+    final processed = <Int64>[];
 
-    int updateIndex = -1;
     for (final update in request.updates) {
-      updateIndex += 1;
       try {
         final sensor = await _sensorService.getById(
           id: update.sensorId.toInt(),
         );
         if (sensor == null) {
           logger.severe(
-            "Didn't find sensor for update (sensor id = ${update.sensorId})",
+            "Didn't find sensor for update (sensorId=${update.sensorId}, updateId=${update.updateId})",
           );
           continue;
         }
@@ -189,7 +187,7 @@ class RecorderService extends grpc.DaemonServiceBase {
           "sensor_update",
           SensorUpdate(sensor: sensor, request: update),
         );
-        processed.add(updateIndex);
+        processed.add(update.updateId);
       } catch (e) {
         final message = "Invalid sensor id '${update.sensorId}'!";
         errors.add(message);

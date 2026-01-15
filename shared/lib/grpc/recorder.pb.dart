@@ -178,10 +178,12 @@ class UpdateSensorRequest extends $pb.GeneratedMessage {
   factory UpdateSensorRequest({
     $fixnum.Int64? sensorId,
     SensorState? newState,
+    $fixnum.Int64? updateId,
   }) {
     final result = create();
     if (sensorId != null) result.sensorId = sensorId;
     if (newState != null) result.newState = newState;
+    if (updateId != null) result.updateId = updateId;
     return result;
   }
 
@@ -201,6 +203,7 @@ class UpdateSensorRequest extends $pb.GeneratedMessage {
     ..aInt64(1, _omitFieldNames ? '' : 'sensorId', protoName: 'sensorId')
     ..aOM<SensorState>(2, _omitFieldNames ? '' : 'newState',
         protoName: 'newState', subBuilder: SensorState.create)
+    ..aInt64(3, _omitFieldNames ? '' : 'updateId', protoName: 'updateId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -241,12 +244,21 @@ class UpdateSensorRequest extends $pb.GeneratedMessage {
   void clearNewState() => $_clearField(2);
   @$pb.TagNumber(2)
   SensorState ensureNewState() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get updateId => $_getI64(2);
+  @$pb.TagNumber(3)
+  set updateId($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasUpdateId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUpdateId() => $_clearField(3);
 }
 
 class UpdateSensorsResponse extends $pb.GeneratedMessage {
   factory UpdateSensorsResponse({
     $core.Iterable<$core.String>? errors,
-    $core.Iterable<$core.int>? processed,
+    $core.Iterable<$fixnum.Int64>? processed,
   }) {
     final result = create();
     if (errors != null) result.errors.addAll(errors);
@@ -268,7 +280,8 @@ class UpdateSensorsResponse extends $pb.GeneratedMessage {
       package: const $pb.PackageName(_omitMessageNames ? '' : 'recorder'),
       createEmptyInstance: create)
     ..pPS(1, _omitFieldNames ? '' : 'errors')
-    ..p<$core.int>(2, _omitFieldNames ? '' : 'processed', $pb.PbFieldType.K3)
+    ..p<$fixnum.Int64>(
+        2, _omitFieldNames ? '' : 'processed', $pb.PbFieldType.K6)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -295,7 +308,7 @@ class UpdateSensorsResponse extends $pb.GeneratedMessage {
   $pb.PbList<$core.String> get errors => $_getList(0);
 
   @$pb.TagNumber(2)
-  $pb.PbList<$core.int> get processed => $_getList(1);
+  $pb.PbList<$fixnum.Int64> get processed => $_getList(1);
 }
 
 class UpdateStationRequest extends $pb.GeneratedMessage {

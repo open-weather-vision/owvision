@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import "package:shared/units/convertible.dart";
+import "package:shared/units/nounit.dart";
 import "package:shared/units/precipation.dart";
 import "package:shared/units/precipation_rate.dart";
 import "package:shared/units/wind_direction.dart";
@@ -26,6 +27,7 @@ class Unit {
     ...Temperature.units(),
     ...WindDirection.units(),
     ...WindSpeed.units(),
+    NoUnit.none,
   ]);
 
   static Map<String, Unit> _mapUnits(List<Unit> units) => {

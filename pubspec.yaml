@@ -1,6 +1,6 @@
 name: owvision
 description: Software system to record, archive, analyze and share your weather station's data with anyone!
-version: 0.0.6
+version: 0.0.8
 repository: https://github.com/open-weather-vision/owvision
 
 environment:
@@ -11,6 +11,7 @@ workspace:
     - recorder
     - shared
     - daemon/clients/daemon_client_dart
+    - dashboard
 dev_dependencies:
     yaml: ^3.1.3
     yaml_edit: ^2.2.3

@@ -72,27 +72,29 @@ const UpdateSensorRequest$json = {
       '6': '.recorder.SensorState',
       '10': 'newState'
     },
+    {'1': 'updateId', '3': 3, '4': 1, '5': 3, '10': 'updateId'},
   ],
 };
 
 /// Descriptor for `UpdateSensorRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateSensorRequestDescriptor = $convert.base64Decode(
     'ChNVcGRhdGVTZW5zb3JSZXF1ZXN0EhoKCHNlbnNvcklkGAEgASgDUghzZW5zb3JJZBIxCghuZX'
-    'dTdGF0ZRgCIAEoCzIVLnJlY29yZGVyLlNlbnNvclN0YXRlUghuZXdTdGF0ZQ==');
+    'dTdGF0ZRgCIAEoCzIVLnJlY29yZGVyLlNlbnNvclN0YXRlUghuZXdTdGF0ZRIaCgh1cGRhdGVJ'
+    'ZBgDIAEoA1IIdXBkYXRlSWQ=');
 
 @$core.Deprecated('Use updateSensorsResponseDescriptor instead')
 const UpdateSensorsResponse$json = {
   '1': 'UpdateSensorsResponse',
   '2': [
     {'1': 'errors', '3': 1, '4': 3, '5': 9, '10': 'errors'},
-    {'1': 'processed', '3': 2, '4': 3, '5': 5, '10': 'processed'},
+    {'1': 'processed', '3': 2, '4': 3, '5': 3, '10': 'processed'},
   ],
 };
 
 /// Descriptor for `UpdateSensorsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateSensorsResponseDescriptor = $convert.base64Decode(
     'ChVVcGRhdGVTZW5zb3JzUmVzcG9uc2USFgoGZXJyb3JzGAEgAygJUgZlcnJvcnMSHAoJcHJvY2'
-    'Vzc2VkGAIgAygFUglwcm9jZXNzZWQ=');
+    'Vzc2VkGAIgAygDUglwcm9jZXNzZWQ=');
 
 @$core.Deprecated('Use updateStationRequestDescriptor instead')
 const UpdateStationRequest$json = {

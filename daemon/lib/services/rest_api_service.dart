@@ -25,7 +25,7 @@ class RestApiService {
         .addMiddleware(
           shelfLimiter(
             RateLimiterOptions(
-              maxRequests: 15,
+              maxRequests: 60,
               windowSize: const Duration(minutes: 1),
               onRateLimitExceeded: (request) {
                 logger.warning("Blocked user because of too many requests!");

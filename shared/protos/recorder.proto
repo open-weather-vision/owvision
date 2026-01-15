@@ -25,11 +25,12 @@ message UpdateSensorsRequest{
 message UpdateSensorRequest{
     int64 sensorId = 1;
     SensorState newState = 2;
+    int64 updateId = 3;
 }
 
 message UpdateSensorsResponse {
     repeated string errors = 1;
-    repeated int32 processed = 2;
+    repeated int64 processed = 2;
 }
 
 message UpdateStationRequest{

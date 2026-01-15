@@ -14,7 +14,8 @@ RecorderConfig _$RecorderConfigFromJson(Map<String, dynamic> json) =>
       daemonGrpcPort: (json['daemonGrpcPort'] as num).toInt(),
       daemonGrpcToken: json['daemonGrpcToken'] as String,
       trustSelfSignedCertificate: json['trustSelfSignedCertificate'] as bool,
-      active: json['active'] as bool,
+      enableVirtualWeatherConditionSensor:
+          json['enableVirtualWeatherConditionSensor'] as bool,
       stationId: (json['stationId'] as num?)?.toInt(),
     );
 
@@ -27,5 +28,6 @@ Map<String, dynamic> _$RecorderConfigToJson(RecorderConfig instance) =>
       'daemonGrpcToken': instance.daemonGrpcToken,
       'trustSelfSignedCertificate': instance.trustSelfSignedCertificate,
       'stationId': ?instance.stationId,
-      'active': instance.active,
+      'enableVirtualWeatherConditionSensor':
+          instance.enableVirtualWeatherConditionSensor,
     };

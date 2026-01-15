@@ -1,6 +1,6 @@
 name: daemon
 description: A sample command-line application.
-version: 0.0.6
+version: 0.0.8
 publish_to: "none"
 
 environment:

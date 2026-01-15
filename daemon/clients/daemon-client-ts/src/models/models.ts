@@ -54,5 +54,6 @@ export enum SensorElement {
   Temperature = "temperature",
   WindSpeed = "windSpeed",
   WindDirection = "windDirection",
-  Humidity = "humidity"
+  Humidity = "humidity",
+  WeatherCode = "weatherCode"
 }

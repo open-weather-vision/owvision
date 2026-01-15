@@ -11,3 +11,31 @@ String formatDuration(Duration d) {
 
   return parts.join(' ');
 }
+
+String formatDurationSimple(Duration d) {
+  final days = d.inDays;
+
+  if (days > 0) {
+    return " ${days}d";
+  }
+
+  final hours = d.inHours;
+
+  if (hours > 0) {
+    return " ${hours}h";
+  }
+
+  final minutes = d.inMinutes;
+
+  if (minutes > 0) {
+    return " ${minutes}m";
+  }
+
+  final inSeconds = d.inSeconds;
+
+  if (inSeconds > 0) {
+    return " ${inSeconds}s";
+  }
+
+  return "";
+}

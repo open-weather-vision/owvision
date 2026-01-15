@@ -20,7 +20,7 @@ class RecorderConfig {
   String daemonGrpcToken;
   bool trustSelfSignedCertificate;
   int? stationId;
-  bool active;
+  bool enableVirtualWeatherConditionSensor;
 
   RecorderConfig({
     required this.interfaceGrpcHost,
@@ -29,7 +29,7 @@ class RecorderConfig {
     required this.daemonGrpcPort,
     required this.daemonGrpcToken,
     required this.trustSelfSignedCertificate,
-    required this.active,
+    required this.enableVirtualWeatherConditionSensor,
     this.stationId,
   });
 
@@ -49,7 +49,7 @@ class RecorderConfig {
         daemonGrpcPort: 8081,
         daemonGrpcToken: "",
         trustSelfSignedCertificate: false,
-        active: true,
+        enableVirtualWeatherConditionSensor: true,
       );
       logger.warning(
         "Failed to read recorder config. Falling back to defaults: $config",
@@ -80,7 +80,7 @@ class RecorderConfig {
 
   @override
   String toString() {
-    return "(interfaceGrpcHost=$interfaceGrpcHost, interfaceGrpcPort=$interfaceGrpcPort, daemonGrpcHost=$daemonGrpcHost, daemonGrpcPort=$daemonGrpcPort, daemonGrpcToken=$daemonGrpcToken, stationId=$stationId, allowSelfSignedCertificate=$trustSelfSignedCertificate, active=$active)";
+    return "(interfaceGrpcHost=$interfaceGrpcHost, interfaceGrpcPort=$interfaceGrpcPort, daemonGrpcHost=$daemonGrpcHost, daemonGrpcPort=$daemonGrpcPort, daemonGrpcToken=$daemonGrpcToken, stationId=$stationId, allowSelfSignedCertificate=$trustSelfSignedCertificate, enableVirtualWeatherConditionSensor=$enableVirtualWeatherConditionSensor)";
   }
 
   Map<String, dynamic> toJson() => _$RecorderConfigToJson(this);

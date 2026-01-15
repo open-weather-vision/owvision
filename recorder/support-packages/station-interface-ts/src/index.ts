@@ -32,6 +32,7 @@ export enum UnitId {
     windspeed_bft = "bft",
     windspeed_mph = "mph",
     windspeed_kn = "kn",
+    none = "none",
 }
 
 export enum SensorElement {
@@ -43,6 +44,7 @@ export enum SensorElement {
     windSpeed = "windSpeed",
     windDirection = "windDirection",
     humidity = "humidity",
+    weatherCode = "weatherCode",
 }
 
 interface StationInterface {

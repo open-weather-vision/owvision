@@ -2,6 +2,7 @@ import 'package:daemon/repositories/station_repository.dart';
 import 'package:events_emitter/emitters/event_emitter.dart';
 import 'package:events_emitter/listener.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared/logger/logger.dart';
 import 'package:shared/models/sensor.dart';
 import 'package:shared/models/station.dart';
 import 'package:shared/models/station_and_sensors.dart';
@@ -70,6 +71,9 @@ class StationService {
       final result = await _stationRepository.create(
         station: station,
         sensors: sensors,
+      );
+      logger.info(
+        "Created station '${station.name}' with ${sensors.length} sensors",
       );
       if (result != null) {
         _events.emit("station_create", result.station.id.toString());

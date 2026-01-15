@@ -35,4 +35,5 @@ const _$SensorElementEnumMap = {
   SensorElement.windSpeed: 'windSpeed',
   SensorElement.windDirection: 'windDirection',
   SensorElement.humidity: 'humidity',
+  SensorElement.weatherCode: 'weatherCode',
 };

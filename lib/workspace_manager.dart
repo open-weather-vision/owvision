@@ -17,11 +17,13 @@ class WorkspaceManager {
     final sharedPackage = DartPackage("./shared");
     final daemonPackage = DartPackage("./daemon");
     final recorderPackage = DartPackage("./recorder");
+    final dashboardPackage = DartPackage("./dashboard");
 
     await workspacePackage.setVersion(version);
     await sharedPackage.setVersion(version);
     await daemonPackage.setVersion(version);
     await recorderPackage.setVersion(version);
+    await dashboardPackage.setVersion(version);
 
     await sharedPackage.runDerryCommand("build");
     await daemonPackage.runDerryCommand("build");

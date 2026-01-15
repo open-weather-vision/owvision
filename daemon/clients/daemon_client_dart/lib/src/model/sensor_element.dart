@@ -22,7 +22,9 @@ enum SensorElement {
       @JsonValue(r'windDirection')
       windDirection(r'windDirection'),
       @JsonValue(r'humidity')
-      humidity(r'humidity');
+      humidity(r'humidity'),
+      @JsonValue(r'weatherCode')
+      weatherCode(r'weatherCode');
 
   const SensorElement(this.value);
 

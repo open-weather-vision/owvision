@@ -36,6 +36,7 @@ export interface UpdateSensorsRequest {
 export interface UpdateSensorRequest {
   sensorId: number;
   newState: SensorState | undefined;
+  updateId: number;
 }
 
 export interface UpdateSensorsResponse {
@@ -267,7 +268,7 @@ export const UpdateSensorsRequest: MessageFns<UpdateSensorsRequest> = {
 };
 
 function createBaseUpdateSensorRequest(): UpdateSensorRequest {
-  return { sensorId: 0, newState: undefined };
+  return { sensorId: 0, newState: undefined, updateId: 0 };
 }
 
 export const UpdateSensorRequest: MessageFns<UpdateSensorRequest> = {
@@ -277,6 +278,9 @@ export const UpdateSensorRequest: MessageFns<UpdateSensorRequest> = {
     }
     if (message.newState !== undefined) {
       SensorState.encode(message.newState, writer.uint32(18).fork()).join();
+    }
+    if (message.updateId !== 0) {
+      writer.uint32(24).int64(message.updateId);
     }
     return writer;
   },
@@ -304,6 +308,14 @@ export const UpdateSensorRequest: MessageFns<UpdateSensorRequest> = {
           message.newState = SensorState.decode(reader, reader.uint32());
           continue;
         }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.updateId = longToNumber(reader.int64());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -317,6 +329,7 @@ export const UpdateSensorRequest: MessageFns<UpdateSensorRequest> = {
     return {
       sensorId: isSet(object.sensorId) ? globalThis.Number(object.sensorId) : 0,
       newState: isSet(object.newState) ? SensorState.fromJSON(object.newState) : undefined,
+      updateId: isSet(object.updateId) ? globalThis.Number(object.updateId) : 0,
     };
   },
 
@@ -327,6 +340,9 @@ export const UpdateSensorRequest: MessageFns<UpdateSensorRequest> = {
     }
     if (message.newState !== undefined) {
       obj.newState = SensorState.toJSON(message.newState);
+    }
+    if (message.updateId !== 0) {
+      obj.updateId = Math.round(message.updateId);
     }
     return obj;
   },
@@ -340,6 +356,7 @@ export const UpdateSensorRequest: MessageFns<UpdateSensorRequest> = {
     message.newState = (object.newState !== undefined && object.newState !== null)
       ? SensorState.fromPartial(object.newState)
       : undefined;
+    message.updateId = object.updateId ?? 0;
     return message;
   },
 };
@@ -355,7 +372,7 @@ export const UpdateSensorsResponse: MessageFns<UpdateSensorsResponse> = {
     }
     writer.uint32(18).fork();
     for (const v of message.processed) {
-      writer.int32(v);
+      writer.int64(v);
     }
     writer.join();
     return writer;
@@ -378,7 +395,7 @@ export const UpdateSensorsResponse: MessageFns<UpdateSensorsResponse> = {
         }
         case 2: {
           if (tag === 16) {
-            message.processed.push(reader.int32());
+            message.processed.push(longToNumber(reader.int64()));
 
             continue;
           }
@@ -386,7 +403,7 @@ export const UpdateSensorsResponse: MessageFns<UpdateSensorsResponse> = {
           if (tag === 18) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.processed.push(reader.int32());
+              message.processed.push(longToNumber(reader.int64()));
             }
 
             continue;

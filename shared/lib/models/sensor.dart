@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:shared/units/convert.dart';
 import 'package:shared/units/humidity.dart';
 import 'package:shared/units/length.dart';
+import 'package:shared/units/nounit.dart';
 import 'package:shared/units/precipation.dart';
 import 'package:shared/units/precipation_rate.dart';
 import 'package:shared/units/pressure.dart';
@@ -60,7 +61,8 @@ enum SensorElement {
   temperature(type: ElementType.instant),
   windSpeed(type: ElementType.instant),
   windDirection(type: ElementType.instant),
-  humidity(type: ElementType.instant);
+  humidity(type: ElementType.instant),
+  weatherCode(type: ElementType.instant);
 
   final ElementType type;
 
@@ -84,6 +86,8 @@ enum SensorElement {
         return WindDirection.degrees;
       case humidity:
         return Humidity.percent;
+      case weatherCode:
+        return NoUnit.none;
     }
   }
 }

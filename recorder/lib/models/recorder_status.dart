@@ -15,14 +15,18 @@ class RecorderStatus {
 
   bool daemonConnected;
   bool stationConnected;
+  bool openMeteoConnected;
   DateTime? latestDaemonConnection;
   DateTime? latestStationConnection;
+  DateTime? latestOpenMeteoConnection;
 
   RecorderStatus({
     required this.daemonConnected,
     required this.stationConnected,
+    required this.openMeteoConnected,
     required this.latestStationConnection,
     required this.latestDaemonConnection,
+    required this.latestOpenMeteoConnection,
   });
 
   static void removeFile() {
@@ -43,8 +47,10 @@ class RecorderStatus {
       config = RecorderStatus(
         daemonConnected: false,
         stationConnected: false,
+        openMeteoConnected: false,
         latestDaemonConnection: null,
         latestStationConnection: null,
+        latestOpenMeteoConnection: null,
       );
       logger.warning(
         "Failed to read recorder status. Falling back to defaults: $config",
@@ -75,7 +81,7 @@ class RecorderStatus {
 
   @override
   String toString() {
-    return "(daemonConnected=$daemonConnected, stationConnected=$stationConnected, latestDaemonConnection=$latestDaemonConnection, latestStationConnection=$latestStationConnection)";
+    return "(daemonConnected=$daemonConnected, stationConnected=$stationConnected, openMeteoConnected=$openMeteoConnected, latestDaemonConnection=$latestDaemonConnection, latestStationConnection=$latestStationConnection, latestOpenMeteoConnection=$latestOpenMeteoConnection)";
   }
 
   Map<String, dynamic> toJson() => _$RecorderStatusToJson(this);

@@ -44,4 +44,14 @@ class StationLiveState {
     }
     return result;
   }
+
+  @override
+  String toString() {
+    var result = "StationLiveState {\n";
+    for (final sensorName in _sensorStates.keys) {
+      final state = _sensorStates[sensorName];
+      result += "  $sensorName=${state != null ? state.toString() : "-"}\n";
+    }
+    return result += "}\n";
+  }
 }

@@ -49,7 +49,7 @@ class LiveSensorStateService {
     _liveState[stationId] = StationLiveState.fromSensors(
       stationAndSensors.sensors,
     );
-    logger.info("Tracking sensor state of station with id=$stationId");
+    logger.info("Tracking sensor states of station with id=$stationId");
 
     _trackers[stationId] = await _liveService.watchStation(
       stationId: stationId,

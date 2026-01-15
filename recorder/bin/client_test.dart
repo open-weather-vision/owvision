@@ -70,12 +70,12 @@ class ClientTest extends StationInterfaceServiceBase {
       name: "Hello station",
       sensors: [
         SensorDefinition(
-          name: "temperature_in",
+          name: "temperature_out",
           element: SensorElement.temperature.name,
           recordIntervalSeconds: Int64(10),
         ),
         SensorDefinition(
-          name: "temperature_out",
+          name: "temperature_in",
           element: SensorElement.temperature.name,
           recordIntervalSeconds: Int64(10),
         ),

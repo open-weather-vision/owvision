@@ -32,4 +32,15 @@ class StatusService {
     _recorderStatus.daemonConnected = false;
     await _recorderStatus.saveToFile();
   }
+
+  Future<void> openMeteoResponded() async {
+    _recorderStatus.openMeteoConnected = true;
+    _recorderStatus.latestOpenMeteoConnection = DateTime.now();
+    await _recorderStatus.saveToFile();
+  }
+
+  Future<void> openMeteoDidntRespond() async {
+    _recorderStatus.openMeteoConnected = false;
+    await _recorderStatus.saveToFile();
+  }
 }

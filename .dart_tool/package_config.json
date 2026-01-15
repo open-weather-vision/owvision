@@ -32,6 +32,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "archive",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/archive-4.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "args",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0",
       "packageUri": "lib/",
@@ -42,6 +48,12 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.13.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "bloc",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/bloc-9.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
     },
     {
       "name": "boolean_selector",
@@ -99,7 +111,7 @@
     },
     {
       "name": "characters",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.4.1",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -132,6 +144,12 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/clock-1.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "code_assets",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/code_assets-0.19.10",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
     },
     {
       "name": "code_builder",
@@ -174,6 +192,12 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.7",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "cupertino_icons",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
     },
     {
       "name": "dart_console",
@@ -248,6 +272,90 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "flat_buffers",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flat_buffers-23.5.26",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter",
+      "rootUri": "file:///C:/Users/harry/Flutter/flutter/packages/flutter",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "flutter_bloc",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_bloc-9.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "flutter_launcher_icons",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.14.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_lints",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-6.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "flutter_secure_storage",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage-10.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "flutter_secure_storage_darwin",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_darwin-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "flutter_secure_storage_linux",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_linux-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "flutter_secure_storage_platform_interface",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_platform_interface-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "flutter_secure_storage_web",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_web-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "flutter_secure_storage_windows",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_windows-4.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "flutter_spinkit",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_spinkit-5.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_svg",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_svg-2.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///C:/Users/harry/Flutter/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
       "name": "frontend_server_client",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/frontend_server_client-4.0.0",
       "packageUri": "lib/",
@@ -290,6 +398,12 @@
       "languageVersion": "3.8"
     },
     {
+      "name": "hooks",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/hooks-0.20.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
       "name": "hotreloader",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/hotreloader-4.3.0",
       "packageUri": "lib/",
@@ -324,6 +438,12 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "image",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/image-4.7.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "injectable",
@@ -392,6 +512,12 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "material_color_utilities",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/material_color_utilities-0.11.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "meta",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.17.0",
       "packageUri": "lib/",
@@ -404,10 +530,34 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "native_toolchain_c",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/native_toolchain_c-0.17.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "nested",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "node_preamble",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/node_preamble-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "objective_c",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/objective_c-9.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
+      "name": "open_meteo",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/open_meteo-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "package_config",
@@ -422,16 +572,88 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "path_parsing",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path_parsing-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "path_provider",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider-2.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "path_provider_android",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.22",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "path_provider_foundation",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
+      "name": "path_provider_linux",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_linux-2.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "path_provider_platform_interface",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_platform_interface-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "path_provider_windows",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_windows-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "platform",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "pool",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/pool-1.5.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
+      "name": "posix",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/posix-6.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "protobuf",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/protobuf-6.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.7"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.5+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "pub_semver",
@@ -492,6 +714,12 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-3.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
+    },
+    {
+      "name": "sky_engine",
+      "rootUri": "file:///C:/Users/harry/Flutter/flutter/bin/cache/pkg/sky_engine",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
     },
     {
       "name": "source_gen",
@@ -566,6 +794,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "sunrise_sunset_calc",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/sunrise_sunset_calc-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "term_glyph",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/term_glyph-1.2.2",
       "packageUri": "lib/",
@@ -608,6 +842,30 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "vector_graphics",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics-1.1.19",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "vector_graphics_codec",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_codec-1.1.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.1.19",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "vector_math",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "vm_service",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-15.0.2",
       "packageUri": "lib/",
@@ -646,6 +904,18 @@
     {
       "name": "win32",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "xdg_directories",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "xml",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.6.1",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -694,6 +964,12 @@
     {
       "name": "owvision_daemon_client_dart",
       "rootUri": "../daemon/clients/daemon_client_dart",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "dashboard",
+      "rootUri": "../dashboard",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     }
