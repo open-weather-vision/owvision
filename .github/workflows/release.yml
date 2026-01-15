@@ -20,7 +20,7 @@ jobs:
               uses: flutter-actions/setup-flutter@v4
               with:
                   channel: stable
-                  version: 3.0.2
+                  version: 3.38.7
 
             - name: Install dart dependencies
               run: flutter pub get
