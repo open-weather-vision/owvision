@@ -16,10 +16,14 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: Setup dart
-              uses: dart-lang/setup-dart@v1
+            - name: Setup Flutter SDK
+              uses: flutter-actions/setup-flutter@v4
               with:
-                  sdk: stable
+                  channel: stable
+                  version: 3.0.2
+
+            - name: Install dart dependencies
+              run: flutter pub get
 
             - name: Install derry
               run: dart pub global activate derry
