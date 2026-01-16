@@ -3,22 +3,7 @@ import 'dart:io';
 import 'package:yaml_edit/yaml_edit.dart';
 import 'package:chalkdart/chalk.dart';
 import 'package:path/path.dart';
-
-Future<void> runShellCommand(
-  String command,
-  List<String> options,
-  String cwd,
-) async {
-  final runCommand = await Process.start(
-    command,
-    options,
-    runInShell: true,
-    workingDirectory: cwd,
-  );
-  runCommand.stdout.transform(utf8.decoder).forEach((x) => print(chalk.dim(x)));
-  runCommand.stderr.transform(utf8.decoder).forEach((x) => print(chalk.dim(x)));
-  await runCommand.exitCode;
-}
+import 'package:shared/utils.dart';
 
 class DartPackage {
   final String path;
@@ -65,63 +50,65 @@ class DartPackage {
     }
     await outFolder.create(recursive: true);
     for (final arch in linuxArchs) {
-      await runDartCommand([
-        "compile",
-        "exe",
-        "--target-os=linux",
-        "--target-arch=$arch",
-        "--output=out/${name}_lin$arch",
-        "bin/$binary.dart",
-      ]);
-      print("Created ${name}_lin$arch");
+      final binaryName = "${name}_lin$arch";
+      try {
+        await runDartCommand([
+          "compile",
+          "exe",
+          "--target-os=linux",
+          "--target-arch=$arch",
+          "--output=out/$binaryName",
+          "bin/$binary.dart",
+        ], onCommandFail: FailAction.throwException);
+        print("Created $binaryName");
+      } catch (e) {
+        print(chalk.yellow("Failed to create binary $binaryName!"));
+      }
     }
 
     for (final arch in winArchs) {
-      await runDartCommand([
-        "compile",
-        "exe",
-        "--target-os=windows",
-        "--target-arch=$arch",
-        "--output=out/${name}_win$arch.exe",
-        "bin/$binary.dart",
-      ]);
-      print("Created ${name}_win$arch.exe");
+      final binaryName = "${name}_win$arch";
+      try {
+        await runDartCommand([
+          "compile",
+          "exe",
+          "--target-os=windows",
+          "--target-arch=$arch",
+          "--output=out/$binaryName",
+          "bin/$binary.dart",
+        ], onCommandFail: FailAction.throwException);
+        print("Created $binaryName");
+      } catch (e) {
+        print(chalk.yellow("Failed to create binary $binaryName!"));
+      }
     }
   }
 
-  Future<void> runDerryCommand(String command) async {
+  Future<void> runDerryCommand(
+    String command, {
+    FailAction onCommandFail = FailAction.exit,
+  }) async {
     print("ℹ️  Running derry command '$command' ($name)...");
-    final runCommand = await Process.start(
+    await runShellCommand(
       "derry",
       [command],
-      runInShell: true,
-      workingDirectory: path,
+      cwd: path,
+      onCommandFail: onCommandFail,
     );
-    runCommand.stdout
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    runCommand.stderr
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    await runCommand.exitCode;
     print("✅ Run derry command '$command' ($name)");
   }
 
-  Future<void> runDartCommand(List<String> options) async {
+  Future<void> runDartCommand(
+    List<String> options, {
+    FailAction onCommandFail = FailAction.exit,
+  }) async {
     print("ℹ️  Running dart command 'dart ${options.join(' ')}' ($name)...");
-    final runCommand = await Process.start(
+    await runShellCommand(
       "dart",
       options,
-      runInShell: true,
-      workingDirectory: path,
+      cwd: path,
+      onCommandFail: onCommandFail,
     );
-    runCommand.stdout
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    runCommand.stderr
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    await runCommand.exitCode;
     print("✅ Run dart command 'dart ${options.join(' ')}' ($name)");
   }
 }
@@ -166,37 +153,23 @@ class NodePackage {
 
   Future<void> installDependencies() async {
     print("ℹ️  Running 'npm install' ($name)...");
-    final runCommand = await Process.start(
+    await runShellCommand(
       "npm",
       ["install"],
-      runInShell: true,
-      workingDirectory: path,
+      cwd: path,
+      onCommandFail: FailAction.exit,
     );
-    runCommand.stdout
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    runCommand.stderr
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    await runCommand.exitCode;
     print("✅ Run npm install!");
   }
 
   Future<void> runCommand(String command) async {
     print("ℹ️  Running npm command '$command' ($name)...");
-    final runCommand = await Process.start(
+    await runShellCommand(
       "npm",
       ["run", command],
-      runInShell: true,
-      workingDirectory: path,
+      cwd: path,
+      onCommandFail: FailAction.exit,
     );
-    runCommand.stdout
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    runCommand.stderr
-        .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
-    await runCommand.exitCode;
     print("✅ Run npm command '$command' ($name)!");
   }
 }

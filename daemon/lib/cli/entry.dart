@@ -7,6 +7,7 @@ import 'package:daemon/cli/commands/gentoken.dart';
 import 'package:daemon/cli/commands/reset.dart';
 import 'package:daemon/cli/commands/init.dart';
 import 'package:daemon/cli/commands/station.dart';
+import 'package:daemon/cli/commands/status.dart';
 import 'package:logging/logging.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
 import 'package:shared/logger/logger.dart';
@@ -28,7 +29,8 @@ Future<void> cliEntry(List<String> arguments) async {
     ..addCommand(AuthenticateCommand())
     ..addCommand(ConfigCommand())
     ..addCommand(ResetCommand())
-    ..addCommand(GenerateTokenCommand());
+    ..addCommand(GenerateTokenCommand())
+    ..addCommand(StatusCommand());
 
   try {
     await runner.run(arguments);

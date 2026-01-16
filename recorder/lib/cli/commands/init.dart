@@ -68,9 +68,9 @@ class InitCommand extends Command<int> {
             "⚠️ Connection test failed! Is your api token correct? Is your daemon running and visible in your network? Retry using ${chalk.italic("owrec reset && owrec init")}.",
           ),
         );
-        exit(0);
+        exit(1);
       }
-      await SystemCtlService.register(
+      await SystemCtlService.create(
         name: "ow_recorder",
         description: "owvision recorder",
       );

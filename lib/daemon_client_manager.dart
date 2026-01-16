@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chalkdart/chalkdart.dart';
 import 'package:shared/pretty_print.dart';
 import 'package:owvision/utils.dart';
+import 'package:shared/utils.dart';
 
 final daemonPath = File("./daemon").resolveSymbolicLinksSync();
 
@@ -23,11 +24,12 @@ class DaemonClientManager {
     );
     final specification = NodePackage("$daemonPath/specification");
     await specification.installDependencies();
-    await runShellCommand("npm", [
-      "install",
-      "-g",
-      "@typespec/compiler",
-    ], "$daemonPath/specification");
+    await runShellCommand(
+      "npm",
+      ["install", "-g", "@typespec/compiler"],
+      cwd: "$daemonPath/specification",
+      onCommandFail: FailAction.exit,
+    );
     await specification.runCommand("build");
   }
 
@@ -35,21 +37,27 @@ class DaemonClientManager {
     PrettyPrinter.output(
       Box([Text(chalk.green.bold("Generating dart-dio client"))]),
     );
-    await runShellCommand("npm", [
-      "install",
-      "-g",
-      "@openapitools/openapi-generator-cli",
-    ], "$daemonPath/specification");
-    await runShellCommand("openapi-generator-cli", [
-      "generate",
-      "-i",
-      "specification.yaml",
-      "-g",
-      "dart-dio",
-      "-o",
-      "../clients/daemon_client_dart",
-      "--additional-properties=pubHomepage=https://open-weather-vision.github.io/owvision/,pubLibrary=daemonclient,pubName=owvision_daemon_client_dart,pubVersion=$version,serializationLibrary=json_serializable",
-    ], "$daemonPath/specification");
+    await runShellCommand(
+      "npm",
+      ["install", "-g", "@openapitools/openapi-generator-cli"],
+      cwd: "$daemonPath/specification",
+      onCommandFail: FailAction.exit,
+    );
+    await runShellCommand(
+      "openapi-generator-cli",
+      [
+        "generate",
+        "-i",
+        "specification.yaml",
+        "-g",
+        "dart-dio",
+        "-o",
+        "../clients/daemon_client_dart",
+        "--additional-properties=pubHomepage=https://open-weather-vision.github.io/owvision/,pubLibrary=daemonclient,pubName=owvision_daemon_client_dart,pubVersion=$version,serializationLibrary=json_serializable",
+      ],
+      cwd: "$daemonPath/specification",
+      onCommandFail: FailAction.exit,
+    );
 
     final generatedDartCient = DartPackage(
       "$daemonPath/clients/daemon_client_dart",

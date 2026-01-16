@@ -9,21 +9,21 @@ class SystemCtlService {
 
   SystemCtlService(this.name);
 
-  static Future<SystemCtlService?> register({
+  static Future<SystemCtlService> create({
     required String name,
     required String description,
+    List<String> wants = const [],
+    List<String> after = const [],
     List<String> arguments = const ["init", "-t"],
   }) async {
     if (!Platform.isLinux) {
       throw UnsupportedError(
-        'Registering service is not supported on ${Platform.operatingSystem}!',
+        'Creating a service is not supported on ${Platform.operatingSystem}!',
       );
     }
 
     final user = Platform.environment['USER']!;
     final file = File("${getOwvisionHomeDirectory()}/$name.service");
-    final exePath = Platform.resolvedExecutable;
-    final argsString = arguments.join(' ');
 
     // 4. Inhalt der .service Datei definieren
     final serviceContent =
@@ -31,12 +31,14 @@ class SystemCtlService {
 [Unit]
 Description=$description
 After=network.target
+${wants.map((entry) => "Wants=$entry").join("\n")}
+${after.map((entry) => "After=$entry").join("\n")}
 
 [Service]
 Type=simple
 User=$user
 WorkingDirectory=/home/$user/.owvision
-ExecStart=$exePath $argsString
+ExecStart=${Platform.resolvedExecutable} ${arguments.join(' ')}
 Restart=always
 RestartSec=5
 StandardOutput=journal
@@ -48,18 +50,32 @@ WantedBy=multi-user.target
 
     try {
       await file.writeAsString(serviceContent);
-
       final serviceFilePath = '/etc/systemd/system/$name.service';
       if (await File(serviceFilePath).exists()) {
         chalk.yellow(
-          "⚠️ Already initialized! If you want to reinitialize run ${chalk.italic("owvi reset")} first.",
+          "⚠️ Already initialized! If you want to reinitialize run ${chalk.italic("reset")} first.",
         );
-        return null;
+        return SystemCtlService(name);
       }
-      await runShellCommand('sudo', ['cp', file.path, serviceFilePath]);
-      await runShellCommand('sudo', ['systemctl', 'daemon-reload']);
-      await runShellCommand('sudo', ['systemctl', 'enable', name]);
-      await runShellCommand('sudo', ['systemctl', 'start', name]);
+      await runShellCommand('sudo', [
+        'cp',
+        file.path,
+        serviceFilePath,
+      ], onCommandFail: FailAction.throwException);
+      await runShellCommand('sudo', [
+        'systemctl',
+        'daemon-reload',
+      ], onCommandFail: FailAction.throwException);
+      await runShellCommand('sudo', [
+        'systemctl',
+        'enable',
+        name,
+      ], onCommandFail: FailAction.throwException);
+      await runShellCommand('sudo', [
+        'systemctl',
+        'start',
+        name,
+      ], onCommandFail: FailAction.throwException);
 
       print(
         chalk.green.bold(
@@ -72,23 +88,38 @@ WantedBy=multi-user.target
         ),
       );
       return SystemCtlService(name);
-    } on FileSystemException {
-      print(
-        chalk.red(
-          '❌ Error: Access denied. Please run using ${chalk.bold("sudo")}.',
-        ),
-      );
-      return null;
     } catch (e) {
-      print(chalk.red('❌ Unknown error while starting service: $e'));
-      return null;
+      print(chalk.red('❌ Error: Failed to create service: $e'));
+      exit(1);
     }
   }
 
-  Future<void> remove() async {
-    await runShellCommand("sudo", ["systemctl", "stop", name]);
-    await runShellCommand("sudo", ["systemctl", "disable", name]);
-    await runShellCommand("sudo", ["systemctl", "daemon-reload"]);
-    await runShellCommand("sudo", ["rm", "/etc/systemd/system/$name.service"]);
+  Future<bool> remove() async {
+    try {
+      await runShellCommand("sudo", [
+        "systemctl",
+        "stop",
+        name,
+      ], onCommandFail: FailAction.throwException);
+      await runShellCommand("sudo", [
+        "systemctl",
+        "disable",
+        name,
+      ], onCommandFail: FailAction.throwException);
+      await runShellCommand("sudo", [
+        "systemctl",
+        "daemon-reload",
+      ], onCommandFail: FailAction.throwException);
+      await runShellCommand("sudo", [
+        "rm",
+        "/etc/systemd/system/$name.service",
+      ], onCommandFail: FailAction.throwException);
+      return true;
+    } catch (err) {
+      print(
+        chalk.yellow("⚠️ Failed to remove service ${chalk.bold(name)}: $err"),
+      );
+      return false;
+    }
   }
 }

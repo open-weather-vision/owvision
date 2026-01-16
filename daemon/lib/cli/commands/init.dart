@@ -79,14 +79,12 @@ class RunCommand extends Command<int> {
       ).interact();
       if (installDependencies) {
         if (Platform.isLinux) {
-          await runShellCommand("sudo", [
-            "apt",
-            "install",
-            "-y",
-            "sqlite3",
+          await tryToInstallCommandUsingApt("sqlite3");
+          await tryToInstallCommandUsingApt(
             "libsqlite3-dev",
-            "caddy",
-          ]);
+            checkIfExists: false,
+          );
+          await tryToInstallCommandUsingApt("caddy");
           await runShellCommand("sudo", ["ldconfig"]);
         } else {
           print(
@@ -103,8 +101,6 @@ class RunCommand extends Command<int> {
           }
         }
       }
-      await runShellCommand("sudo", ["caddy", "stop"]);
-      await runShellCommand("sudo", ["caddy", "start"]);
 
       final option = Select(
         prompt: "Which option fits your situation?",
@@ -145,9 +141,11 @@ class RunCommand extends Command<int> {
       }
       await daemonConfig.saveToFile();
 
-      final service = await SystemCtlService.register(
+      final service = await SystemCtlService.create(
         description: "owvision daemon",
         name: "ow_daemon",
+        after: ["caddy.service"],
+        wants: ["caddy.service"],
       );
       if (service == null) {
         exit(0);
