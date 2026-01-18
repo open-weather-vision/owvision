@@ -13,6 +13,10 @@ abstract class _$SensorCWProxy {
 
   Sensor name(String name);
 
+  Sensor recordIntervalSeconds(int recordIntervalSeconds);
+
+  Sensor historyIntervalSeconds(int historyIntervalSeconds);
+
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Sensor(...).copyWith.fieldName(value)`.
   ///
@@ -20,7 +24,13 @@ abstract class _$SensorCWProxy {
   /// ```dart
   /// Sensor(...).copyWith(id: 12, name: "My name")
   /// ```
-  Sensor call({int id, SensorElement element, String name});
+  Sensor call({
+    int id,
+    SensorElement element,
+    String name,
+    int recordIntervalSeconds,
+    int historyIntervalSeconds,
+  });
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -40,6 +50,14 @@ class _$SensorCWProxyImpl implements _$SensorCWProxy {
   Sensor name(String name) => call(name: name);
 
   @override
+  Sensor recordIntervalSeconds(int recordIntervalSeconds) =>
+      call(recordIntervalSeconds: recordIntervalSeconds);
+
+  @override
+  Sensor historyIntervalSeconds(int historyIntervalSeconds) =>
+      call(historyIntervalSeconds: historyIntervalSeconds);
+
+  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Sensor(...).copyWith.fieldName(value)`.
   ///
@@ -51,6 +69,8 @@ class _$SensorCWProxyImpl implements _$SensorCWProxy {
     Object? id = const $CopyWithPlaceholder(),
     Object? element = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
+    Object? recordIntervalSeconds = const $CopyWithPlaceholder(),
+    Object? historyIntervalSeconds = const $CopyWithPlaceholder(),
   }) {
     return Sensor(
       id: id == const $CopyWithPlaceholder() || id == null
@@ -65,6 +85,18 @@ class _$SensorCWProxyImpl implements _$SensorCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
+      recordIntervalSeconds:
+          recordIntervalSeconds == const $CopyWithPlaceholder() ||
+              recordIntervalSeconds == null
+          ? _value.recordIntervalSeconds
+          // ignore: cast_nullable_to_non_nullable
+          : recordIntervalSeconds as int,
+      historyIntervalSeconds:
+          historyIntervalSeconds == const $CopyWithPlaceholder() ||
+              historyIntervalSeconds == null
+          ? _value.historyIntervalSeconds
+          // ignore: cast_nullable_to_non_nullable
+          : historyIntervalSeconds as int,
     );
   }
 }
@@ -82,7 +114,16 @@ extension $SensorCopyWith on Sensor {
 
 Sensor _$SensorFromJson(Map<String, dynamic> json) =>
     $checkedCreate('Sensor', json, ($checkedConvert) {
-      $checkKeys(json, requiredKeys: const ['id', 'element', 'name']);
+      $checkKeys(
+        json,
+        requiredKeys: const [
+          'id',
+          'element',
+          'name',
+          'recordIntervalSeconds',
+          'historyIntervalSeconds',
+        ],
+      );
       final val = Sensor(
         id: $checkedConvert('id', (v) => (v as num).toInt()),
         element: $checkedConvert(
@@ -90,6 +131,14 @@ Sensor _$SensorFromJson(Map<String, dynamic> json) =>
           (v) => $enumDecode(_$SensorElementEnumMap, v),
         ),
         name: $checkedConvert('name', (v) => v as String),
+        recordIntervalSeconds: $checkedConvert(
+          'recordIntervalSeconds',
+          (v) => (v as num).toInt(),
+        ),
+        historyIntervalSeconds: $checkedConvert(
+          'historyIntervalSeconds',
+          (v) => (v as num).toInt(),
+        ),
       );
       return val;
     });
@@ -98,6 +147,8 @@ Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
   'id': instance.id,
   'element': _$SensorElementEnumMap[instance.element]!,
   'name': instance.name,
+  'recordIntervalSeconds': instance.recordIntervalSeconds,
+  'historyIntervalSeconds': instance.historyIntervalSeconds,
 };
 
 const _$SensorElementEnumMap = {

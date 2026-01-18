@@ -4,9 +4,10 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:chalkdart/chalkstrings.dart';
 import 'package:daemon/cli/cli_config.dart';
-import 'package:shared/models/daemon_config.dart';
 import 'package:shared/service.dart';
 import 'package:shared/utils.dart';
+
+import '../../models/daemon_config.dart';
 
 class ResetCommand extends Command<int> {
   @override

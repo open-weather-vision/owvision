@@ -63,7 +63,8 @@ export interface StationDefinition {
 export interface SensorDefinition {
   name: string;
   element: string;
-  recordIntervalSeconds: number;
+  recordIntervalSeconds?: number | undefined;
+  historyIntervalSeconds?: number | undefined;
 }
 
 export interface Station {
@@ -76,6 +77,7 @@ export interface Sensor {
   id: number;
   name: string;
   recordIntervalSeconds: number;
+  historyIntervalSeconds: number;
 }
 
 export interface GetSensorStateRequest {
@@ -84,9 +86,8 @@ export interface GetSensorStateRequest {
 
 export interface SensorState {
   unitId: string;
-  value?: number | undefined;
   createdAt: number;
-  intervalStart?: number | undefined;
+  value?: number | undefined;
 }
 
 function createBasePingMessage(): PingMessage {
@@ -699,7 +700,7 @@ export const StationDefinition: MessageFns<StationDefinition> = {
 };
 
 function createBaseSensorDefinition(): SensorDefinition {
-  return { name: "", element: "", recordIntervalSeconds: 0 };
+  return { name: "", element: "", recordIntervalSeconds: undefined, historyIntervalSeconds: undefined };
 }
 
 export const SensorDefinition: MessageFns<SensorDefinition> = {
@@ -710,8 +711,11 @@ export const SensorDefinition: MessageFns<SensorDefinition> = {
     if (message.element !== "") {
       writer.uint32(18).string(message.element);
     }
-    if (message.recordIntervalSeconds !== 0) {
+    if (message.recordIntervalSeconds !== undefined) {
       writer.uint32(24).int64(message.recordIntervalSeconds);
+    }
+    if (message.historyIntervalSeconds !== undefined) {
+      writer.uint32(32).int64(message.historyIntervalSeconds);
     }
     return writer;
   },
@@ -747,6 +751,14 @@ export const SensorDefinition: MessageFns<SensorDefinition> = {
           message.recordIntervalSeconds = longToNumber(reader.int64());
           continue;
         }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.historyIntervalSeconds = longToNumber(reader.int64());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -760,7 +772,12 @@ export const SensorDefinition: MessageFns<SensorDefinition> = {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       element: isSet(object.element) ? globalThis.String(object.element) : "",
-      recordIntervalSeconds: isSet(object.recordIntervalSeconds) ? globalThis.Number(object.recordIntervalSeconds) : 0,
+      recordIntervalSeconds: isSet(object.recordIntervalSeconds)
+        ? globalThis.Number(object.recordIntervalSeconds)
+        : undefined,
+      historyIntervalSeconds: isSet(object.historyIntervalSeconds)
+        ? globalThis.Number(object.historyIntervalSeconds)
+        : undefined,
     };
   },
 
@@ -772,8 +789,11 @@ export const SensorDefinition: MessageFns<SensorDefinition> = {
     if (message.element !== "") {
       obj.element = message.element;
     }
-    if (message.recordIntervalSeconds !== 0) {
+    if (message.recordIntervalSeconds !== undefined) {
       obj.recordIntervalSeconds = Math.round(message.recordIntervalSeconds);
+    }
+    if (message.historyIntervalSeconds !== undefined) {
+      obj.historyIntervalSeconds = Math.round(message.historyIntervalSeconds);
     }
     return obj;
   },
@@ -785,7 +805,8 @@ export const SensorDefinition: MessageFns<SensorDefinition> = {
     const message = createBaseSensorDefinition();
     message.name = object.name ?? "";
     message.element = object.element ?? "";
-    message.recordIntervalSeconds = object.recordIntervalSeconds ?? 0;
+    message.recordIntervalSeconds = object.recordIntervalSeconds ?? undefined;
+    message.historyIntervalSeconds = object.historyIntervalSeconds ?? undefined;
     return message;
   },
 };
@@ -883,7 +904,7 @@ export const Station: MessageFns<Station> = {
 };
 
 function createBaseSensor(): Sensor {
-  return { id: 0, name: "", recordIntervalSeconds: 0 };
+  return { id: 0, name: "", recordIntervalSeconds: 0, historyIntervalSeconds: 0 };
 }
 
 export const Sensor: MessageFns<Sensor> = {
@@ -896,6 +917,9 @@ export const Sensor: MessageFns<Sensor> = {
     }
     if (message.recordIntervalSeconds !== 0) {
       writer.uint32(24).int64(message.recordIntervalSeconds);
+    }
+    if (message.historyIntervalSeconds !== 0) {
+      writer.uint32(32).int64(message.historyIntervalSeconds);
     }
     return writer;
   },
@@ -931,6 +955,14 @@ export const Sensor: MessageFns<Sensor> = {
           message.recordIntervalSeconds = longToNumber(reader.int64());
           continue;
         }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.historyIntervalSeconds = longToNumber(reader.int64());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -945,6 +977,9 @@ export const Sensor: MessageFns<Sensor> = {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       recordIntervalSeconds: isSet(object.recordIntervalSeconds) ? globalThis.Number(object.recordIntervalSeconds) : 0,
+      historyIntervalSeconds: isSet(object.historyIntervalSeconds)
+        ? globalThis.Number(object.historyIntervalSeconds)
+        : 0,
     };
   },
 
@@ -959,6 +994,9 @@ export const Sensor: MessageFns<Sensor> = {
     if (message.recordIntervalSeconds !== 0) {
       obj.recordIntervalSeconds = Math.round(message.recordIntervalSeconds);
     }
+    if (message.historyIntervalSeconds !== 0) {
+      obj.historyIntervalSeconds = Math.round(message.historyIntervalSeconds);
+    }
     return obj;
   },
 
@@ -970,6 +1008,7 @@ export const Sensor: MessageFns<Sensor> = {
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
     message.recordIntervalSeconds = object.recordIntervalSeconds ?? 0;
+    message.historyIntervalSeconds = object.historyIntervalSeconds ?? 0;
     return message;
   },
 };
@@ -1033,7 +1072,7 @@ export const GetSensorStateRequest: MessageFns<GetSensorStateRequest> = {
 };
 
 function createBaseSensorState(): SensorState {
-  return { unitId: "", value: undefined, createdAt: 0, intervalStart: undefined };
+  return { unitId: "", createdAt: 0, value: undefined };
 }
 
 export const SensorState: MessageFns<SensorState> = {
@@ -1041,14 +1080,11 @@ export const SensorState: MessageFns<SensorState> = {
     if (message.unitId !== "") {
       writer.uint32(18).string(message.unitId);
     }
-    if (message.value !== undefined) {
-      writer.uint32(25).double(message.value);
-    }
     if (message.createdAt !== 0) {
       writer.uint32(32).int64(message.createdAt);
     }
-    if (message.intervalStart !== undefined) {
-      writer.uint32(40).int64(message.intervalStart);
+    if (message.value !== undefined) {
+      writer.uint32(25).double(message.value);
     }
     return writer;
   },
@@ -1068,14 +1104,6 @@ export const SensorState: MessageFns<SensorState> = {
           message.unitId = reader.string();
           continue;
         }
-        case 3: {
-          if (tag !== 25) {
-            break;
-          }
-
-          message.value = reader.double();
-          continue;
-        }
         case 4: {
           if (tag !== 32) {
             break;
@@ -1084,12 +1112,12 @@ export const SensorState: MessageFns<SensorState> = {
           message.createdAt = longToNumber(reader.int64());
           continue;
         }
-        case 5: {
-          if (tag !== 40) {
+        case 3: {
+          if (tag !== 25) {
             break;
           }
 
-          message.intervalStart = longToNumber(reader.int64());
+          message.value = reader.double();
           continue;
         }
       }
@@ -1104,9 +1132,8 @@ export const SensorState: MessageFns<SensorState> = {
   fromJSON(object: any): SensorState {
     return {
       unitId: isSet(object.unitId) ? globalThis.String(object.unitId) : "",
-      value: isSet(object.value) ? globalThis.Number(object.value) : undefined,
       createdAt: isSet(object.createdAt) ? globalThis.Number(object.createdAt) : 0,
-      intervalStart: isSet(object.intervalStart) ? globalThis.Number(object.intervalStart) : undefined,
+      value: isSet(object.value) ? globalThis.Number(object.value) : undefined,
     };
   },
 
@@ -1115,14 +1142,11 @@ export const SensorState: MessageFns<SensorState> = {
     if (message.unitId !== "") {
       obj.unitId = message.unitId;
     }
-    if (message.value !== undefined) {
-      obj.value = message.value;
-    }
     if (message.createdAt !== 0) {
       obj.createdAt = Math.round(message.createdAt);
     }
-    if (message.intervalStart !== undefined) {
-      obj.intervalStart = Math.round(message.intervalStart);
+    if (message.value !== undefined) {
+      obj.value = message.value;
     }
     return obj;
   },
@@ -1133,13 +1157,13 @@ export const SensorState: MessageFns<SensorState> = {
   fromPartial<I extends Exact<DeepPartial<SensorState>, I>>(object: I): SensorState {
     const message = createBaseSensorState();
     message.unitId = object.unitId ?? "";
-    message.value = object.value ?? undefined;
     message.createdAt = object.createdAt ?? 0;
-    message.intervalStart = object.intervalStart ?? undefined;
+    message.value = object.value ?? undefined;
     return message;
   },
 };
 
+/** Interface to the grpc service running on the daemon. */
 export type DaemonServiceService = typeof DaemonServiceService;
 export const DaemonServiceService = {
   createStation: {
@@ -1282,6 +1306,7 @@ export const DaemonServiceClient = makeGenericClientConstructor(
   serviceName: string;
 };
 
+/** Interface to the grpc service running on the station interface. Minimalistic by design. */
 export type StationInterfaceService = typeof StationInterfaceService;
 export const StationInterfaceService = {
   getStationDefinition: {

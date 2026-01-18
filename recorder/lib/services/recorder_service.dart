@@ -8,12 +8,14 @@ import 'package:open_meteo/open_meteo.dart';
 import 'package:recorder/cli/entry.dart';
 import 'package:recorder/services/status_service.dart';
 import 'package:recorder/utils/create_daemon_client.dart';
+import 'package:shared/drift_free_timer.dart';
 import 'package:shared/grpc/recorder.pbgrpc.dart' as grpc;
 import 'package:shared/logger/logger.dart';
-import 'package:shared/models/recorder_config.dart';
 import 'package:shared/models/sensor.dart';
 import 'package:shared/units/nounit.dart';
 import 'package:shared/weather_code.dart';
+
+import '../models/recorder_config.dart';
 
 @singleton
 class RecorderService {
@@ -24,7 +26,7 @@ class RecorderService {
   late grpc.Station _station;
   late grpc.StationDefinition _definition;
   final DataQueue _queue = DataQueue();
-  final _timers = <Timer>[];
+  final _timers = <DriftFreeTimer>[];
   final _openMeteo = WeatherApi(userAgent: "owvision_recorder");
   bool running = false;
 
@@ -107,7 +109,7 @@ class RecorderService {
       for (final sensor in _station.sensors) {
         _fetchSensor(sensor);
         _timers.add(
-          Timer.periodic(
+          DriftFreeTimer(
             Duration(seconds: sensor.recordIntervalSeconds.toInt()),
             (_) async {
               _fetchSensor(sensor);
@@ -118,7 +120,7 @@ class RecorderService {
       logger.info("Successfully scheduled record timers!");
       await _processLatestBatch();
       _timers.add(
-        Timer.periodic(Duration(seconds: 10), (_) async {
+        DriftFreeTimer(Duration(seconds: 10), (_) async {
           await _processLatestBatch();
         }),
       );

@@ -15,6 +15,7 @@ Sensor _$SensorFromJson(Map<String, dynamic> json) => Sensor(
     json['storageUnit'] as String,
   ),
   recordIntervalSeconds: (json['recordIntervalSeconds'] as num).toInt(),
+  historyIntervalSeconds: (json['historyIntervalSeconds'] as num).toInt(),
 );
 
 Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
@@ -23,6 +24,7 @@ Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
   'element': _$SensorElementEnumMap[instance.element]!,
   'name': instance.name,
   'recordIntervalSeconds': instance.recordIntervalSeconds,
+  'historyIntervalSeconds': instance.historyIntervalSeconds,
   'storageUnit': const UnitJsonConverter().toJson(instance.storageUnit),
 };
 

@@ -1,7 +1,9 @@
 import 'package:owvision_daemon_client_dart/src/model/error.dart';
+import 'package:owvision_daemon_client_dart/src/model/history_record.dart';
 import 'package:owvision_daemon_client_dart/src/model/sensor.dart';
-import 'package:owvision_daemon_client_dart/src/model/station.dart';
+import 'package:owvision_daemon_client_dart/src/model/sensor_history.dart';
 import 'package:owvision_daemon_client_dart/src/model/station_and_sensors.dart';
+import 'package:owvision_daemon_client_dart/src/model/weather_station.dart';
 
 final _regList = RegExp(r'^List<(.*)>$');
 final _regSet = RegExp(r'^Set<(.*)>$');
@@ -26,13 +28,15 @@ final _regMap = RegExp(r'^Map<String,(.*)>$');
         case 'ErrorCode':
           
           
+        case 'HistoryRecord':
+          return HistoryRecord.fromJson(value as Map<String, dynamic>) as ReturnType;
         case 'Sensor':
           return Sensor.fromJson(value as Map<String, dynamic>) as ReturnType;
         case 'SensorElement':
           
           
-        case 'Station':
-          return Station.fromJson(value as Map<String, dynamic>) as ReturnType;
+        case 'SensorHistory':
+          return SensorHistory.fromJson(value as Map<String, dynamic>) as ReturnType;
         case 'StationAndSensors':
           return StationAndSensors.fromJson(value as Map<String, dynamic>) as ReturnType;
         case 'TokenRole':
@@ -41,6 +45,8 @@ final _regMap = RegExp(r'^Map<String,(.*)>$');
         case 'Versions':
           
           
+        case 'WeatherStation':
+          return WeatherStation.fromJson(value as Map<String, dynamic>) as ReturnType;
         default:
           RegExpMatch? match;
 

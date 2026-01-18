@@ -1,6 +1,8 @@
 import 'package:shared/units/convert.dart';
 
 class Length {
+  static final groupName = "length";
+
   static final m = Unit.usingRatioAndOffset(
     "m",
     1.0,
@@ -8,6 +10,7 @@ class Length {
     "m",
     " Meter",
     " Meters",
+    group: Length.groupName,
   );
 
   static final cm = Unit.usingRatioAndOffset(
@@ -17,6 +20,7 @@ class Length {
     "cm",
     " Centimeter",
     " Centimeters",
+    group: Length.groupName,
   );
 
   static final ft = Unit.usingRatioAndOffset(
@@ -26,6 +30,7 @@ class Length {
     "ft",
     " Foot",
     " Feet",
+    group: Length.groupName,
   );
 
   static final inch = Unit.usingRatioAndOffset(
@@ -35,6 +40,7 @@ class Length {
     "in",
     " Inch",
     " Inches",
+    group: Length.groupName,
   );
 
   static List<Unit> units() {

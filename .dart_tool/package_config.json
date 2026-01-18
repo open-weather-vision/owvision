@@ -248,6 +248,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "equatable",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "events_emitter",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/events_emitter-0.6.0",
       "packageUri": "lib/",
@@ -270,6 +276,12 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/fixnum-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.1"
+    },
+    {
+      "name": "fl_chart",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
     },
     {
       "name": "flat_buffers",
@@ -516,6 +528,12 @@
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/material_color_utilities-0.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "material_symbols_icons",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/material_symbols_icons-4.2892.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "meta",

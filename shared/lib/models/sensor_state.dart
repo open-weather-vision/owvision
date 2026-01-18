@@ -6,13 +6,13 @@ part 'sensor_state.g.dart';
 
 @JsonSerializable()
 class SensorState {
-  final Convertible value;
+  final Convertible? value;
 
   @DateTimeEpochConverter()
   final DateTime createdAt;
 
   @DurationConverter()
-  final Duration? interval;
+  final Duration interval;
 
   const SensorState({
     required this.value,
@@ -22,7 +22,7 @@ class SensorState {
 
   @override
   String toString() {
-    return "${value.format()} (from: $createdAt, interval: ${interval.toString()})";
+    return "${value?.format()} (from: $createdAt, interval: ${interval.toString()})";
   }
 
   factory SensorState.fromJson(Map<String, dynamic> json) =>
@@ -45,8 +45,8 @@ class DurationConverter implements JsonConverter<Duration, int> {
   const DurationConverter();
 
   @override
-  Duration fromJson(int json) => Duration(milliseconds: json);
+  Duration fromJson(int json) => Duration(seconds: json);
 
   @override
-  int toJson(Duration object) => object.inMilliseconds;
+  int toJson(Duration object) => object.inSeconds;
 }

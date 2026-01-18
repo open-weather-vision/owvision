@@ -1,14 +1,14 @@
 openapi: 3.1.0
 info:
   title: Daemon REST API
-  version: 0.0.9
+  version: 0.0.10
 tags:
   - name: Token
   - name: Station
 paths:
   /stations:
     get:
-      operationId: Stations_all
+      operationId: Station_all
       description: Get all stations.
       parameters: []
       responses:
@@ -19,7 +19,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Station'
+                  $ref: '#/components/schemas/WeatherStation'
         default:
           description: An unexpected error response.
           content:
@@ -32,7 +32,7 @@ paths:
         - BearerAuth: []
   /stations/{id}:
     get:
-      operationId: Stations_one
+      operationId: Station_one
       description: Get one station and it's sensors.
       parameters:
         - name: id
@@ -58,9 +58,61 @@ paths:
         - Station
       security:
         - BearerAuth: []
+  /stations/{id}/history:
+    get:
+      operationId: Station_history
+      description: Get the history of one ore more sensors (in a specific interval).
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          explode: false
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          explode: false
+        - name: sensors
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SensorHistory'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Station
+      security:
+        - BearerAuth: []
   /stations/{id}/live:
     get:
-      operationId: Stations_connect
+      operationId: Station_connect
       description: Connect to a station's live websocket.
       parameters:
         - name: id
@@ -97,7 +149,7 @@ paths:
         - BearerAuth: []
   /tokens:
     post:
-      operationId: Tokens_generate
+      operationId: Token_generate
       description: Generates a new token. Only succeeds if you are authenticated using an admin token, or once using the init token `%12345678%`.
       parameters:
         - name: role
@@ -142,12 +194,25 @@ components:
         - notFound
         - internalError
         - badRequest
+    HistoryRecord:
+      type: object
+      required:
+        - createdAt
+      properties:
+        value:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
     Sensor:
       type: object
       required:
         - id
         - element
         - name
+        - recordIntervalSeconds
+        - historyIntervalSeconds
       properties:
         id:
           type: integer
@@ -156,6 +221,12 @@ components:
           $ref: '#/components/schemas/SensorElement'
         name:
           type: string
+        recordIntervalSeconds:
+          type: integer
+          format: int64
+        historyIntervalSeconds:
+          type: integer
+          format: int64
     SensorElement:
       type: string
       enum:
@@ -168,7 +239,44 @@ components:
         - windDirection
         - humidity
         - weatherCode
-    Station:
+    SensorHistory:
+      type: object
+      required:
+        - sensorName
+        - unitId
+        - history
+      properties:
+        sensorName:
+          type: string
+        unitId:
+          type: string
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryRecord'
+    StationAndSensors:
+      type: object
+      required:
+        - info
+        - sensors
+      properties:
+        info:
+          $ref: '#/components/schemas/WeatherStation'
+        sensors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sensor'
+    TokenRole:
+      type: string
+      enum:
+        - admin
+        - recorder
+        - viewer
+    Versions:
+      type: string
+      enum:
+        - 0.0.10
+    WeatherStation:
       type: object
       required:
         - id
@@ -190,28 +298,6 @@ components:
           format: double
         createdAt:
           type: string
-    StationAndSensors:
-      type: object
-      required:
-        - station
-        - sensors
-      properties:
-        station:
-          $ref: '#/components/schemas/Station'
-        sensors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Sensor'
-    TokenRole:
-      type: string
-      enum:
-        - admin
-        - recorder
-        - viewer
-    Versions:
-      type: string
-      enum:
-        - 0.0.9
   securitySchemes:
     BearerAuth:
       type: http

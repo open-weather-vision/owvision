@@ -1,6 +1,8 @@
 import 'package:shared/units/convert.dart';
 
 class PrecipitationRate {
+  static final groupName = "prec_rate";
+
   static final mmph = Unit.usingRatioAndOffset(
     "mmph",
     1.0,
@@ -8,6 +10,7 @@ class PrecipitationRate {
     "mm/h",
     " Millimeter per hour",
     " Millimeters per hour",
+    group: PrecipitationRate.groupName,
   );
 
   static final inph = Unit.usingRatioAndOffset(
@@ -17,6 +20,7 @@ class PrecipitationRate {
     "in/h",
     " Inch per hour",
     " Inches per hour",
+    group: PrecipitationRate.groupName,
   );
 
   static List<Unit> units() {

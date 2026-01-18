@@ -1,13 +1,14 @@
 import 'package:args/command_runner.dart';
 import 'package:chalkdart/chalkstrings.dart';
-import 'package:recorder/cli/commands/authenticate.dart';
-import 'package:recorder/cli/commands/config.dart';
-import 'package:recorder/cli/commands/reset.dart';
-import 'package:recorder/cli/commands/init.dart';
-import 'package:recorder/cli/commands/status.dart';
 import 'package:shared/logger/logger.dart';
-import 'package:shared/models/recorder_config.dart';
 import 'package:logging/logging.dart';
+
+import '../models/recorder_config.dart';
+import 'commands/authenticate.dart';
+import 'commands/config.dart';
+import 'commands/init.dart';
+import 'commands/reset.dart';
+import 'commands/status.dart';
 
 var recorderConfig = RecorderConfig.fromFileSync();
 

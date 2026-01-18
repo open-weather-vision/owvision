@@ -4,6 +4,8 @@ import 'package:shared/units/convert.dart';
 import 'package:shared/units/convertible.dart'; // Für PI benötigt
 
 class WindDirection {
+  static final groupName = "winddir";
+
   static final degrees = Unit.usingRatioAndOffset(
     "degrees",
     1.0,
@@ -11,6 +13,7 @@ class WindDirection {
     "°",
     " Degree",
     " Degrees",
+    group: WindDirection.groupName,
   );
 
   static final radians = Unit.usingRatioAndOffset(
@@ -20,6 +23,7 @@ class WindDirection {
     "rad",
     " Radian",
     " Radians",
+    group: WindDirection.groupName,
   );
 
   static String toWindCategory({required Convertible value}) {

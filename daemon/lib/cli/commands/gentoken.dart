@@ -32,7 +32,7 @@ class GenerateTokenCommand extends Command<int> {
     }
 
     try {
-      final response = await daemonClient.getTokenApi().tokensGenerate(
+      final response = await daemonClient.getTokenApi().tokenGenerate(
         role: role,
       );
       print(chalk.green("✅  Generated token: ${chalk.italic(response.data!)}"));

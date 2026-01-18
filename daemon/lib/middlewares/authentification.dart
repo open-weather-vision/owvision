@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:daemon/locator.dart';
 import 'package:daemon/services/token_service.dart';
 import 'package:shared/logger/logger.dart';
-import 'package:shared/models/error_response.dart';
-import 'package:shared/models/token.dart';
 import 'package:shared/models/token_role.dart';
 import 'package:shelf/shelf.dart';
+
+import '../models/error_response.dart';
+import '../models/token.dart';
 
 Middleware authMiddleware({required bool disabled}) {
   return (Handler innerHandler) {
@@ -15,8 +16,27 @@ Middleware authMiddleware({required bool disabled}) {
         return innerHandler(request);
       }
 
-      final authHeader = request.headers['Authorization'];
-      if (authHeader == null || !authHeader.startsWith('Bearer ')) {
+      String? authHeader = request.headers['Authorization']?.trim();
+
+      // Web socket authentication hack
+      if (authHeader == null &&
+          request.headers['Sec-WebSocket-Protocol'] != null) {
+        logger.info("Authenticating via sec web socket protocol...");
+        final entries = request.headers['Sec-WebSocket-Protocol']!
+            .split(",")
+            .map((e) => e.trim());
+        for (final entry in entries) {
+          if (entry.startsWith("auth.bearer.")) {
+            authHeader = entry.substring(12);
+          }
+        }
+      } else if (authHeader != null && authHeader.startsWith('Bearer ')) {
+        authHeader = authHeader.substring(7);
+      } else {
+        authHeader = null;
+      }
+
+      if (authHeader == null) {
         return Response.unauthorized(
           jsonEncode(
             ErrorResponse(ErrorCode.unauthorized, "Missing token!").toJson(),
@@ -24,9 +44,8 @@ Middleware authMiddleware({required bool disabled}) {
         );
       }
 
-      final plainToken = authHeader.substring(7);
       final tokenService = getIt<TokenService>();
-      final token = await tokenService.getToken(token: plainToken);
+      final token = await tokenService.getToken(token: authHeader);
 
       if (token == null) {
         logger.warning("Blocked user because of invalid token.");

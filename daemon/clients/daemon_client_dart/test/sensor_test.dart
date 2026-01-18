@@ -22,5 +22,15 @@ void main() {
       // TODO
     });
 
+    // int recordIntervalSeconds
+    test('to test the property `recordIntervalSeconds`', () async {
+      // TODO
+    });
+
+    // int historyIntervalSeconds
+    test('to test the property `historyIntervalSeconds`', () async {
+      // TODO
+    });
+
   });
 }

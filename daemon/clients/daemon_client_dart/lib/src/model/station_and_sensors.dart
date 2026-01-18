@@ -3,8 +3,8 @@
 //
 
 // ignore_for_file: unused_element
+import 'package:owvision_daemon_client_dart/src/model/weather_station.dart';
 import 'package:owvision_daemon_client_dart/src/model/sensor.dart';
-import 'package:owvision_daemon_client_dart/src/model/station.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -22,20 +22,20 @@ class StationAndSensors {
   /// Returns a new [StationAndSensors] instance.
   StationAndSensors({
 
-    required  this.station,
+    required  this.info,
 
     required  this.sensors,
   });
 
   @JsonKey(
     
-    name: r'station',
+    name: r'info',
     required: true,
     includeIfNull: false,
   )
 
 
-  final Station station;
+  final WeatherStation info;
 
 
 
@@ -55,12 +55,12 @@ class StationAndSensors {
 
     @override
     bool operator ==(Object other) => identical(this, other) || other is StationAndSensors &&
-      other.station == station &&
+      other.info == info &&
       other.sensors == sensors;
 
     @override
     int get hashCode =>
-        station.hashCode +
+        info.hashCode +
         sensors.hashCode;
 
   factory StationAndSensors.fromJson(Map<String, dynamic> json) => _$StationAndSensorsFromJson(json);

@@ -1,5 +1,4 @@
-import 'package:shared/models/sensor.dart';
-
+import 'sensor.dart';
 import 'sensor_state.dart';
 
 class StationLiveState {

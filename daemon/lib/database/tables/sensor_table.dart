@@ -2,6 +2,9 @@ import 'package:daemon/database/tables/station_table.dart';
 import 'package:drift/drift.dart';
 import "package:shared/models/sensor.dart";
 
+const defaultRecordIntervalSeconds = 60;
+const defaultHistoryIntervalSeconds = 3600;
+
 class SensorTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get stationId => integer().references(
@@ -14,7 +17,9 @@ class SensorTable extends Table {
   TextColumn get storageUnitId => text()();
   TextColumn get name => text()();
   IntColumn get recordIntervalSeconds =>
-      integer().withDefault(const Constant(60))();
+      integer().withDefault(const Constant(defaultRecordIntervalSeconds))();
+  IntColumn get historyIntervalSeconds =>
+      integer().withDefault(const Constant(defaultHistoryIntervalSeconds))();
 
   @override
   List<Set<Column>> get uniqueKeys => [

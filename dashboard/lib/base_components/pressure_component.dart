@@ -24,9 +24,7 @@ class PressureComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleLiveComponent(
       _pressure,
-      "Pressure",
-      pressureColor(_pressure?.state?.value.to(Pressure.hpa).value),
-      Icons.density_small_rounded,
+      pressureColor(_pressure?.state?.value?.to(Pressure.hpa).value),
     );
   }
 }

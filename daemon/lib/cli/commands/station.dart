@@ -39,7 +39,7 @@ class StationListCommand extends Command<int> {
     final stationsApi = daemonClient.getStationApi();
 
     try {
-      final response = await stationsApi.stationsAll();
+      final response = await stationsApi.stationAll();
       final stations = response.data;
       for (final station in stations!) {
         final selected = station.id == cliConfig.selectedStationId;
@@ -88,9 +88,9 @@ class StationSelectCommand extends Command<int> {
   FutureOr<int>? run() async {
     final stationsApi = daemonClient.getStationApi();
 
-    late final Station selectedStation;
+    late final WeatherStation selectedStation;
     try {
-      final response = await stationsApi.stationsAll();
+      final response = await stationsApi.stationAll();
       final stations = response.data;
       if (stations!.isEmpty) {
         print(
@@ -221,11 +221,11 @@ class LiveView {
       late final String lastUpdateTime;
 
       final state = sensorStateEntry.value;
-      if (state == null) {
+      if (state == null || state.value == null) {
         currentValue = "-";
         lastUpdateTime = "";
       } else {
-        currentValue = state.value.format();
+        currentValue = state.value!.format();
         final timeAgo = DateTime.now().difference(state.createdAt);
         lastUpdateTime = chalk.dim(" (${formatDuration(timeAgo)} ago)");
       }

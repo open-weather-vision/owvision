@@ -17,6 +17,7 @@ class Unit {
   final String shortName;
   final String longNameSg;
   final String longNamePl;
+  final String group;
 
   static final Map<String, Unit> units = _mapUnits([
     ...Humidity.units(),
@@ -40,8 +41,9 @@ class Unit {
     this.fromBaseUnit,
     this.shortName,
     this.longNameSg,
-    this.longNamePl,
-  );
+    this.longNamePl, {
+    required this.group,
+  });
 
   factory Unit.usingRatioAndOffset(
     String id,
@@ -49,8 +51,9 @@ class Unit {
     double baseOffset,
     String shortName,
     String longNameSg,
-    String longNamePl,
-  ) {
+    String longNamePl, {
+    required String group,
+  }) {
     return Unit(
       id,
       (v) => v * baseRatio + baseOffset,
@@ -58,6 +61,7 @@ class Unit {
       shortName,
       longNameSg,
       longNamePl,
+      group: group,
     );
   }
 

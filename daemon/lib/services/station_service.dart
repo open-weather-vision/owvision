@@ -4,8 +4,8 @@ import 'package:events_emitter/listener.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared/logger/logger.dart';
 import 'package:shared/models/sensor.dart';
-import 'package:shared/models/station.dart';
-import 'package:shared/models/station_and_sensors.dart';
+import '../models/station_info.dart';
+import '../models/station_and_sensors.dart';
 
 @singleton
 class StationService {
@@ -14,12 +14,12 @@ class StationService {
 
   StationService(this._stationRepository);
 
-  Future<Station?> getById({required int id}) {
+  Future<StationInfo?> getById({required int id}) {
     return _stationRepository.getById(id: id);
   }
 
   /// Gets all weather stations.
-  Future<List<Station>> getAll() async {
+  Future<List<StationInfo>> getAll() async {
     return await _stationRepository.getAll();
   }
 
@@ -62,7 +62,7 @@ class StationService {
 
   /// Creates a weather station and its sensors.
   Future<StationAndSensors?> create({
-    required Station station,
+    required StationInfo station,
     required List<Sensor> sensors,
   }) async {
     if (await _stationRepository.exists(name: station.name)) {
@@ -76,7 +76,7 @@ class StationService {
         "Created station '${station.name}' with ${sensors.length} sensors",
       );
       if (result != null) {
-        _events.emit("station_create", result.station.id.toString());
+        _events.emit("station_create", result.info.id.toString());
       }
       return result;
     }

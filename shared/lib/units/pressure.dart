@@ -1,6 +1,8 @@
 import 'package:shared/units/convert.dart';
 
 class Pressure {
+  static final groupName = "pressure";
+
   static final hpa = Unit.usingRatioAndOffset(
     "hpa",
     1,
@@ -8,6 +10,7 @@ class Pressure {
     "hPa",
     " Hectopascal",
     " Hectopascals",
+    group: Pressure.groupName,
   );
 
   static final inhg = Unit.usingRatioAndOffset(
@@ -17,6 +20,7 @@ class Pressure {
     "inHg",
     " Inch of Mercury",
     " Inches of Mercury",
+    group: Pressure.groupName,
   );
 
   static List<Unit> units() {

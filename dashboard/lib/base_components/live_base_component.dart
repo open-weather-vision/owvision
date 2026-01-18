@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class LiveBaseComponent extends StatelessWidget {
   final List<Widget> children;
-  final Color? color;
+  final Color color;
   final Color? borderColor;
   final EdgeInsets? padding;
   final String? label;
@@ -18,7 +18,7 @@ class LiveBaseComponent extends StatelessWidget {
     this.children, {
     super.key,
     required this.label,
-    this.color,
+    this.color = Colors.blueGrey,
     this.borderColor,
     this.padding,
     this.labelColor,
@@ -31,6 +31,7 @@ class LiveBaseComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lightMode = Theme.of(context).brightness == Brightness.light;
     return Opacity(
       opacity: connected ? 1.0 : 0.5,
       child: Container(
@@ -40,18 +41,16 @@ class LiveBaseComponent extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           image: backgroundImage,
-          color:
-              (color ??
-              Theme.of(
-                context,
-              ).colorScheme.surfaceContainerHighest.withValues(alpha: .3)),
+          color: lightMode ? color : color.withAlpha(150),
           borderRadius: BorderRadius.circular(12),
           border: borderWidth != 0
               ? Border.all(
                   color:
                       borderColor ??
-                      Theme.of(context).colorScheme.outlineVariant,
-                  width: borderWidth ?? 1.0,
+                      (Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white.withAlpha(120)
+                          : Colors.transparent),
+                  width: borderWidth ?? 1.5,
                 )
               : null,
         ),

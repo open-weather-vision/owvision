@@ -15,6 +15,7 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'controllers/station_controller.dart' as _i12;
 import 'controllers/token_controller.dart' as _i1022;
 import 'database/database.dart' as _i565;
+import 'repositories/history_repository.dart' as _i427;
 import 'repositories/sensor_repository.dart' as _i247;
 import 'repositories/station_repository.dart' as _i189;
 import 'repositories/token_repository.dart' as _i434;
@@ -23,6 +24,8 @@ import 'routers/station_router.dart' as _i296;
 import 'routers/token_router.dart' as _i677;
 import 'services/caddy_service.dart' as _i1032;
 import 'services/config_service.dart' as _i863;
+import 'services/history_creator_service.dart' as _i1049;
+import 'services/history_service.dart' as _i582;
 import 'services/live_sensor_state_service.dart' as _i141;
 import 'services/live_service.dart' as _i160;
 import 'services/rest_api_service.dart' as _i346;
@@ -39,6 +42,9 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.singleton<_i565.AppDatabase>(() => _i565.AppDatabase());
     gh.singleton<_i863.ConfigService>(() => _i863.ConfigService());
+    gh.singleton<_i427.HistoryRepository>(
+      () => _i427.HistoryRepository(gh<_i565.AppDatabase>()),
+    );
     gh.singleton<_i247.SensorRepository>(
       () => _i247.SensorRepository(gh<_i565.AppDatabase>()),
     );
@@ -57,6 +63,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i572.StationService>(
       () => _i572.StationService(gh<_i189.StationRepository>()),
     );
+    gh.singleton<_i582.HistoryService>(
+      () => _i582.HistoryService(
+        gh<_i427.HistoryRepository>(),
+        gh<_i247.SensorRepository>(),
+      ),
+    );
     gh.singleton<_i570.TokenService>(
       () => _i570.TokenService(
         gh<_i434.TokenRepository>(),
@@ -70,14 +82,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i863.ConfigService>(),
       ),
     );
-    gh.singleton<_i1022.TokenController>(
-      () => _i1022.TokenController(
-        gh<_i570.TokenService>(),
-        gh<_i863.ConfigService>(),
+    gh.singleton<_i1049.HistoryCreatorService>(
+      () => _i1049.HistoryCreatorService(
+        gh<_i160.LiveService>(),
+        gh<_i572.StationService>(),
       ),
-    );
-    gh.singleton<_i677.TokenRouter>(
-      () => _i677.TokenRouter(gh<_i1022.TokenController>()),
     );
     gh.singleton<_i141.LiveSensorStateService>(
       () => _i141.LiveSensorStateService(
@@ -89,10 +98,20 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i12.StationController(
         gh<_i572.StationService>(),
         gh<_i141.LiveSensorStateService>(),
+        gh<_i582.HistoryService>(),
+      ),
+    );
+    gh.singleton<_i1022.TokenController>(
+      () => _i1022.TokenController(
+        gh<_i570.TokenService>(),
+        gh<_i863.ConfigService>(),
       ),
     );
     gh.singleton<_i296.StationRouter>(
       () => _i296.StationRouter(gh<_i12.StationController>()),
+    );
+    gh.singleton<_i677.TokenRouter>(
+      () => _i677.TokenRouter(gh<_i1022.TokenController>()),
     );
     gh.singleton<_i50.AppRouter>(
       () => _i50.AppRouter(gh<_i296.StationRouter>(), gh<_i677.TokenRouter>()),

@@ -4,9 +4,10 @@ import 'package:crypto/crypto.dart';
 import 'package:daemon/database/database.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared/logger/logger.dart';
-import 'package:shared/models/token.dart';
 import 'package:shared/models/token_role.dart';
 import 'package:uuid/uuid.dart';
+
+import '../models/token.dart';
 
 @singleton
 class TokenRepository {

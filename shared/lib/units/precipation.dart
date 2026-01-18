@@ -1,6 +1,8 @@
 import 'package:shared/units/convert.dart';
 
 class Precipitation {
+  static final groupName = "precipation";
+
   static final mm = Unit.usingRatioAndOffset(
     "mm",
     1.0,
@@ -8,6 +10,7 @@ class Precipitation {
     "mm",
     " Millimeter",
     " Millimeters",
+    group: Precipitation.groupName,
   );
 
   static final inch = Unit.usingRatioAndOffset(
@@ -17,6 +20,7 @@ class Precipitation {
     "in",
     " Inch",
     " Inches",
+    group: Precipitation.groupName,
   );
 
   static final lpm2 = Unit.usingRatioAndOffset(
@@ -26,6 +30,7 @@ class Precipitation {
     "l/m²",
     " Liter per square meter",
     " Liters per square meter",
+    group: Precipitation.groupName,
   );
 
   static List<Unit> units() {

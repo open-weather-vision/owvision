@@ -8,22 +8,30 @@ import 'package:shared/grpc/recorder.pbgrpc.dart';
 import 'package:shared/logger/logger.dart';
 import 'package:shared/models/sensor.dart';
 import 'package:shared/units/humidity.dart';
+import 'package:shared/units/precipation.dart';
 import 'package:shared/units/temperature.dart';
 
 class StationDriverMock {
   late double tempIn;
   late double tempOut;
   late double humOut;
+  late double precipationLastMinute;
   final _random = Random();
 
   StationDriverMock() {
     tempIn = _random.nextDouble() * 30 - 15;
     tempOut = _random.nextDouble() * 30 - 15;
     humOut = _random.nextDouble() * 100;
+    precipationLastMinute = 1.3;
     Timer.periodic(Duration(seconds: 1), (_) {
       tempOut += (_random.nextDouble() - 0.5) * 0.1;
       tempIn += (_random.nextDouble() - 0.5) * 0.1;
       humOut += (_random.nextDouble() - 0.5) * 0.1;
+    });
+    Timer.periodic(Duration(minutes: 1), (_) {
+      precipationLastMinute = _random.nextDouble() > 0.6
+          ? _random.nextDouble() * 0.5
+          : 0;
     });
   }
 }
@@ -48,6 +56,12 @@ class ClientTest extends StationInterfaceServiceBase {
         unitId: Temperature.celsius.id,
         createdAt: Int64(DateTime.now().millisecondsSinceEpoch),
         value: _stationDriver.tempIn,
+      );
+    } else if (request.name == "precipation_min") {
+      return SensorState(
+        unitId: Precipitation.mm.id,
+        createdAt: Int64(DateTime.now().millisecondsSinceEpoch),
+        value: _stationDriver.precipationLastMinute,
       );
     } else {
       return SensorState(
@@ -83,6 +97,12 @@ class ClientTest extends StationInterfaceServiceBase {
           name: "humidity_out",
           element: SensorElement.humidity.name,
           recordIntervalSeconds: Int64(60),
+        ),
+        SensorDefinition(
+          name: "precipation_min",
+          element: SensorElement.precipationAccumulated.name,
+          recordIntervalSeconds: Int64(30),
+          historyIntervalSeconds: Int64(60),
         ),
       ],
       version: 1,

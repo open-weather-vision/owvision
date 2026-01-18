@@ -23,11 +23,25 @@ class PrecipationComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lightMode = Theme.of(context).brightness == Brightness.light;
     return LiveBaseComponent(
       [
         Positioned.fill(
           top: 40,
-          child: SvgPicture.asset('assets/svgs/water2.svg', fit: BoxFit.fill),
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            child: SvgPicture.asset(
+              'assets/svgs/water2.svg',
+              fit: BoxFit.fill,
+              colorFilter: lightMode
+                  ? null
+                  : ColorFilter.mode(
+                      const Color.fromARGB(255, 31, 68, 99),
+                      BlendMode.srcIn,
+                    ),
+            ),
+          ),
         ),
         Positioned(
           top: 50,
@@ -36,17 +50,29 @@ class PrecipationComponent extends StatelessWidget {
             textBaseline: TextBaseline.ideographic,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             children: [
-              Text(
-                _precipationAcc?.state?.value.value.toString() ?? "",
-                style: TextStyle(
-                  fontSize: 55,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+              if (_precipationAcc?.state?.value != null)
+                Text(
+                  _precipationAcc!.state!.value!.value.toStringAsFixed(1),
+                  style: TextStyle(
+                    fontSize: 55,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                )
+              else
+                Row(
+                  spacing: 20,
+                  children: [
+                    Icon(
+                      Icons.sensors_off,
+                      size: 55,
+                      color: const Color.fromARGB(255, 229, 147, 147),
+                    ),
+                  ],
                 ),
-              ),
               SizedBox(width: 5),
               Text(
-                _precipationAcc?.state?.value.unit.shortName ?? "",
+                _precipationAcc?.state?.value?.unit.shortName ?? "",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -59,13 +85,15 @@ class PrecipationComponent extends StatelessWidget {
       ],
       height: 145,
       connected: _precipationAcc?.state?.value != null,
+      borderColor: (Theme.of(context).brightness == Brightness.dark
+          ? Colors.white.withAlpha(60)
+          : Colors.transparent),
       label:
-          "Precipation${formatDurationSimple(_precipationInterval ?? Duration(minutes: 15))}", // TODO: Remove fallback
+          "Precipation${_precipationInterval != null ? formatDurationSimple(_precipationInterval) : ""}",
       padding: EdgeInsets.all(0),
-      borderWidth: 0,
       color: Color.fromARGB(255, 77, 175, 255),
       labelColor: Color.fromARGB(150, 0, 0, 0),
-      labelIcon: Icon(Icons.water_drop_sharp, size: 14),
+      labelIcon: Icon(Icons.water_drop_sharp, size: 14, color: Colors.white),
     );
   }
 }

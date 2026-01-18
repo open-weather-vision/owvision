@@ -66,6 +66,17 @@ class $StationTableTable extends StationTable
     type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -73,6 +84,7 @@ class $StationTableTable extends StationTable
     createdAt,
     longitude,
     latitude,
+    version,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -121,6 +133,14 @@ class $StationTableTable extends StationTable
     } else if (isInserting) {
       context.missing(_latitudeMeta);
     }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
     return context;
   }
 
@@ -150,6 +170,10 @@ class $StationTableTable extends StationTable
         DriftSqlType.double,
         data['${effectivePrefix}latitude'],
       )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
     );
   }
 
@@ -166,12 +190,14 @@ class StationTableData extends DataClass
   final DateTime createdAt;
   final double longitude;
   final double latitude;
+  final int version;
   const StationTableData({
     required this.id,
     required this.name,
     required this.createdAt,
     required this.longitude,
     required this.latitude,
+    required this.version,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -181,6 +207,7 @@ class StationTableData extends DataClass
     map['created_at'] = Variable<DateTime>(createdAt);
     map['longitude'] = Variable<double>(longitude);
     map['latitude'] = Variable<double>(latitude);
+    map['version'] = Variable<int>(version);
     return map;
   }
 
@@ -191,6 +218,7 @@ class StationTableData extends DataClass
       createdAt: Value(createdAt),
       longitude: Value(longitude),
       latitude: Value(latitude),
+      version: Value(version),
     );
   }
 
@@ -205,6 +233,7 @@ class StationTableData extends DataClass
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       longitude: serializer.fromJson<double>(json['longitude']),
       latitude: serializer.fromJson<double>(json['latitude']),
+      version: serializer.fromJson<int>(json['version']),
     );
   }
   @override
@@ -216,6 +245,7 @@ class StationTableData extends DataClass
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'longitude': serializer.toJson<double>(longitude),
       'latitude': serializer.toJson<double>(latitude),
+      'version': serializer.toJson<int>(version),
     };
   }
 
@@ -225,12 +255,14 @@ class StationTableData extends DataClass
     DateTime? createdAt,
     double? longitude,
     double? latitude,
+    int? version,
   }) => StationTableData(
     id: id ?? this.id,
     name: name ?? this.name,
     createdAt: createdAt ?? this.createdAt,
     longitude: longitude ?? this.longitude,
     latitude: latitude ?? this.latitude,
+    version: version ?? this.version,
   );
   StationTableData copyWithCompanion(StationTableCompanion data) {
     return StationTableData(
@@ -239,6 +271,7 @@ class StationTableData extends DataClass
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       longitude: data.longitude.present ? data.longitude.value : this.longitude,
       latitude: data.latitude.present ? data.latitude.value : this.latitude,
+      version: data.version.present ? data.version.value : this.version,
     );
   }
 
@@ -249,13 +282,15 @@ class StationTableData extends DataClass
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
           ..write('longitude: $longitude, ')
-          ..write('latitude: $latitude')
+          ..write('latitude: $latitude, ')
+          ..write('version: $version')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, createdAt, longitude, latitude);
+  int get hashCode =>
+      Object.hash(id, name, createdAt, longitude, latitude, version);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -264,7 +299,8 @@ class StationTableData extends DataClass
           other.name == this.name &&
           other.createdAt == this.createdAt &&
           other.longitude == this.longitude &&
-          other.latitude == this.latitude);
+          other.latitude == this.latitude &&
+          other.version == this.version);
 }
 
 class StationTableCompanion extends UpdateCompanion<StationTableData> {
@@ -273,12 +309,14 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
   final Value<DateTime> createdAt;
   final Value<double> longitude;
   final Value<double> latitude;
+  final Value<int> version;
   const StationTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.longitude = const Value.absent(),
     this.latitude = const Value.absent(),
+    this.version = const Value.absent(),
   });
   StationTableCompanion.insert({
     this.id = const Value.absent(),
@@ -286,16 +324,19 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
     required DateTime createdAt,
     required double longitude,
     required double latitude,
+    required int version,
   }) : name = Value(name),
        createdAt = Value(createdAt),
        longitude = Value(longitude),
-       latitude = Value(latitude);
+       latitude = Value(latitude),
+       version = Value(version);
   static Insertable<StationTableData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<DateTime>? createdAt,
     Expression<double>? longitude,
     Expression<double>? latitude,
+    Expression<int>? version,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -303,6 +344,7 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
       if (createdAt != null) 'created_at': createdAt,
       if (longitude != null) 'longitude': longitude,
       if (latitude != null) 'latitude': latitude,
+      if (version != null) 'version': version,
     });
   }
 
@@ -312,6 +354,7 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
     Value<DateTime>? createdAt,
     Value<double>? longitude,
     Value<double>? latitude,
+    Value<int>? version,
   }) {
     return StationTableCompanion(
       id: id ?? this.id,
@@ -319,6 +362,7 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
       createdAt: createdAt ?? this.createdAt,
       longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
+      version: version ?? this.version,
     );
   }
 
@@ -340,6 +384,9 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
     if (latitude.present) {
       map['latitude'] = Variable<double>(latitude.value);
     }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
     return map;
   }
 
@@ -350,7 +397,8 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
           ..write('longitude: $longitude, ')
-          ..write('latitude: $latitude')
+          ..write('latitude: $latitude, ')
+          ..write('version: $version')
           ..write(')'))
         .toString();
   }
@@ -427,7 +475,18 @@ class $SensorTableTable extends SensorTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: const Constant(60),
+    defaultValue: const Constant(defaultRecordIntervalSeconds),
+  );
+  static const VerificationMeta _historyIntervalSecondsMeta =
+      const VerificationMeta('historyIntervalSeconds');
+  @override
+  late final GeneratedColumn<int> historyIntervalSeconds = GeneratedColumn<int>(
+    'history_interval_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(defaultHistoryIntervalSeconds),
   );
   @override
   List<GeneratedColumn> get $columns => [
@@ -437,6 +496,7 @@ class $SensorTableTable extends SensorTable
     storageUnitId,
     name,
     recordIntervalSeconds,
+    historyIntervalSeconds,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -489,6 +549,15 @@ class $SensorTableTable extends SensorTable
         ),
       );
     }
+    if (data.containsKey('history_interval_seconds')) {
+      context.handle(
+        _historyIntervalSecondsMeta,
+        historyIntervalSeconds.isAcceptableOrUnknown(
+          data['history_interval_seconds']!,
+          _historyIntervalSecondsMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -528,6 +597,10 @@ class $SensorTableTable extends SensorTable
         DriftSqlType.int,
         data['${effectivePrefix}record_interval_seconds'],
       )!,
+      historyIntervalSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}history_interval_seconds'],
+      )!,
     );
   }
 
@@ -547,6 +620,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   final String storageUnitId;
   final String name;
   final int recordIntervalSeconds;
+  final int historyIntervalSeconds;
   const SensorTableData({
     required this.id,
     required this.stationId,
@@ -554,6 +628,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     required this.storageUnitId,
     required this.name,
     required this.recordIntervalSeconds,
+    required this.historyIntervalSeconds,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -568,6 +643,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     map['storage_unit_id'] = Variable<String>(storageUnitId);
     map['name'] = Variable<String>(name);
     map['record_interval_seconds'] = Variable<int>(recordIntervalSeconds);
+    map['history_interval_seconds'] = Variable<int>(historyIntervalSeconds);
     return map;
   }
 
@@ -579,6 +655,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
       storageUnitId: Value(storageUnitId),
       name: Value(name),
       recordIntervalSeconds: Value(recordIntervalSeconds),
+      historyIntervalSeconds: Value(historyIntervalSeconds),
     );
   }
 
@@ -598,6 +675,9 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
       recordIntervalSeconds: serializer.fromJson<int>(
         json['recordIntervalSeconds'],
       ),
+      historyIntervalSeconds: serializer.fromJson<int>(
+        json['historyIntervalSeconds'],
+      ),
     );
   }
   @override
@@ -612,6 +692,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
       'storageUnitId': serializer.toJson<String>(storageUnitId),
       'name': serializer.toJson<String>(name),
       'recordIntervalSeconds': serializer.toJson<int>(recordIntervalSeconds),
+      'historyIntervalSeconds': serializer.toJson<int>(historyIntervalSeconds),
     };
   }
 
@@ -622,6 +703,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     String? storageUnitId,
     String? name,
     int? recordIntervalSeconds,
+    int? historyIntervalSeconds,
   }) => SensorTableData(
     id: id ?? this.id,
     stationId: stationId ?? this.stationId,
@@ -629,6 +711,8 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     storageUnitId: storageUnitId ?? this.storageUnitId,
     name: name ?? this.name,
     recordIntervalSeconds: recordIntervalSeconds ?? this.recordIntervalSeconds,
+    historyIntervalSeconds:
+        historyIntervalSeconds ?? this.historyIntervalSeconds,
   );
   SensorTableData copyWithCompanion(SensorTableCompanion data) {
     return SensorTableData(
@@ -642,6 +726,9 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
       recordIntervalSeconds: data.recordIntervalSeconds.present
           ? data.recordIntervalSeconds.value
           : this.recordIntervalSeconds,
+      historyIntervalSeconds: data.historyIntervalSeconds.present
+          ? data.historyIntervalSeconds.value
+          : this.historyIntervalSeconds,
     );
   }
 
@@ -653,7 +740,8 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
           ..write('element: $element, ')
           ..write('storageUnitId: $storageUnitId, ')
           ..write('name: $name, ')
-          ..write('recordIntervalSeconds: $recordIntervalSeconds')
+          ..write('recordIntervalSeconds: $recordIntervalSeconds, ')
+          ..write('historyIntervalSeconds: $historyIntervalSeconds')
           ..write(')'))
         .toString();
   }
@@ -666,6 +754,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     storageUnitId,
     name,
     recordIntervalSeconds,
+    historyIntervalSeconds,
   );
   @override
   bool operator ==(Object other) =>
@@ -676,7 +765,8 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
           other.element == this.element &&
           other.storageUnitId == this.storageUnitId &&
           other.name == this.name &&
-          other.recordIntervalSeconds == this.recordIntervalSeconds);
+          other.recordIntervalSeconds == this.recordIntervalSeconds &&
+          other.historyIntervalSeconds == this.historyIntervalSeconds);
 }
 
 class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
@@ -686,6 +776,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
   final Value<String> storageUnitId;
   final Value<String> name;
   final Value<int> recordIntervalSeconds;
+  final Value<int> historyIntervalSeconds;
   const SensorTableCompanion({
     this.id = const Value.absent(),
     this.stationId = const Value.absent(),
@@ -693,6 +784,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
     this.storageUnitId = const Value.absent(),
     this.name = const Value.absent(),
     this.recordIntervalSeconds = const Value.absent(),
+    this.historyIntervalSeconds = const Value.absent(),
   });
   SensorTableCompanion.insert({
     this.id = const Value.absent(),
@@ -701,6 +793,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
     required String storageUnitId,
     required String name,
     this.recordIntervalSeconds = const Value.absent(),
+    this.historyIntervalSeconds = const Value.absent(),
   }) : stationId = Value(stationId),
        element = Value(element),
        storageUnitId = Value(storageUnitId),
@@ -712,6 +805,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
     Expression<String>? storageUnitId,
     Expression<String>? name,
     Expression<int>? recordIntervalSeconds,
+    Expression<int>? historyIntervalSeconds,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -721,6 +815,8 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
       if (name != null) 'name': name,
       if (recordIntervalSeconds != null)
         'record_interval_seconds': recordIntervalSeconds,
+      if (historyIntervalSeconds != null)
+        'history_interval_seconds': historyIntervalSeconds,
     });
   }
 
@@ -731,6 +827,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
     Value<String>? storageUnitId,
     Value<String>? name,
     Value<int>? recordIntervalSeconds,
+    Value<int>? historyIntervalSeconds,
   }) {
     return SensorTableCompanion(
       id: id ?? this.id,
@@ -740,6 +837,8 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
       name: name ?? this.name,
       recordIntervalSeconds:
           recordIntervalSeconds ?? this.recordIntervalSeconds,
+      historyIntervalSeconds:
+          historyIntervalSeconds ?? this.historyIntervalSeconds,
     );
   }
 
@@ -768,6 +867,11 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
         recordIntervalSeconds.value,
       );
     }
+    if (historyIntervalSeconds.present) {
+      map['history_interval_seconds'] = Variable<int>(
+        historyIntervalSeconds.value,
+      );
+    }
     return map;
   }
 
@@ -779,7 +883,8 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
           ..write('element: $element, ')
           ..write('storageUnitId: $storageUnitId, ')
           ..write('name: $name, ')
-          ..write('recordIntervalSeconds: $recordIntervalSeconds')
+          ..write('recordIntervalSeconds: $recordIntervalSeconds, ')
+          ..write('historyIntervalSeconds: $historyIntervalSeconds')
           ..write(')'))
         .toString();
   }
@@ -1001,12 +1106,316 @@ class TokenTableCompanion extends UpdateCompanion<TokenTableData> {
   }
 }
 
+class $HistoryTableTable extends HistoryTable
+    with TableInfo<$HistoryTableTable, HistoryTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HistoryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _sensorIdMeta = const VerificationMeta(
+    'sensorId',
+  );
+  @override
+  late final GeneratedColumn<int> sensorId = GeneratedColumn<int>(
+    'sensor_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES sensor_table (id) ON UPDATE CASCADE ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<double> value = GeneratedColumn<double>(
+    'value',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, sensorId, value, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'history_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HistoryTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('sensor_id')) {
+      context.handle(
+        _sensorIdMeta,
+        sensorId.isAcceptableOrUnknown(data['sensor_id']!, _sensorIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sensorIdMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+        _valueMeta,
+        value.isAcceptableOrUnknown(data['value']!, _valueMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  HistoryTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HistoryTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      sensorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sensor_id'],
+      )!,
+      value: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}value'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $HistoryTableTable createAlias(String alias) {
+    return $HistoryTableTable(attachedDatabase, alias);
+  }
+}
+
+class HistoryTableData extends DataClass
+    implements Insertable<HistoryTableData> {
+  final int id;
+  final int sensorId;
+  final double? value;
+  final DateTime createdAt;
+  const HistoryTableData({
+    required this.id,
+    required this.sensorId,
+    this.value,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['sensor_id'] = Variable<int>(sensorId);
+    if (!nullToAbsent || value != null) {
+      map['value'] = Variable<double>(value);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  HistoryTableCompanion toCompanion(bool nullToAbsent) {
+    return HistoryTableCompanion(
+      id: Value(id),
+      sensorId: Value(sensorId),
+      value: value == null && nullToAbsent
+          ? const Value.absent()
+          : Value(value),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory HistoryTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HistoryTableData(
+      id: serializer.fromJson<int>(json['id']),
+      sensorId: serializer.fromJson<int>(json['sensorId']),
+      value: serializer.fromJson<double?>(json['value']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'sensorId': serializer.toJson<int>(sensorId),
+      'value': serializer.toJson<double?>(value),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  HistoryTableData copyWith({
+    int? id,
+    int? sensorId,
+    Value<double?> value = const Value.absent(),
+    DateTime? createdAt,
+  }) => HistoryTableData(
+    id: id ?? this.id,
+    sensorId: sensorId ?? this.sensorId,
+    value: value.present ? value.value : this.value,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  HistoryTableData copyWithCompanion(HistoryTableCompanion data) {
+    return HistoryTableData(
+      id: data.id.present ? data.id.value : this.id,
+      sensorId: data.sensorId.present ? data.sensorId.value : this.sensorId,
+      value: data.value.present ? data.value.value : this.value,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HistoryTableData(')
+          ..write('id: $id, ')
+          ..write('sensorId: $sensorId, ')
+          ..write('value: $value, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, sensorId, value, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HistoryTableData &&
+          other.id == this.id &&
+          other.sensorId == this.sensorId &&
+          other.value == this.value &&
+          other.createdAt == this.createdAt);
+}
+
+class HistoryTableCompanion extends UpdateCompanion<HistoryTableData> {
+  final Value<int> id;
+  final Value<int> sensorId;
+  final Value<double?> value;
+  final Value<DateTime> createdAt;
+  const HistoryTableCompanion({
+    this.id = const Value.absent(),
+    this.sensorId = const Value.absent(),
+    this.value = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  HistoryTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int sensorId,
+    this.value = const Value.absent(),
+    required DateTime createdAt,
+  }) : sensorId = Value(sensorId),
+       createdAt = Value(createdAt);
+  static Insertable<HistoryTableData> custom({
+    Expression<int>? id,
+    Expression<int>? sensorId,
+    Expression<double>? value,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (sensorId != null) 'sensor_id': sensorId,
+      if (value != null) 'value': value,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  HistoryTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? sensorId,
+    Value<double?>? value,
+    Value<DateTime>? createdAt,
+  }) {
+    return HistoryTableCompanion(
+      id: id ?? this.id,
+      sensorId: sensorId ?? this.sensorId,
+      value: value ?? this.value,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (sensorId.present) {
+      map['sensor_id'] = Variable<int>(sensorId.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<double>(value.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HistoryTableCompanion(')
+          ..write('id: $id, ')
+          ..write('sensorId: $sensorId, ')
+          ..write('value: $value, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $StationTableTable stationTable = $StationTableTable(this);
   late final $SensorTableTable sensorTable = $SensorTableTable(this);
   late final $TokenTableTable tokenTable = $TokenTableTable(this);
+  late final $HistoryTableTable historyTable = $HistoryTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1015,6 +1424,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     stationTable,
     sensorTable,
     tokenTable,
+    historyTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -1032,6 +1442,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       ),
       result: [TableUpdate('sensor_table', kind: UpdateKind.update)],
     ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sensor_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('history_table', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sensor_table',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('history_table', kind: UpdateKind.update)],
+    ),
   ]);
 }
 
@@ -1042,6 +1466,7 @@ typedef $$StationTableTableCreateCompanionBuilder =
       required DateTime createdAt,
       required double longitude,
       required double latitude,
+      required int version,
     });
 typedef $$StationTableTableUpdateCompanionBuilder =
     StationTableCompanion Function({
@@ -1050,6 +1475,7 @@ typedef $$StationTableTableUpdateCompanionBuilder =
       Value<DateTime> createdAt,
       Value<double> longitude,
       Value<double> latitude,
+      Value<int> version,
     });
 
 final class $$StationTableTableReferences
@@ -1113,6 +1539,11 @@ class $$StationTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
   Expression<bool> sensorTableRefs(
     Expression<bool> Function($$SensorTableTableFilterComposer f) f,
   ) {
@@ -1172,6 +1603,11 @@ class $$StationTableTableOrderingComposer
     column: $table.latitude,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$StationTableTableAnnotationComposer
@@ -1197,6 +1633,9 @@ class $$StationTableTableAnnotationComposer
 
   GeneratedColumn<double> get latitude =>
       $composableBuilder(column: $table.latitude, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
 
   Expression<T> sensorTableRefs<T extends Object>(
     Expression<T> Function($$SensorTableTableAnnotationComposer a) f,
@@ -1257,12 +1696,14 @@ class $$StationTableTableTableManager
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<double> longitude = const Value.absent(),
                 Value<double> latitude = const Value.absent(),
+                Value<int> version = const Value.absent(),
               }) => StationTableCompanion(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 longitude: longitude,
                 latitude: latitude,
+                version: version,
               ),
           createCompanionCallback:
               ({
@@ -1271,12 +1712,14 @@ class $$StationTableTableTableManager
                 required DateTime createdAt,
                 required double longitude,
                 required double latitude,
+                required int version,
               }) => StationTableCompanion.insert(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 longitude: longitude,
                 latitude: latitude,
+                version: version,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -1342,6 +1785,7 @@ typedef $$SensorTableTableCreateCompanionBuilder =
       required String storageUnitId,
       required String name,
       Value<int> recordIntervalSeconds,
+      Value<int> historyIntervalSeconds,
     });
 typedef $$SensorTableTableUpdateCompanionBuilder =
     SensorTableCompanion Function({
@@ -1351,6 +1795,7 @@ typedef $$SensorTableTableUpdateCompanionBuilder =
       Value<String> storageUnitId,
       Value<String> name,
       Value<int> recordIntervalSeconds,
+      Value<int> historyIntervalSeconds,
     });
 
 final class $$SensorTableTableReferences
@@ -1373,6 +1818,27 @@ final class $$SensorTableTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$HistoryTableTable, List<HistoryTableData>>
+  _historyTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.historyTable,
+    aliasName: $_aliasNameGenerator(
+      db.sensorTable.id,
+      db.historyTable.sensorId,
+    ),
+  );
+
+  $$HistoryTableTableProcessedTableManager get historyTableRefs {
+    final manager = $$HistoryTableTableTableManager(
+      $_db,
+      $_db.historyTable,
+    ).filter((f) => f.sensorId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_historyTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 }
@@ -1412,6 +1878,11 @@ class $$SensorTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<int> get historyIntervalSeconds => $composableBuilder(
+    column: $table.historyIntervalSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$StationTableTableFilterComposer get stationId {
     final $$StationTableTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -1433,6 +1904,31 @@ class $$SensorTableTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> historyTableRefs(
+    Expression<bool> Function($$HistoryTableTableFilterComposer f) f,
+  ) {
+    final $$HistoryTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.historyTable,
+      getReferencedColumn: (t) => t.sensorId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$HistoryTableTableFilterComposer(
+            $db: $db,
+            $table: $db.historyTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -1467,6 +1963,11 @@ class $$SensorTableTableOrderingComposer
 
   ColumnOrderings<int> get recordIntervalSeconds => $composableBuilder(
     column: $table.recordIntervalSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get historyIntervalSeconds => $composableBuilder(
+    column: $table.historyIntervalSeconds,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1522,6 +2023,11 @@ class $$SensorTableTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<int> get historyIntervalSeconds => $composableBuilder(
+    column: $table.historyIntervalSeconds,
+    builder: (column) => column,
+  );
+
   $$StationTableTableAnnotationComposer get stationId {
     final $$StationTableTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -1544,6 +2050,31 @@ class $$SensorTableTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> historyTableRefs<T extends Object>(
+    Expression<T> Function($$HistoryTableTableAnnotationComposer a) f,
+  ) {
+    final $$HistoryTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.historyTable,
+      getReferencedColumn: (t) => t.sensorId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$HistoryTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.historyTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$SensorTableTableTableManager
@@ -1559,7 +2090,7 @@ class $$SensorTableTableTableManager
           $$SensorTableTableUpdateCompanionBuilder,
           (SensorTableData, $$SensorTableTableReferences),
           SensorTableData,
-          PrefetchHooks Function({bool stationId})
+          PrefetchHooks Function({bool stationId, bool historyTableRefs})
         > {
   $$SensorTableTableTableManager(_$AppDatabase db, $SensorTableTable table)
     : super(
@@ -1580,6 +2111,7 @@ class $$SensorTableTableTableManager
                 Value<String> storageUnitId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<int> recordIntervalSeconds = const Value.absent(),
+                Value<int> historyIntervalSeconds = const Value.absent(),
               }) => SensorTableCompanion(
                 id: id,
                 stationId: stationId,
@@ -1587,6 +2119,7 @@ class $$SensorTableTableTableManager
                 storageUnitId: storageUnitId,
                 name: name,
                 recordIntervalSeconds: recordIntervalSeconds,
+                historyIntervalSeconds: historyIntervalSeconds,
               ),
           createCompanionCallback:
               ({
@@ -1596,6 +2129,7 @@ class $$SensorTableTableTableManager
                 required String storageUnitId,
                 required String name,
                 Value<int> recordIntervalSeconds = const Value.absent(),
+                Value<int> historyIntervalSeconds = const Value.absent(),
               }) => SensorTableCompanion.insert(
                 id: id,
                 stationId: stationId,
@@ -1603,6 +2137,7 @@ class $$SensorTableTableTableManager
                 storageUnitId: storageUnitId,
                 name: name,
                 recordIntervalSeconds: recordIntervalSeconds,
+                historyIntervalSeconds: historyIntervalSeconds,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -1612,47 +2147,74 @@ class $$SensorTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({stationId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (stationId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.stationId,
-                                referencedTable: $$SensorTableTableReferences
-                                    ._stationIdTable(db),
-                                referencedColumn: $$SensorTableTableReferences
-                                    ._stationIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({stationId = false, historyTableRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (historyTableRefs) db.historyTable,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (stationId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.stationId,
+                                    referencedTable:
+                                        $$SensorTableTableReferences
+                                            ._stationIdTable(db),
+                                    referencedColumn:
+                                        $$SensorTableTableReferences
+                                            ._stationIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (historyTableRefs)
+                        await $_getPrefetchedData<
+                          SensorTableData,
+                          $SensorTableTable,
+                          HistoryTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$SensorTableTableReferences
+                              ._historyTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SensorTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).historyTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.sensorId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -1669,7 +2231,7 @@ typedef $$SensorTableTableProcessedTableManager =
       $$SensorTableTableUpdateCompanionBuilder,
       (SensorTableData, $$SensorTableTableReferences),
       SensorTableData,
-      PrefetchHooks Function({bool stationId})
+      PrefetchHooks Function({bool stationId, bool historyTableRefs})
     >;
 typedef $$TokenTableTableCreateCompanionBuilder =
     TokenTableCompanion Function({
@@ -1811,6 +2373,301 @@ typedef $$TokenTableTableProcessedTableManager =
       TokenTableData,
       PrefetchHooks Function()
     >;
+typedef $$HistoryTableTableCreateCompanionBuilder =
+    HistoryTableCompanion Function({
+      Value<int> id,
+      required int sensorId,
+      Value<double?> value,
+      required DateTime createdAt,
+    });
+typedef $$HistoryTableTableUpdateCompanionBuilder =
+    HistoryTableCompanion Function({
+      Value<int> id,
+      Value<int> sensorId,
+      Value<double?> value,
+      Value<DateTime> createdAt,
+    });
+
+final class $$HistoryTableTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $HistoryTableTable, HistoryTableData> {
+  $$HistoryTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $SensorTableTable _sensorIdTable(_$AppDatabase db) =>
+      db.sensorTable.createAlias(
+        $_aliasNameGenerator(db.historyTable.sensorId, db.sensorTable.id),
+      );
+
+  $$SensorTableTableProcessedTableManager get sensorId {
+    final $_column = $_itemColumn<int>('sensor_id')!;
+
+    final manager = $$SensorTableTableTableManager(
+      $_db,
+      $_db.sensorTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_sensorIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$HistoryTableTableFilterComposer
+    extends Composer<_$AppDatabase, $HistoryTableTable> {
+  $$HistoryTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$SensorTableTableFilterComposer get sensorId {
+    final $$SensorTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.sensorId,
+      referencedTable: $db.sensorTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SensorTableTableFilterComposer(
+            $db: $db,
+            $table: $db.sensorTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HistoryTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $HistoryTableTable> {
+  $$HistoryTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$SensorTableTableOrderingComposer get sensorId {
+    final $$SensorTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.sensorId,
+      referencedTable: $db.sensorTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SensorTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.sensorTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HistoryTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HistoryTableTable> {
+  $$HistoryTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$SensorTableTableAnnotationComposer get sensorId {
+    final $$SensorTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.sensorId,
+      referencedTable: $db.sensorTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SensorTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.sensorTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$HistoryTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HistoryTableTable,
+          HistoryTableData,
+          $$HistoryTableTableFilterComposer,
+          $$HistoryTableTableOrderingComposer,
+          $$HistoryTableTableAnnotationComposer,
+          $$HistoryTableTableCreateCompanionBuilder,
+          $$HistoryTableTableUpdateCompanionBuilder,
+          (HistoryTableData, $$HistoryTableTableReferences),
+          HistoryTableData,
+          PrefetchHooks Function({bool sensorId})
+        > {
+  $$HistoryTableTableTableManager(_$AppDatabase db, $HistoryTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HistoryTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HistoryTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HistoryTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> sensorId = const Value.absent(),
+                Value<double?> value = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => HistoryTableCompanion(
+                id: id,
+                sensorId: sensorId,
+                value: value,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int sensorId,
+                Value<double?> value = const Value.absent(),
+                required DateTime createdAt,
+              }) => HistoryTableCompanion.insert(
+                id: id,
+                sensorId: sensorId,
+                value: value,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$HistoryTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({sensorId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (sensorId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.sensorId,
+                                referencedTable: $$HistoryTableTableReferences
+                                    ._sensorIdTable(db),
+                                referencedColumn: $$HistoryTableTableReferences
+                                    ._sensorIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$HistoryTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HistoryTableTable,
+      HistoryTableData,
+      $$HistoryTableTableFilterComposer,
+      $$HistoryTableTableOrderingComposer,
+      $$HistoryTableTableAnnotationComposer,
+      $$HistoryTableTableCreateCompanionBuilder,
+      $$HistoryTableTableUpdateCompanionBuilder,
+      (HistoryTableData, $$HistoryTableTableReferences),
+      HistoryTableData,
+      PrefetchHooks Function({bool sensorId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1821,4 +2678,6 @@ class $AppDatabaseManager {
       $$SensorTableTableTableManager(_db, _db.sensorTable);
   $$TokenTableTableTableManager get tokenTable =>
       $$TokenTableTableTableManager(_db, _db.tokenTable);
+  $$HistoryTableTableTableManager get historyTable =>
+      $$HistoryTableTableTableManager(_db, _db.historyTable);
 }

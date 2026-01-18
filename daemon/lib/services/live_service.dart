@@ -1,9 +1,3 @@
-import 'package:daemon/exceptions/station_not_found.dart';
-import 'package:daemon/locator.dart';
-import 'package:daemon/services/config_service.dart';
-import 'package:daemon/services/sensor_service.dart';
-import 'package:daemon/services/station_service.dart';
-import 'package:daemon/services/token_service.dart';
 import 'package:events_emitter/emitters/event_emitter.dart';
 import 'package:events_emitter/listener.dart';
 import 'package:fixnum/fixnum.dart';
@@ -13,10 +7,18 @@ import 'package:shared/grpc/recorder.pbgrpc.dart' as grpc;
 import 'package:shared/logger/logger.dart';
 import 'package:shared/models/sensor.dart';
 import 'package:shared/models/sensor_state.dart';
-import 'package:shared/models/station.dart';
 import 'package:shared/models/token_role.dart';
 import 'package:shared/units/convert.dart';
 import 'package:shared/units/convertible.dart';
+
+import '../database/tables/sensor_table.dart';
+import '../exceptions/station_not_found.dart';
+import '../locator.dart';
+import '../models/station_info.dart';
+import 'config_service.dart';
+import 'sensor_service.dart';
+import 'station_service.dart';
+import 'token_service.dart';
 
 @singleton
 /// Manages a grpc service that processes weather station updates and create requests from the **recorder**.
@@ -130,10 +132,11 @@ class RecorderService extends grpc.DaemonServiceBase {
   ) async {
     try {
       final result = await _stationService.create(
-        station: Station.create(
+        station: StationInfo.create(
           name: request.name,
           longitude: request.longitude,
           latitude: request.latitude,
+          version: request.version,
         ),
         sensors: request.sensors.map((sensor) {
           final element = SensorElement.values.byName(sensor.element);
@@ -141,7 +144,12 @@ class RecorderService extends grpc.DaemonServiceBase {
             name: sensor.name,
             element: element,
             storageUnit: SensorElement.defaultUnit(element: element),
-            recordIntervalSeconds: sensor.recordIntervalSeconds.toInt(),
+            recordIntervalSeconds: sensor.hasRecordIntervalSeconds()
+                ? sensor.recordIntervalSeconds.toInt()
+                : defaultRecordIntervalSeconds,
+            historyIntervalSeconds: sensor.hasHistoryIntervalSeconds()
+                ? sensor.historyIntervalSeconds.toInt()
+                : defaultHistoryIntervalSeconds,
           );
         }).toList(),
       );
@@ -149,12 +157,14 @@ class RecorderService extends grpc.DaemonServiceBase {
         throw Exception("Internal error!");
       }
       return grpc.Station(
-        id: Int64(result.station.id),
+        id: Int64(result.info.id),
+        version: result.info.version,
         sensors: result.sensors.map(
           (sensor) => grpc.Sensor(
             id: Int64(sensor.id),
             name: sensor.name,
             recordIntervalSeconds: Int64(sensor.recordIntervalSeconds),
+            historyIntervalSeconds: Int64(sensor.historyIntervalSeconds),
           ),
         ),
       );
@@ -215,7 +225,8 @@ class RecorderService extends grpc.DaemonServiceBase {
       );
     }
     return grpc.Station(
-      id: Int64(result.station.id),
+      id: Int64(result.info.id),
+      version: result.info.version,
       sensors: result.sensors.map(
         (sensor) => grpc.Sensor(
           id: Int64(sensor.id),
@@ -245,6 +256,7 @@ class RecorderService extends grpc.DaemonServiceBase {
   }
 }
 
+/// Represents a processed sensor update. Value gets automatically converted to the storage unit of the sensor.
 class SensorUpdate {
   final Sensor sensor;
   late final SensorState state;
@@ -256,23 +268,15 @@ class SensorUpdate {
     final createdAt = DateTime.fromMillisecondsSinceEpoch(
       request.newState.createdAt.toInt(),
     );
-    late final Duration? interval;
-    if (request.newState.hasIntervalStart()) {
-      interval = createdAt.difference(
-        DateTime.fromMillisecondsSinceEpoch(
-          request.newState.intervalStart.toInt(),
-        ),
-      );
-    } else {
-      interval = null;
-    }
     state = SensorState(
-      value: Convertible(
-        request.newState.value,
-        Unit.fromId(request.newState.unitId),
-      ).to(sensor.storageUnit),
+      value: request.newState.hasValue()
+          ? Convertible(
+              request.newState.value,
+              Unit.fromId(request.newState.unitId),
+            ).to(sensor.storageUnit)
+          : null,
       createdAt: createdAt,
-      interval: interval,
+      interval: Duration(seconds: sensor.historyIntervalSeconds),
     );
   }
 

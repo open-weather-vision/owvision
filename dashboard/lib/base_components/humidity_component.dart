@@ -9,11 +9,6 @@ class HumidityComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleLiveComponent(
-      _humidity,
-      "Humidity",
-      Colors.blueGrey,
-      Icons.water,
-    );
+    return SimpleLiveComponent(_humidity, Colors.blueGrey);
   }
 }

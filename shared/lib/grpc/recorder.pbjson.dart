@@ -164,16 +164,33 @@ const SensorDefinition$json = {
       '3': 3,
       '4': 1,
       '5': 3,
-      '10': 'recordIntervalSeconds'
+      '9': 0,
+      '10': 'recordIntervalSeconds',
+      '17': true
     },
+    {
+      '1': 'historyIntervalSeconds',
+      '3': 4,
+      '4': 1,
+      '5': 3,
+      '9': 1,
+      '10': 'historyIntervalSeconds',
+      '17': true
+    },
+  ],
+  '8': [
+    {'1': '_recordIntervalSeconds'},
+    {'1': '_historyIntervalSeconds'},
   ],
 };
 
 /// Descriptor for `SensorDefinition`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List sensorDefinitionDescriptor = $convert.base64Decode(
     'ChBTZW5zb3JEZWZpbml0aW9uEhIKBG5hbWUYASABKAlSBG5hbWUSGAoHZWxlbWVudBgCIAEoCV'
-    'IHZWxlbWVudBI0ChVyZWNvcmRJbnRlcnZhbFNlY29uZHMYAyABKANSFXJlY29yZEludGVydmFs'
-    'U2Vjb25kcw==');
+    'IHZWxlbWVudBI5ChVyZWNvcmRJbnRlcnZhbFNlY29uZHMYAyABKANIAFIVcmVjb3JkSW50ZXJ2'
+    'YWxTZWNvbmRziAEBEjsKFmhpc3RvcnlJbnRlcnZhbFNlY29uZHMYBCABKANIAVIWaGlzdG9yeU'
+    'ludGVydmFsU2Vjb25kc4gBAUIYChZfcmVjb3JkSW50ZXJ2YWxTZWNvbmRzQhkKF19oaXN0b3J5'
+    'SW50ZXJ2YWxTZWNvbmRz');
 
 @$core.Deprecated('Use stationDescriptor instead')
 const Station$json = {
@@ -210,13 +227,21 @@ const Sensor$json = {
       '5': 3,
       '10': 'recordIntervalSeconds'
     },
+    {
+      '1': 'historyIntervalSeconds',
+      '3': 4,
+      '4': 1,
+      '5': 3,
+      '10': 'historyIntervalSeconds'
+    },
   ],
 };
 
 /// Descriptor for `Sensor`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List sensorDescriptor = $convert.base64Decode(
     'CgZTZW5zb3ISDgoCaWQYASABKANSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSNAoVcmVjb3JkSW'
-    '50ZXJ2YWxTZWNvbmRzGAMgASgDUhVyZWNvcmRJbnRlcnZhbFNlY29uZHM=');
+    '50ZXJ2YWxTZWNvbmRzGAMgASgDUhVyZWNvcmRJbnRlcnZhbFNlY29uZHMSNgoWaGlzdG9yeUlu'
+    'dGVydmFsU2Vjb25kcxgEIAEoA1IWaGlzdG9yeUludGVydmFsU2Vjb25kcw==');
 
 @$core.Deprecated('Use getSensorStateRequestDescriptor instead')
 const GetSensorStateRequest$json = {
@@ -236,27 +261,15 @@ const SensorState$json = {
   '1': 'SensorState',
   '2': [
     {'1': 'unitId', '3': 2, '4': 1, '5': 9, '10': 'unitId'},
-    {'1': 'value', '3': 3, '4': 1, '5': 1, '9': 0, '10': 'value', '17': true},
     {'1': 'created_at', '3': 4, '4': 1, '5': 3, '10': 'createdAt'},
-    {
-      '1': 'intervalStart',
-      '3': 5,
-      '4': 1,
-      '5': 3,
-      '9': 1,
-      '10': 'intervalStart',
-      '17': true
-    },
+    {'1': 'value', '3': 3, '4': 1, '5': 1, '9': 0, '10': 'value', '17': true},
   ],
   '8': [
     {'1': '_value'},
-    {'1': '_intervalStart'},
   ],
 };
 
 /// Descriptor for `SensorState`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List sensorStateDescriptor = $convert.base64Decode(
-    'CgtTZW5zb3JTdGF0ZRIWCgZ1bml0SWQYAiABKAlSBnVuaXRJZBIZCgV2YWx1ZRgDIAEoAUgAUg'
-    'V2YWx1ZYgBARIdCgpjcmVhdGVkX2F0GAQgASgDUgljcmVhdGVkQXQSKQoNaW50ZXJ2YWxTdGFy'
-    'dBgFIAEoA0gBUg1pbnRlcnZhbFN0YXJ0iAEBQggKBl92YWx1ZUIQCg5faW50ZXJ2YWxTdGFydA'
-    '==');
+    'CgtTZW5zb3JTdGF0ZRIWCgZ1bml0SWQYAiABKAlSBnVuaXRJZBIdCgpjcmVhdGVkX2F0GAQgAS'
+    'gDUgljcmVhdGVkQXQSGQoFdmFsdWUYAyABKAFIAFIFdmFsdWWIAQFCCAoGX3ZhbHVl');

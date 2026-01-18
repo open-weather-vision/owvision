@@ -1,4 +1,4 @@
-import type { Sensor, Station, StationAndSensors } from "../models.js";
+import type { HistoryRecord, Sensor, SensorHistory, StationAndSensors, WeatherStation } from "../models.js";
 
 export function decodeBase64(value: string): Uint8Array | undefined {
   if(!value) {
@@ -53,8 +53,8 @@ export function decodeBase64(value: string): Uint8Array | undefined {
   }
 
   return new Date(date * 1000);
-}export function jsonArrayStationToTransportTransform(
-  items_?: Array<Station> | null,
+}export function jsonArrayWeatherStationToTransportTransform(
+  items_?: Array<WeatherStation> | null,
 ): any {
   if(!items_) {
     return items_ as any;
@@ -62,33 +62,37 @@ export function decodeBase64(value: string): Uint8Array | undefined {
   const _transformedArray = [];
 
   for (const item of items_ ?? []) {
-    const transformedItem = jsonStationToTransportTransform(item as any);
+    const transformedItem = jsonWeatherStationToTransportTransform(item as any);
     _transformedArray.push(transformedItem);
   }
 
   return _transformedArray as any;
-}export function jsonArrayStationToApplicationTransform(
+}export function jsonArrayWeatherStationToApplicationTransform(
   items_?: any,
-): Array<Station> {
+): Array<WeatherStation> {
   if(!items_) {
     return items_ as any;
   }
   const _transformedArray = [];
 
   for (const item of items_ ?? []) {
-    const transformedItem = jsonStationToApplicationTransform(item as any);
+    const transformedItem = jsonWeatherStationToApplicationTransform(item as any);
     _transformedArray.push(transformedItem);
   }
 
   return _transformedArray as any;
-}export function jsonStationToTransportTransform(input_?: Station | null): any {
+}export function jsonWeatherStationToTransportTransform(
+  input_?: WeatherStation | null,
+): any {
   if(!input_) {
     return input_ as any;
   }
     return {
     id: input_.id,name: input_.name,longitude: input_.longitude,latitude: input_.latitude,createdAt: input_.createdAt
   }!;
-}export function jsonStationToApplicationTransform(input_?: any): Station {
+}export function jsonWeatherStationToApplicationTransform(
+  input_?: any,
+): WeatherStation {
   if(!input_) {
     return input_ as any;
   }
@@ -102,7 +106,7 @@ export function decodeBase64(value: string): Uint8Array | undefined {
     return input_ as any;
   }
     return {
-    station: jsonStationToTransportTransform(input_.station),sensors: jsonArraySensorToTransportTransform(input_.sensors)
+    info: jsonWeatherStationToTransportTransform(input_.info),sensors: jsonArraySensorToTransportTransform(input_.sensors)
   }!;
 }export function jsonStationAndSensorsToApplicationTransform(
   input_?: any,
@@ -111,7 +115,7 @@ export function decodeBase64(value: string): Uint8Array | undefined {
     return input_ as any;
   }
     return {
-    station: jsonStationToApplicationTransform(input_.station),sensors: jsonArraySensorToApplicationTransform(input_.sensors)
+    info: jsonWeatherStationToApplicationTransform(input_.info),sensors: jsonArraySensorToApplicationTransform(input_.sensors)
   }!;
 }export function jsonArraySensorToTransportTransform(
   items_?: Array<Sensor> | null,
@@ -146,13 +150,133 @@ export function decodeBase64(value: string): Uint8Array | undefined {
     return input_ as any;
   }
     return {
-    id: input_.id,element: input_.element,name: input_.name
+    id: input_.id,element: input_.element,name: input_.name,recordIntervalSeconds: input_.recordIntervalSeconds,historyIntervalSeconds: input_.historyIntervalSeconds
   }!;
 }export function jsonSensorToApplicationTransform(input_?: any): Sensor {
   if(!input_) {
     return input_ as any;
   }
     return {
-    id: input_.id,element: input_.element,name: input_.name
+    id: input_.id,element: input_.element,name: input_.name,recordIntervalSeconds: input_.recordIntervalSeconds,historyIntervalSeconds: input_.historyIntervalSeconds
+  }!;
+}export function jsonArrayStringToTransportTransform(
+  items_?: Array<string> | null,
+): any {
+  if(!items_) {
+    return items_ as any;
+  }
+  const _transformedArray = [];
+
+  for (const item of items_ ?? []) {
+    const transformedItem = item as any;
+    _transformedArray.push(transformedItem);
+  }
+
+  return _transformedArray as any;
+}export function jsonArrayStringToApplicationTransform(
+  items_?: any,
+): Array<string> {
+  if(!items_) {
+    return items_ as any;
+  }
+  const _transformedArray = [];
+
+  for (const item of items_ ?? []) {
+    const transformedItem = item as any;
+    _transformedArray.push(transformedItem);
+  }
+
+  return _transformedArray as any;
+}export function jsonArraySensorHistoryToTransportTransform(
+  items_?: Array<SensorHistory> | null,
+): any {
+  if(!items_) {
+    return items_ as any;
+  }
+  const _transformedArray = [];
+
+  for (const item of items_ ?? []) {
+    const transformedItem = jsonSensorHistoryToTransportTransform(item as any);
+    _transformedArray.push(transformedItem);
+  }
+
+  return _transformedArray as any;
+}export function jsonArraySensorHistoryToApplicationTransform(
+  items_?: any,
+): Array<SensorHistory> {
+  if(!items_) {
+    return items_ as any;
+  }
+  const _transformedArray = [];
+
+  for (const item of items_ ?? []) {
+    const transformedItem = jsonSensorHistoryToApplicationTransform(item as any);
+    _transformedArray.push(transformedItem);
+  }
+
+  return _transformedArray as any;
+}export function jsonSensorHistoryToTransportTransform(
+  input_?: SensorHistory | null,
+): any {
+  if(!input_) {
+    return input_ as any;
+  }
+    return {
+    sensorName: input_.sensorName,unitId: input_.unitId,history: jsonArrayHistoryRecordToTransportTransform(input_.history)
+  }!;
+}export function jsonSensorHistoryToApplicationTransform(
+  input_?: any,
+): SensorHistory {
+  if(!input_) {
+    return input_ as any;
+  }
+    return {
+    sensorName: input_.sensorName,unitId: input_.unitId,history: jsonArrayHistoryRecordToApplicationTransform(input_.history)
+  }!;
+}export function jsonArrayHistoryRecordToTransportTransform(
+  items_?: Array<HistoryRecord> | null,
+): any {
+  if(!items_) {
+    return items_ as any;
+  }
+  const _transformedArray = [];
+
+  for (const item of items_ ?? []) {
+    const transformedItem = jsonHistoryRecordToTransportTransform(item as any);
+    _transformedArray.push(transformedItem);
+  }
+
+  return _transformedArray as any;
+}export function jsonArrayHistoryRecordToApplicationTransform(
+  items_?: any,
+): Array<HistoryRecord> {
+  if(!items_) {
+    return items_ as any;
+  }
+  const _transformedArray = [];
+
+  for (const item of items_ ?? []) {
+    const transformedItem = jsonHistoryRecordToApplicationTransform(item as any);
+    _transformedArray.push(transformedItem);
+  }
+
+  return _transformedArray as any;
+}export function jsonHistoryRecordToTransportTransform(
+  input_?: HistoryRecord | null,
+): any {
+  if(!input_) {
+    return input_ as any;
+  }
+    return {
+    value: input_.value,createdAt: dateRfc3339Serializer(input_.createdAt)
+  }!;
+}export function jsonHistoryRecordToApplicationTransform(
+  input_?: any,
+): HistoryRecord {
+  if(!input_) {
+    return input_ as any;
+  }
+    return {
+    value: input_.value,createdAt: dateDeserializer(input_.createdAt)!
   }!;
 }

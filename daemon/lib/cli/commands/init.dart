@@ -3,24 +3,17 @@ import 'dart:io';
 
 import 'package:chalkdart/chalkstrings.dart';
 import 'package:daemon/cli/entry.dart';
-import 'package:daemon/utils/fix_libsqlite.dart';
+import 'package:daemon/runDaemon.dart';
 import 'package:interact/interact.dart';
-import 'package:logging/logging.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
 import 'package:shared/current_version.dart';
-import 'package:shared/logger/logger.dart';
-import 'package:shared/models/daemon_config.dart';
 import 'package:shared/pretty_print.dart';
 import 'package:shared/service.dart';
 import 'package:shared/utils.dart';
 
-import '../../locator.dart';
-import '../../services/caddy_service.dart';
-import '../../services/live_sensor_state_service.dart';
-import '../../services/live_service.dart';
-import '../../services/rest_api_service.dart';
-import '../../services/token_service.dart';
 import 'package:args/command_runner.dart';
+
+import '../../models/daemon_config.dart';
 
 class RunCommand extends Command<int> {
   @override
@@ -43,33 +36,7 @@ class RunCommand extends Command<int> {
   FutureOr<int> run() async {
     final bool runTemporary = argResults?['temporary'];
     if (runTemporary) {
-      fixLibsqlite();
-
-      logger.level = Level.ALL;
-      // load injectable services
-      configureDependencies();
-
-      // start grpc live service
-      final liveService = getIt<LiveService>();
-      liveService.enableLogs();
-      await liveService.start();
-
-      // start rest api
-      final restApi = getIt<RestApiService>();
-      await restApi.start();
-
-      // configure caddy
-      final caddyService = getIt<CaddyService>();
-      caddyService.tryToConfigure();
-
-      // start tracking stations state in ram
-      final liveSensorStateService = getIt<LiveSensorStateService>();
-      await liveSensorStateService.start();
-
-      // start generating tokens if there are none
-      final tokenService = getIt<TokenService>();
-      await tokenService.insertInitializationTokenIfThereIsNone();
-
+      await runDaemon();
       return 0;
     } else {
       final installDependencies = Confirm(
@@ -141,15 +108,12 @@ class RunCommand extends Command<int> {
       }
       await daemonConfig.saveToFile();
 
-      final service = await SystemCtlService.create(
+      await SystemCtlService.create(
         description: "owvision daemon",
         name: "ow_daemon",
         after: ["caddy.service"],
         wants: ["caddy.service"],
       );
-      if (service == null) {
-        exit(0);
-      }
 
       final tmpDaemonClient = OwvisionDaemonClientDart(
         basePathOverride: OwvisionDaemonClientDart.basePath,
@@ -165,7 +129,7 @@ class RunCommand extends Command<int> {
       while (!authenticated && tries < maxTries) {
         try {
           await Future.delayed(Duration(seconds: 1));
-          final response = await api.tokensGenerate(role: TokenRole.admin);
+          final response = await api.tokenGenerate(role: TokenRole.admin);
           cliConfig.apiToken = response.data!;
           cliConfig.saveToFile();
           authenticated = true;

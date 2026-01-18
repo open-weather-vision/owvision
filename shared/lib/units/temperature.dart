@@ -1,6 +1,8 @@
 import 'package:shared/units/convert.dart';
 
 class Temperature {
+  static final groupName = "temperature";
+
   static final celsius = Unit.usingRatioAndOffset(
     "celsius",
     1,
@@ -8,6 +10,7 @@ class Temperature {
     "°C",
     "° Celsius",
     "° Celsius",
+    group: Temperature.groupName,
   );
 
   static final kelvin = Unit.usingRatioAndOffset(
@@ -17,6 +20,7 @@ class Temperature {
     "K",
     " Kelvin",
     " Kelvin",
+    group: Temperature.groupName,
   );
 
   static final fahrenheit = Unit(
@@ -26,6 +30,7 @@ class Temperature {
     "°F",
     "° Fahrenheit",
     "° Fahrenheit",
+    group: Temperature.groupName,
   );
 
   static List<Unit> units() {

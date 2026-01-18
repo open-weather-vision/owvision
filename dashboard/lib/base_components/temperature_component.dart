@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:dashboard/base_components/live_base_component.dart';
 import 'package:dashboard/base_components/simple_live_component.dart';
 import 'package:dashboard/features/live/live_view.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +58,9 @@ class TemperatureComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleLiveComponent(
       _temperature,
-      "Temperature",
       temperatureColor(
-        _temperature?.state?.value.to(Temperature.celsius).value,
+        _temperature?.state?.value?.to(Temperature.celsius).value,
       ),
-      Icons.thermostat,
     );
   }
 }

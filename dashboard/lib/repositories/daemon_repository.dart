@@ -2,11 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dashboard/log.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
-import 'package:shared/logger/logger.dart';
 import 'package:shared/models/station_live_state.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
+import 'config_repository.dart';
 
 class ConnectionCanceller {
   bool _isCancelled = false;
@@ -37,9 +41,20 @@ class ConnectionCanceller {
 }
 
 class DaemonRepository {
-  final String _token;
-  final String _baseUrl;
-  late final OwvisionDaemonClientDart _client;
+  late OwvisionDaemonClientDart _client;
+  AppConfig? _cachedConfig;
+  final ConfigRepository _configRepository;
+
+  Future<AppConfig> get currentConfig async =>
+      _cachedConfig ?? await _configRepository.loadConfig();
+
+  DaemonRepository({required ConfigRepository configRepository})
+    : _configRepository = configRepository {
+    _configRepository.configStream.listen((config) {
+      _cachedConfig = config;
+      recreateClient(config.apiUrl, config.apiToken);
+    });
+  }
 
   HttpClient _createInsecureClient() {
     final client = HttpClient();
@@ -47,24 +62,40 @@ class DaemonRepository {
     return client;
   }
 
-  DaemonRepository(this._baseUrl, this._token) {
-    _client = OwvisionDaemonClientDart(basePathOverride: _baseUrl);
-    (_client.dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient =
-        _createInsecureClient;
-    _client.setBearerAuth("BearerAuth", _token);
+  void recreateClient(String baseUrl, String token) {
+    _client = OwvisionDaemonClientDart(basePathOverride: baseUrl);
+    if (!kIsWeb) {
+      (_client.dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient =
+          _createInsecureClient;
+    }
+    _client.setBearerAuth("BearerAuth", token);
   }
 
   Future<StationAndSensors?> getStation(int id) async {
-    logger.info("Fetching station...");
-    final response = await _client.getStationApi().stationsOne(id: id);
-    logger.info("Fetched station: ${response.data}");
+    Log.info("Fetching station...");
+    final response = await _client.getStationApi().stationOne(id: id);
+    Log.info("Fetched station!");
     return response.data;
   }
 
-  Future<List<Station>> getStations() async {
-    logger.info("Fetching stations...");
-    final response = await _client.getStationApi().stationsAll();
-    logger.info("Fetched stations: ${response.data}");
+  Future<List<WeatherStation>> getStations() async {
+    Log.info("Fetching stations...");
+    final response = await _client.getStationApi().stationAll();
+    Log.info("Fetched stations!");
+    return response.data ?? [];
+  }
+
+  Future<List<SensorHistory>> getSensorHistory(
+    int id,
+    DateTime from,
+    DateTime to,
+  ) async {
+    final response = await _client.getStationApi().stationHistory(
+      id: id,
+      from: from,
+      to: to,
+    );
+
     return response.data ?? [];
   }
 
@@ -73,12 +104,13 @@ class DaemonRepository {
     void Function() onTemporaryConnectionLoss, {
     int? id,
   }) async {
+    await currentConfig;
     var firstConnect = true;
     var hasBeenConnectedBefore = false;
     return ConnectionCanceller((canceller) async {
       while (!canceller.isCancelled) {
         if (!firstConnect) {
-          logger.warning("Waiting 10 seconds before retrying to connect...");
+          Log.warn("Waiting 10 seconds before retrying to connect...");
           if (hasBeenConnectedBefore) {
             onTemporaryConnectionLoss();
           }
@@ -86,7 +118,7 @@ class DaemonRepository {
         }
         firstConnect = false;
         try {
-          logger.warning("Connecting to station...");
+          Log.warn("Connecting to station...");
           // 1. Find a station to connect to
           if (id == null) {
             final stations = await getStations();
@@ -97,11 +129,23 @@ class DaemonRepository {
             }
           }
           // 2. Connect to the web socket
-          final connection = IOWebSocketChannel.connect(
-            "${_baseUrl.replaceFirst("http", "ws")}/stations/$id/live",
-            headers: {"Authorization": "Bearer $_token"},
-            customClient: _createInsecureClient(),
-          );
+          late final WebSocketChannel connection;
+          if (kIsWeb) {
+            connection = WebSocketChannel.connect(
+              Uri.parse(
+                "${(await currentConfig).apiUrl.replaceFirst("http", "ws")}/stations/$id/live",
+              ),
+              protocols: ["auth.bearer.${(await currentConfig).apiToken}}"],
+            );
+          } else {
+            connection = IOWebSocketChannel.connect(
+              "${(await currentConfig).apiUrl.replaceFirst("http", "ws")}/stations/$id/live",
+              headers: {
+                "Authorization": "Bearer ${(await currentConfig).apiToken}",
+              },
+              customClient: _createInsecureClient(),
+            );
+          }
           await connection.ready;
 
           // 3. Get station information
@@ -135,12 +179,10 @@ class DaemonRepository {
 
           await completer.future;
         } catch (err) {
-          logger.severe("Suddenly disconnected from socket: $err");
+          Log.error("Suddenly disconnected from socket: $err");
         }
       }
-      logger.info(
-        "Successfully disconnected from weather station live socket!",
-      );
+      Log.info("Successfully disconnected from weather station live socket!");
     });
   }
 }

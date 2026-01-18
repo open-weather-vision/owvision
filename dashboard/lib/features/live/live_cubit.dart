@@ -1,7 +1,7 @@
+import 'package:dashboard/log.dart';
 import 'package:dashboard/repositories/daemon_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
-import 'package:shared/logger/logger.dart';
 import 'package:shared/models/station_live_state.dart';
 
 enum StationConnectionState { connecting, reconnecting, connected }
@@ -68,7 +68,7 @@ class LiveCubit extends Cubit<LiveState> {
             );
           },
           () {
-            logger.warning("Temporary connection loss!");
+            Log.warn("Temporary connection loss!");
             final previous = state;
             emit(
               LiveState(
@@ -103,6 +103,6 @@ class LiveCubit extends Cubit<LiveState> {
   @override
   void onChange(Change<LiveState> change) {
     super.onChange(change);
-    logger.info(change.nextState.stationState);
+    Log.info(change.nextState.stationState.toString());
   }
 }

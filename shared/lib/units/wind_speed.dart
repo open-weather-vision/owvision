@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:shared/units/convert.dart';
 
 class WindSpeed {
+  static final groupName = "windspeed";
+
   static final kmh = Unit.usingRatioAndOffset(
     "kmh",
     1 / 3.6,
@@ -10,6 +12,7 @@ class WindSpeed {
     "km/h",
     " kilometer per hour",
     " kilometers per hour",
+    group: WindSpeed.groupName,
   );
 
   static final ms = Unit.usingRatioAndOffset(
@@ -19,6 +22,7 @@ class WindSpeed {
     "m/s",
     " meter per second",
     " meters per second",
+    group: WindSpeed.groupName,
   );
 
   static final bft = Unit(
@@ -35,6 +39,7 @@ class WindSpeed {
     "Bft",
     " Beaufort",
     " Beaufort",
+    group: WindSpeed.groupName,
   );
 
   static final mph = Unit.usingRatioAndOffset(
@@ -44,6 +49,7 @@ class WindSpeed {
     "mi/h",
     " mile per hour",
     " miles per hour",
+    group: WindSpeed.groupName,
   );
 
   static final kn = Unit.usingRatioAndOffset(
@@ -53,6 +59,7 @@ class WindSpeed {
     "kn",
     " knot",
     " knots",
+    group: WindSpeed.groupName,
   );
 
   static List<Unit> units() {

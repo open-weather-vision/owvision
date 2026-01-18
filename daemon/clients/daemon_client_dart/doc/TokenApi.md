@@ -9,11 +9,11 @@ All URIs are relative to *http://127.0.0.1:7070/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**tokensGenerate**](TokenApi.md#tokensgenerate) | **POST** /tokens | 
+[**tokenGenerate**](TokenApi.md#tokengenerate) | **POST** /tokens | 
 
 
-# **tokensGenerate**
-> String tokensGenerate(role)
+# **tokenGenerate**
+> String tokenGenerate(role)
 
 
 
@@ -27,10 +27,10 @@ final api = OwvisionDaemonClientDart().getTokenApi();
 final TokenRole role = ; // TokenRole | 
 
 try {
-    final response = api.tokensGenerate(role);
+    final response = api.tokenGenerate(role);
     print(response);
 } on DioException catch (e) {
-    print('Exception when calling TokenApi->tokensGenerate: $e\n');
+    print('Exception when calling TokenApi->tokenGenerate: $e\n');
 }
 ```
 

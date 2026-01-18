@@ -4,8 +4,9 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:chalkdart/chalkstrings.dart';
 import 'package:recorder/models/recorder_status.dart';
-import 'package:shared/models/recorder_config.dart';
 import 'package:shared/service.dart';
+
+import '../../models/recorder_config.dart';
 
 class ResetCommand extends Command<int> {
   @override

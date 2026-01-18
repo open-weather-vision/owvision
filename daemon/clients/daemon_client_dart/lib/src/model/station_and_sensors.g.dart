@@ -7,7 +7,7 @@ part of 'station_and_sensors.dart';
 // **************************************************************************
 
 abstract class _$StationAndSensorsCWProxy {
-  StationAndSensors station(Station station);
+  StationAndSensors info(WeatherStation info);
 
   StationAndSensors sensors(List<Sensor> sensors);
 
@@ -18,7 +18,7 @@ abstract class _$StationAndSensorsCWProxy {
   /// ```dart
   /// StationAndSensors(...).copyWith(id: 12, name: "My name")
   /// ```
-  StationAndSensors call({Station station, List<Sensor> sensors});
+  StationAndSensors call({WeatherStation info, List<Sensor> sensors});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -29,7 +29,7 @@ class _$StationAndSensorsCWProxyImpl implements _$StationAndSensorsCWProxy {
   final StationAndSensors _value;
 
   @override
-  StationAndSensors station(Station station) => call(station: station);
+  StationAndSensors info(WeatherStation info) => call(info: info);
 
   @override
   StationAndSensors sensors(List<Sensor> sensors) => call(sensors: sensors);
@@ -43,14 +43,14 @@ class _$StationAndSensorsCWProxyImpl implements _$StationAndSensorsCWProxy {
   /// StationAndSensors(...).copyWith(id: 12, name: "My name")
   /// ```
   StationAndSensors call({
-    Object? station = const $CopyWithPlaceholder(),
+    Object? info = const $CopyWithPlaceholder(),
     Object? sensors = const $CopyWithPlaceholder(),
   }) {
     return StationAndSensors(
-      station: station == const $CopyWithPlaceholder() || station == null
-          ? _value.station
+      info: info == const $CopyWithPlaceholder() || info == null
+          ? _value.info
           // ignore: cast_nullable_to_non_nullable
-          : station as Station,
+          : info as WeatherStation,
       sensors: sensors == const $CopyWithPlaceholder() || sensors == null
           ? _value.sensors
           // ignore: cast_nullable_to_non_nullable
@@ -73,11 +73,11 @@ extension $StationAndSensorsCopyWith on StationAndSensors {
 
 StationAndSensors _$StationAndSensorsFromJson(Map<String, dynamic> json) =>
     $checkedCreate('StationAndSensors', json, ($checkedConvert) {
-      $checkKeys(json, requiredKeys: const ['station', 'sensors']);
+      $checkKeys(json, requiredKeys: const ['info', 'sensors']);
       final val = StationAndSensors(
-        station: $checkedConvert(
-          'station',
-          (v) => Station.fromJson(v as Map<String, dynamic>),
+        info: $checkedConvert(
+          'info',
+          (v) => WeatherStation.fromJson(v as Map<String, dynamic>),
         ),
         sensors: $checkedConvert(
           'sensors',
@@ -91,6 +91,6 @@ StationAndSensors _$StationAndSensorsFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$StationAndSensorsToJson(StationAndSensors instance) =>
     <String, dynamic>{
-      'station': instance.station.toJson(),
+      'info': instance.info.toJson(),
       'sensors': instance.sensors.map((e) => e.toJson()).toList(),
     };

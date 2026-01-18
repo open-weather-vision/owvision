@@ -20,6 +20,7 @@ import 'recorder.pb.dart' as $0;
 
 export 'recorder.pb.dart';
 
+/// Interface to the grpc service running on the daemon.
 @$pb.GrpcServiceName('recorder.DaemonService')
 class DaemonServiceClient extends $grpc.Client {
   /// The hostname for this service.
@@ -182,6 +183,7 @@ abstract class DaemonServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.PingMessage request);
 }
 
+/// Interface to the grpc service running on the station interface. Minimalistic by design.
 @$pb.GrpcServiceName('recorder.StationInterface')
 class StationInterfaceClient extends $grpc.Client {
   /// The hostname for this service.

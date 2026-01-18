@@ -21,14 +21,10 @@ class LiveView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
-        return RepositoryProvider(
-          create: (ctx) =>
-              DaemonRepository(state.apiUrl ?? "", state.apiToken ?? ""),
-          child: BlocProvider(
-            lazy: false,
-            create: (context) => LiveCubit(context.read<DaemonRepository>()),
-            child: _LivePane(),
-          ),
+        return BlocProvider(
+          lazy: false,
+          create: (context) => LiveCubit(context.read<DaemonRepository>()),
+          child: _LivePane(),
         );
       },
     );
@@ -100,7 +96,7 @@ class _LivePane extends StatelessWidget {
       // Connected component
       items.add(
         ConnectedStationComponent(
-          state.station?.station,
+          state.station?.info,
           latestUpdateTime: state.latestUpdateTime,
           currentConditions: _currentConditions?.state,
           reconnecting:

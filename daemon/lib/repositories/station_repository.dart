@@ -1,11 +1,12 @@
-import 'package:daemon/database/database.dart';
-import 'package:daemon/repositories/sensor_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:shared/logger/logger.dart';
-import 'package:shared/models/sensor.dart';
-import 'package:shared/models/station.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared/models/station_and_sensors.dart';
+import 'package:shared/models/sensor.dart';
+
+import '../database/database.dart';
+import '../models/station_info.dart';
+import '../models/station_and_sensors.dart';
+import 'sensor_repository.dart';
 
 @singleton
 class StationRepository {
@@ -13,13 +14,14 @@ class StationRepository {
 
   StationRepository(this._database);
 
-  Station _fromResult({required StationTableData result}) {
-    return Station(
+  StationInfo _fromResult({required StationTableData result}) {
+    return StationInfo(
       id: result.id,
       name: result.name,
       createdAt: result.createdAt,
       latitude: result.latitude,
       longitude: result.longitude,
+      version: result.version,
     );
   }
 
@@ -56,7 +58,7 @@ class StationRepository {
   }
 
   // Gets a station by name.
-  Future<Station?> getByName({required String name}) async {
+  Future<StationInfo?> getByName({required String name}) async {
     try {
       final result = await (_database.select(
         _database.stationTable,
@@ -69,7 +71,7 @@ class StationRepository {
   }
 
   // Gets a station by id.
-  Future<Station?> getById({required int id}) async {
+  Future<StationInfo?> getById({required int id}) async {
     try {
       final result = await (_database.select(
         _database.stationTable,
@@ -94,7 +96,7 @@ class StationRepository {
       final sensors = result
           .map((s) => SensorRepository.fromResult(result: s))
           .toList();
-      return StationAndSensors(station: station, sensors: sensors);
+      return StationAndSensors(info: station, sensors: sensors);
     } catch (e) {
       logger.severe(e);
       return null;
@@ -103,7 +105,7 @@ class StationRepository {
 
   /// Creates a weather station and its sensors in a single atomic transaction.
   Future<StationAndSensors?> create({
-    required Station station,
+    required StationInfo station,
     required List<Sensor> sensors,
   }) async {
     try {
@@ -116,14 +118,16 @@ class StationRepository {
                 createdAt: station.createdAt,
                 longitude: station.longitude,
                 latitude: station.latitude,
+                version: station.version,
               ),
             );
-        final createdStation = Station(
+        final createdStation = StationInfo(
           id: stationId,
           createdAt: station.createdAt,
           latitude: station.latitude,
           longitude: station.longitude,
           name: station.name,
+          version: station.version,
         );
         final insertedSensors = <Sensor>[];
         for (final sensor in sensors) {
@@ -136,6 +140,7 @@ class StationRepository {
                   element: sensor.element,
                   storageUnitId: sensor.storageUnit.id,
                   recordIntervalSeconds: Value(sensor.recordIntervalSeconds),
+                  historyIntervalSeconds: Value(sensor.historyIntervalSeconds),
                 ),
               );
           insertedSensors.add(
@@ -146,11 +151,12 @@ class StationRepository {
               element: sensor.element,
               storageUnit: sensor.storageUnit,
               recordIntervalSeconds: sensor.recordIntervalSeconds,
+              historyIntervalSeconds: sensor.historyIntervalSeconds,
             ),
           );
         }
         return StationAndSensors(
-          station: createdStation,
+          info: createdStation,
           sensors: insertedSensors,
         );
       });
@@ -160,7 +166,7 @@ class StationRepository {
     }
   }
 
-  Future<List<Station>> getAll() async {
+  Future<List<StationInfo>> getAll() async {
     try {
       var stations = await _database.select(_database.stationTable).get();
       return stations.map((s) => _fromResult(result: s)).toList();

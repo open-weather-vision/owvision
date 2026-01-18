@@ -4,9 +4,10 @@ import 'package:daemon/services/config_service.dart';
 import 'package:daemon/services/token_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared/logger/logger.dart';
-import 'package:shared/models/error_response.dart';
 import 'package:shared/models/token_role.dart';
 import 'package:shelf/shelf.dart';
+
+import '../models/error_response.dart';
 
 @singleton
 class TokenController {

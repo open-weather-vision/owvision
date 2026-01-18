@@ -19,7 +19,7 @@ bool isDaytime(double lat, double lng, DateTime utcTime) {
 }
 
 class ConnectedStationComponent extends StatelessWidget {
-  final Station? _station;
+  final WeatherStation? _station;
   final DateTime? latestUpdateTime;
   final SensorState? currentConditions;
   final bool reconnecting;
@@ -41,7 +41,7 @@ class ConnectedStationComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final weatherCode = currentConditions?.value.value.toInt().toString();
+    final weatherCode = currentConditions?.value?.value.toInt().toString();
     return LiveBaseComponent(
       [
         Positioned(
@@ -62,7 +62,11 @@ class ConnectedStationComponent extends StatelessWidget {
               ),
               Text(
                 "${_station?.latitude.toStringAsFixed(2) ?? ""}  ${_station?.longitude.toStringAsFixed(2) ?? ""}",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
               ),
               SizedBox(height: 40),
               Row(
@@ -139,8 +143,12 @@ class ConnectedStationComponent extends StatelessWidget {
       height: 200,
       label: null,
       padding: EdgeInsets.all(0),
-      borderWidth: 0,
-      color: const Color.fromARGB(255, 52, 53, 53),
+      borderColor: (Theme.of(context).brightness == Brightness.dark
+          ? Colors.white.withAlpha(50)
+          : Colors.transparent),
+      color: Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 28, 29, 29)
+          : const Color.fromARGB(255, 88, 88, 88),
       backgroundImage: weatherCode != null
           ? DecorationImage(
               fit: BoxFit.cover,

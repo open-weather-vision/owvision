@@ -8,7 +8,7 @@ export enum TokenRole {
   Viewer = "viewer"
 }
 
-export interface Station {
+export interface WeatherStation {
   id: bigint;
   name: string;
   longitude: number;
@@ -37,7 +37,7 @@ export type Float64 = number;
  */
 export type Float = number;
 export interface StationAndSensors {
-  station: Station;
+  info: WeatherStation;
   sensors: Array<Sensor>;
 }
 
@@ -45,6 +45,8 @@ export interface Sensor {
   id: bigint;
   element: SensorElement;
   name: string;
+  recordIntervalSeconds: bigint;
+  historyIntervalSeconds: bigint;
 }
 export enum SensorElement {
   PrecipationAccumulated = "precipationAccumulated",
@@ -56,4 +58,20 @@ export enum SensorElement {
   WindDirection = "windDirection",
   Humidity = "humidity",
   WeatherCode = "weatherCode"
+}
+/**
+ * An instant in coordinated universal time (UTC)"
+ */
+export type UtcDateTime = Date;
+
+
+export interface SensorHistory {
+  sensorName: string;
+  unitId: string;
+  history: Array<HistoryRecord>;
+}
+
+export interface HistoryRecord {
+  value?: number;
+  createdAt: Date;
 }

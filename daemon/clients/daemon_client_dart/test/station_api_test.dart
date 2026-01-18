@@ -9,22 +9,29 @@ void main() {
   group(StationApi, () {
     // Get all stations.
     //
-    //Future<List<Station>> stationsAll() async
-    test('test stationsAll', () async {
+    //Future<List<WeatherStation>> stationAll() async
+    test('test stationAll', () async {
       // TODO
     });
 
     // Connect to a station's live websocket.
     //
-    //Future<Error> stationsConnect(int id) async
-    test('test stationsConnect', () async {
+    //Future<Error> stationConnect(int id) async
+    test('test stationConnect', () async {
+      // TODO
+    });
+
+    // Get the history of one ore more sensors (in a specific interval).
+    //
+    //Future<List<SensorHistory>> stationHistory(int id, { DateTime from, DateTime to, List<String> sensors }) async
+    test('test stationHistory', () async {
       // TODO
     });
 
     // Get one station and it's sensors.
     //
-    //Future<StationAndSensors> stationsOne(int id) async
-    test('test stationsOne', () async {
+    //Future<StationAndSensors> stationOne(int id) async
+    test('test stationOne', () async {
       // TODO
     });
 

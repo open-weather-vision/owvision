@@ -11,10 +11,10 @@ using Versioning;
 namespace DaemonRestApi;
 
 enum Versions {
-  v1: "0.0.9"
+  v1: "0.0.10"
 }
 
-model Station {
+model WeatherStation {
   id: int64;
   name: string;
   longitude: float64;
@@ -26,6 +26,8 @@ model Sensor {
   id: int64;
   element: SensorElement;
   name: string;
+  recordIntervalSeconds: int64;
+  historyIntervalSeconds: int64;
 }
 
 enum SensorElement{
@@ -60,14 +62,25 @@ enum TokenRole{
 }
 
 model StationAndSensors{
-  station: Station,
+  info: WeatherStation,
   sensors: Sensor[]
+}
+
+model HistoryRecord{
+  value?: float64,
+  createdAt: utcDateTime;
+}
+
+model SensorHistory{
+  sensorName: string,
+  unitId: string,
+  history: HistoryRecord[]
 }
 
 @route("/tokens")
 @tag("Token")
 @useAuth(BearerAuth)
-interface Tokens {
+interface Token {
   /** Generates a new token. Only succeeds if you are authenticated using an admin token, or once using the init token `%12345678%`. */
   @post generate(@query role: TokenRole): string | Error;
 }
@@ -75,9 +88,9 @@ interface Tokens {
 @route("/stations")
 @tag("Station")
 @useAuth(BearerAuth)
-interface Stations {
+interface Station {
   /** Get all stations. */
-  @get all(): Station[] | Error;
+  @get all(): WeatherStation[] | Error;
 
   /** Get one station and it's sensors. */
   @get one(@path id: int64): StationAndSensors | Error;
@@ -89,4 +102,8 @@ interface Stations {
     @header connection: "Upgrade";
     @header upgrade: "websocket";
   } | Error;
+
+  /** Get the history of one ore more sensors (in a specific interval). */
+  @route("/{id}/history")
+  @get history(@path id: int64, @query from?: utcDateTime, @query to?: utcDateTime, @query sensors?: string[]): Error | SensorHistory[];
 }

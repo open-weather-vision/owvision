@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package recorder;
 
-
+/* Interface to the grpc service running on the daemon. */
 service DaemonService {
     rpc CreateStation (StationDefinition) returns (Station) {}
     rpc GetStation (GetStationRequest) returns (Station) {}
@@ -39,6 +39,7 @@ message UpdateStationRequest{
     StationDefinition definition = 2; 
 }
 
+/* Interface to the grpc service running on the station interface. Minimalistic by design. */
 service StationInterface {
     rpc GetStationDefinition (GetStationDefinitionRequest) returns (StationDefinition) {}
     rpc GetSensorState (GetSensorStateRequest) returns (SensorState) {}
@@ -59,7 +60,8 @@ message StationDefinition{
 message SensorDefinition{
     string name = 1;
     string element = 2;
-    int64 recordIntervalSeconds = 3;
+    optional int64 recordIntervalSeconds = 3;
+    optional int64 historyIntervalSeconds = 4;
 }
 
 message Station{
@@ -72,6 +74,7 @@ message Sensor{
     int64 id = 1;
     string name = 2;
     int64 recordIntervalSeconds = 3;
+    int64 historyIntervalSeconds = 4;
 }
 
 message GetSensorStateRequest{
@@ -80,7 +83,6 @@ message GetSensorStateRequest{
 
 message SensorState {
     string unitId = 2;
-    optional double value = 3;
     int64 created_at = 4;
-    optional int64 intervalStart = 5;
+    optional double value = 3;
 }

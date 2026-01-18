@@ -1,25 +1,23 @@
-import 'dart:ui';
-
 import 'package:dashboard/base_components/live_base_component.dart';
 import 'package:dashboard/features/live/live_view.dart';
+import 'package:dashboard/utils/icon_by_element.dart';
 import 'package:flutter/material.dart';
+import 'package:shared/models/sensor.dart' as shared;
 
 class SimpleLiveComponent extends StatelessWidget {
   final SensorAndState? _sensor;
   final Color color;
-  final IconData icon;
-  final String label;
 
-  const SimpleLiveComponent(
-    this._sensor,
-    this.label,
-    this.color,
-    this.icon, {
-    super.key,
-  });
+  const SimpleLiveComponent(this._sensor, this.color, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool lightMode = Theme.of(context).brightness == Brightness.light;
+
+    final rawElement = _sensor?.sensor.element.value;
+    final element = rawElement != null
+        ? shared.SensorElement.values.byName(rawElement)
+        : null;
     return LiveBaseComponent(
       [
         Positioned(
@@ -29,9 +27,9 @@ class SimpleLiveComponent extends StatelessWidget {
             textBaseline: TextBaseline.ideographic,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             children: [
-              if (_sensor?.state != null)
+              if (_sensor?.state != null && _sensor!.state!.value != null)
                 Text(
-                  _sensor!.state!.value.value.toStringAsFixed(1),
+                  _sensor.state!.value!.value.toStringAsFixed(1),
                   style: TextStyle(
                     fontSize: 55,
                     fontWeight: FontWeight.w600,
@@ -51,7 +49,7 @@ class SimpleLiveComponent extends StatelessWidget {
                 ),
               SizedBox(width: 5),
               Text(
-                _sensor?.state?.value.unit.shortName ?? "",
+                _sensor?.state?.value?.unit.shortName ?? "",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -64,12 +62,11 @@ class SimpleLiveComponent extends StatelessWidget {
       ],
       connected: _sensor?.state?.value != null,
       height: 145,
-      label: label,
+      label: element?.label,
       padding: EdgeInsets.all(0),
-      borderWidth: 0,
       color: color,
       labelColor: Color.fromARGB(150, 0, 0, 0),
-      labelIcon: Icon(icon, size: 14),
+      labelIcon: Icon(iconByElement(element), size: 14, color: Colors.white),
     );
   }
 }

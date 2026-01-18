@@ -6,4 +6,5 @@ class StationTable extends Table {
   DateTimeColumn get createdAt => dateTime()();
   RealColumn get longitude => real()();
   RealColumn get latitude => real()();
+  IntColumn get version => integer()();
 }

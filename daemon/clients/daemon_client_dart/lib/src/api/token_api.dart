@@ -18,7 +18,7 @@ class TokenApi {
 
   const TokenApi(this._dio);
 
-  /// tokensGenerate
+  /// tokenGenerate
   /// Generates a new token. Only succeeds if you are authenticated using an admin token, or once using the init token &#x60;%12345678%&#x60;.
   ///
   /// Parameters:
@@ -32,7 +32,7 @@ class TokenApi {
   ///
   /// Returns a [Future] containing a [Response] with a [String] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<String>> tokensGenerate({ 
+  Future<Response<String>> tokenGenerate({ 
     required TokenRole role,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,

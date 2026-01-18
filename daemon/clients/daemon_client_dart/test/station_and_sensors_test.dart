@@ -7,8 +7,8 @@ void main() {
   // TODO add properties to the entity
 
   group(StationAndSensors, () {
-    // Station station
-    test('to test the property `station`', () async {
+    // WeatherStation info
+    test('to test the property `info`', () async {
       // TODO
     });
 

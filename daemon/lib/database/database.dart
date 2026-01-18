@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:daemon/database/tables/history_table.dart';
 import 'package:shared/utils.dart';
 
 import './tables/sensor_table.dart';
@@ -13,7 +14,7 @@ import 'package:drift/native.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [StationTable, SensorTable, TokenTable])
+@DriftDatabase(tables: [StationTable, SensorTable, TokenTable, HistoryTable])
 @singleton
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());

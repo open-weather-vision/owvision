@@ -1,4 +1,6 @@
 import 'package:dashboard/features/settings/settings_cubit.dart';
+import 'package:dashboard/log.dart';
+import 'package:dashboard/repositories/daemon_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,6 +16,7 @@ class SettingsView extends StatefulWidget {
 class _SettingsState extends State<SettingsView> {
   final _daemonServerUrlController = TextEditingController();
   final _daemonApiTokenController = TextEditingController();
+  var _testingConnection = false;
 
   @override
   void dispose() {
@@ -29,6 +32,51 @@ class _SettingsState extends State<SettingsView> {
     final settings = context.read<SettingsCubit>().state;
     _daemonServerUrlController.text = settings.apiUrl ?? "";
     _daemonApiTokenController.text = settings.apiToken ?? "";
+  }
+
+  void _testConnection() async {
+    setState(() {
+      _testingConnection = true;
+    });
+    final repo = context.read<DaemonRepository>();
+    final config = await repo.currentConfig;
+    repo.recreateClient(
+      _daemonServerUrlController.text,
+      _daemonApiTokenController.text,
+    );
+    try {
+      await repo.getStations();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Connection is stable!'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating, // Lässt die Bar "schweben"
+          duration: Duration(seconds: 2),
+          showCloseIcon: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    } catch (e) {
+      Log.warn(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Failed to reach daemon!'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating, // Lässt die Bar "schweben"
+          duration: Duration(seconds: 2),
+          showCloseIcon: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+    repo.recreateClient(config.apiUrl, config.apiToken);
+    setState(() {
+      _testingConnection = false;
+    });
   }
 
   void _save() async {
@@ -123,6 +171,27 @@ class _SettingsState extends State<SettingsView> {
                 ],
               ),
             ),
+            Opacity(
+              opacity: _testingConnection ? 0.5 : 1,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primaryContainer,
+                  foregroundColor: theme.colorScheme.onPrimaryContainer,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  minimumSize: Size.fromHeight(60),
+                ),
+                icon: Icon(Icons.sensors, size: 18),
+                onPressed: _testingConnection ? null : _testConnection,
+
+                label: Text(
+                  _testingConnection ? "Connecting..." : "Test connection",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+
             Spacer(),
             ElevatedButton.icon(
               style: ButtonStyle(

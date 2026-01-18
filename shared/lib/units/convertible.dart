@@ -12,6 +12,11 @@ class Convertible {
   Convertible(this.value, this.unit);
 
   Convertible to(Unit newUnit) {
+    if (newUnit.group != unit.group) {
+      throw Exception(
+        "Cannot convert from unit '${unit.shortName}' to '${newUnit.shortName}'!",
+      );
+    }
     double valueInBaseUnit = unit.toBaseUnit(value);
     value = newUnit.fromBaseUnit(valueInBaseUnit);
     unit = newUnit;

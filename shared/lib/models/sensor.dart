@@ -19,6 +19,7 @@ class Sensor {
   final SensorElement element;
   final String name;
   final int recordIntervalSeconds;
+  final int historyIntervalSeconds;
 
   @UnitJsonConverter()
   final Unit storageUnit;
@@ -30,6 +31,7 @@ class Sensor {
     required this.element,
     required this.storageUnit,
     required this.recordIntervalSeconds,
+    required this.historyIntervalSeconds,
   });
 
   factory Sensor.create({
@@ -37,6 +39,7 @@ class Sensor {
     required SensorElement element,
     required Unit storageUnit,
     required int recordIntervalSeconds,
+    required int historyIntervalSeconds,
   }) {
     return Sensor(
       element: element,
@@ -45,6 +48,7 @@ class Sensor {
       id: -1,
       stationId: -1,
       recordIntervalSeconds: recordIntervalSeconds,
+      historyIntervalSeconds: historyIntervalSeconds,
     );
   }
 
@@ -53,20 +57,22 @@ class Sensor {
   Map<String, dynamic> toJson() => _$SensorToJson(this);
 }
 
+// Make sure to update the typespec specification and the the station-interface-ts support package when this changes
 enum SensorElement {
-  precipationAccumulated(type: ElementType.accumulated),
-  precipationRate(type: ElementType.instant),
-  snowHeight(type: ElementType.instant),
-  pressure(type: ElementType.instant),
-  temperature(type: ElementType.instant),
-  windSpeed(type: ElementType.instant),
-  windDirection(type: ElementType.instant),
-  humidity(type: ElementType.instant),
-  weatherCode(type: ElementType.instant);
+  temperature(type: ElementType.instant, label: "Temperature"),
+  precipationAccumulated(type: ElementType.accumulated, label: "Precipation"),
+  precipationRate(type: ElementType.instant, label: "Precipation rate"),
+  pressure(type: ElementType.instant, label: "Pressure"),
+  windSpeed(type: ElementType.instant, label: "Wind speed"),
+  windDirection(type: ElementType.instant, label: "Wind direction"),
+  humidity(type: ElementType.instant, label: "Humidity"),
+  snowHeight(type: ElementType.instant, label: "Snow height"),
+  weatherCode(type: ElementType.instant, label: "Weather");
 
   final ElementType type;
+  final String label;
 
-  const SensorElement({required this.type});
+  const SensorElement({required this.type, required this.label});
 
   static Unit defaultUnit({required SensorElement element}) {
     switch (element) {

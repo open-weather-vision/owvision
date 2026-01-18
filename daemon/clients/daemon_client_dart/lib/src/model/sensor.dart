@@ -26,6 +26,10 @@ class Sensor {
     required  this.element,
 
     required  this.name,
+
+    required  this.recordIntervalSeconds,
+
+    required  this.historyIntervalSeconds,
   });
 
   @JsonKey(
@@ -64,19 +68,47 @@ class Sensor {
 
 
 
+  @JsonKey(
+    
+    name: r'recordIntervalSeconds',
+    required: true,
+    includeIfNull: false,
+  )
+
+
+  final int recordIntervalSeconds;
+
+
+
+  @JsonKey(
+    
+    name: r'historyIntervalSeconds',
+    required: true,
+    includeIfNull: false,
+  )
+
+
+  final int historyIntervalSeconds;
+
+
+
 
 
     @override
     bool operator ==(Object other) => identical(this, other) || other is Sensor &&
       other.id == id &&
       other.element == element &&
-      other.name == name;
+      other.name == name &&
+      other.recordIntervalSeconds == recordIntervalSeconds &&
+      other.historyIntervalSeconds == historyIntervalSeconds;
 
     @override
     int get hashCode =>
         id.hashCode +
         element.hashCode +
-        name.hashCode;
+        name.hashCode +
+        recordIntervalSeconds.hashCode +
+        historyIntervalSeconds.hashCode;
 
   factory Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 

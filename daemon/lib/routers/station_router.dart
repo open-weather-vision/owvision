@@ -16,6 +16,7 @@ class StationRouter {
     app.get("/", _stationController.getAll);
     app.get("/<id>", _stationController.getOne);
     app.get("/<id>/live", _stationController.live);
+    app.get("/<id>/history", _stationController.getHistory);
 
     return app.call;
   }

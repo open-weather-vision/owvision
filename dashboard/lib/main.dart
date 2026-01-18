@@ -1,3 +1,4 @@
+import 'package:dashboard/features/history/history_view.dart';
 import 'package:dashboard/features/settings/settings_cubit.dart';
 import 'package:dashboard/features/settings/settings_view.dart';
 import 'package:dashboard/navigation_cubit.dart';
@@ -8,6 +9,8 @@ import 'features/live/live_view.dart';
 import 'repositories/daemon_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+const seedColor = Color.fromARGB(255, 77, 169, 255);
 
 void main() {
   Bloc.observer = const AppStateObserver();
@@ -20,11 +23,12 @@ class DashboardApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'owvision Dashboard',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 77, 234, 255),
+          seedColor: seedColor,
           brightness: Brightness.light,
         ),
         fontFamily: 'Outfit',
@@ -33,13 +37,13 @@ class DashboardApp extends StatelessWidget {
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 77, 234, 255),
+          seedColor: seedColor,
           brightness: Brightness.dark,
         ),
         fontFamily: 'Outfit',
       ),
 
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       home: RepositoryProvider(
         create: (ctx) => ConfigRepository(),
         child: MultiBlocProvider(
@@ -68,13 +72,24 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<NavigationCubit, int>(
         builder: (context, state) {
+          late final Widget widget;
           if (state == 0) {
-            return LiveView();
+            widget = LiveView();
           } else if (state == 1) {
-            return Text("Not implemented");
+            widget = HistoryView();
           } else {
-            return SettingsView();
+            widget = SettingsView();
           }
+          return BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) {
+              return RepositoryProvider(
+                create: (ctx) => DaemonRepository(
+                  configRepository: ctx.read<ConfigRepository>(),
+                ),
+                child: widget,
+              );
+            },
+          );
         },
       ),
       bottomNavigationBar: BlocBuilder<NavigationCubit, int>(

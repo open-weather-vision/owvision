@@ -1,8 +1,9 @@
 import 'package:daemon/repositories/token_repository.dart';
 import 'package:daemon/services/config_service.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared/models/token.dart';
 import 'package:shared/models/token_role.dart';
+
+import '../models/token.dart';
 
 @singleton
 class TokenService {

@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **id** | **int** |  | 
 **element** | [**SensorElement**](SensorElement.md) |  | 
 **name** | **String** |  | 
+**recordIntervalSeconds** | **int** |  | 
+**historyIntervalSeconds** | **int** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

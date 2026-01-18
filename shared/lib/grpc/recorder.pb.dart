@@ -523,12 +523,15 @@ class SensorDefinition extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? element,
     $fixnum.Int64? recordIntervalSeconds,
+    $fixnum.Int64? historyIntervalSeconds,
   }) {
     final result = create();
     if (name != null) result.name = name;
     if (element != null) result.element = element;
     if (recordIntervalSeconds != null)
       result.recordIntervalSeconds = recordIntervalSeconds;
+    if (historyIntervalSeconds != null)
+      result.historyIntervalSeconds = historyIntervalSeconds;
     return result;
   }
 
@@ -549,6 +552,8 @@ class SensorDefinition extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'element')
     ..aInt64(3, _omitFieldNames ? '' : 'recordIntervalSeconds',
         protoName: 'recordIntervalSeconds')
+    ..aInt64(4, _omitFieldNames ? '' : 'historyIntervalSeconds',
+        protoName: 'historyIntervalSeconds')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -596,6 +601,15 @@ class SensorDefinition extends $pb.GeneratedMessage {
   $core.bool hasRecordIntervalSeconds() => $_has(2);
   @$pb.TagNumber(3)
   void clearRecordIntervalSeconds() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get historyIntervalSeconds => $_getI64(3);
+  @$pb.TagNumber(4)
+  set historyIntervalSeconds($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasHistoryIntervalSeconds() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearHistoryIntervalSeconds() => $_clearField(4);
 }
 
 class Station extends $pb.GeneratedMessage {
@@ -675,12 +689,15 @@ class Sensor extends $pb.GeneratedMessage {
     $fixnum.Int64? id,
     $core.String? name,
     $fixnum.Int64? recordIntervalSeconds,
+    $fixnum.Int64? historyIntervalSeconds,
   }) {
     final result = create();
     if (id != null) result.id = id;
     if (name != null) result.name = name;
     if (recordIntervalSeconds != null)
       result.recordIntervalSeconds = recordIntervalSeconds;
+    if (historyIntervalSeconds != null)
+      result.historyIntervalSeconds = historyIntervalSeconds;
     return result;
   }
 
@@ -701,6 +718,8 @@ class Sensor extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aInt64(3, _omitFieldNames ? '' : 'recordIntervalSeconds',
         protoName: 'recordIntervalSeconds')
+    ..aInt64(4, _omitFieldNames ? '' : 'historyIntervalSeconds',
+        protoName: 'historyIntervalSeconds')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -747,6 +766,15 @@ class Sensor extends $pb.GeneratedMessage {
   $core.bool hasRecordIntervalSeconds() => $_has(2);
   @$pb.TagNumber(3)
   void clearRecordIntervalSeconds() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get historyIntervalSeconds => $_getI64(3);
+  @$pb.TagNumber(4)
+  set historyIntervalSeconds($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasHistoryIntervalSeconds() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearHistoryIntervalSeconds() => $_clearField(4);
 }
 
 class GetSensorStateRequest extends $pb.GeneratedMessage {
@@ -809,13 +837,11 @@ class SensorState extends $pb.GeneratedMessage {
     $core.String? unitId,
     $core.double? value,
     $fixnum.Int64? createdAt,
-    $fixnum.Int64? intervalStart,
   }) {
     final result = create();
     if (unitId != null) result.unitId = unitId;
     if (value != null) result.value = value;
     if (createdAt != null) result.createdAt = createdAt;
-    if (intervalStart != null) result.intervalStart = intervalStart;
     return result;
   }
 
@@ -835,8 +861,6 @@ class SensorState extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'unitId', protoName: 'unitId')
     ..aD(3, _omitFieldNames ? '' : 'value')
     ..aInt64(4, _omitFieldNames ? '' : 'createdAt')
-    ..aInt64(5, _omitFieldNames ? '' : 'intervalStart',
-        protoName: 'intervalStart')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -884,15 +908,6 @@ class SensorState extends $pb.GeneratedMessage {
   $core.bool hasCreatedAt() => $_has(2);
   @$pb.TagNumber(4)
   void clearCreatedAt() => $_clearField(4);
-
-  @$pb.TagNumber(5)
-  $fixnum.Int64 get intervalStart => $_getI64(3);
-  @$pb.TagNumber(5)
-  set intervalStart($fixnum.Int64 value) => $_setInt64(3, value);
-  @$pb.TagNumber(5)
-  $core.bool hasIntervalStart() => $_has(3);
-  @$pb.TagNumber(5)
-  void clearIntervalStart() => $_clearField(5);
 }
 
 const $core.bool _omitFieldNames =

@@ -9,8 +9,8 @@ void main() {
   group(TokenApi, () {
     // Generates a new token. Only succeeds if you are authenticated using an admin token, or once using the init token `%12345678%`.
     //
-    //Future<String> tokensGenerate(TokenRole role) async
-    test('test tokensGenerate', () async {
+    //Future<String> tokenGenerate(TokenRole role) async
+    test('test tokenGenerate', () async {
       // TODO
     });
 
