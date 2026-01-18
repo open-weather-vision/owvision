@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Daemon REST API
-  version: 0.0.10
+  version: 0.0.11
 tags:
   - name: Token
   - name: Station
@@ -239,6 +239,8 @@ components:
         - windDirection
         - humidity
         - weatherCode
+        - dewPoint
+        - windChill
     SensorHistory:
       type: object
       required:
@@ -275,7 +277,7 @@ components:
     Versions:
       type: string
       enum:
-        - 0.0.10
+        - 0.0.11
     WeatherStation:
       type: object
       required:

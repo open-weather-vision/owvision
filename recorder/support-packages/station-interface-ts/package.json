@@ -1,6 +1,6 @@
 {
   "name": "@owvision/station-interface-ts",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Support package thats helps you to write a station interface that gets automatically detected by the owvision recorder.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -10,6 +10,7 @@ IconData iconByElement(SensorElement? element) {
     case SensorElement.humidity:
       return Symbols.humidity_percentage;
     case SensorElement.temperature:
+    case SensorElement.windChill:
       return Icons.thermostat;
     case SensorElement.precipationAccumulated:
       return Icons.water_drop;
@@ -25,5 +26,7 @@ IconData iconByElement(SensorElement? element) {
       return Symbols.explore;
     case SensorElement.weatherCode:
       return Symbols.cloud_circle;
+    case SensorElement.dewPoint:
+      return Symbols.dew_point;
   }
 }

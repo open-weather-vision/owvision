@@ -57,7 +57,9 @@ export enum SensorElement {
   WindSpeed = "windSpeed",
   WindDirection = "windDirection",
   Humidity = "humidity",
-  WeatherCode = "weatherCode"
+  WeatherCode = "weatherCode",
+  DewPoint = "dewPoint",
+  WindChill = "windChill"
 }
 /**
  * An instant in coordinated universal time (UTC)"

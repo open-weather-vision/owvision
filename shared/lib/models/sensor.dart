@@ -60,6 +60,8 @@ class Sensor {
 // Make sure to update the typespec specification and the the station-interface-ts support package when this changes
 enum SensorElement {
   temperature(type: ElementType.instant, label: "Temperature"),
+  windChill(type: ElementType.instant, label: "Wind chill"),
+  dewPoint(type: ElementType.instant, label: "Dew point"),
   precipationAccumulated(type: ElementType.accumulated, label: "Precipation"),
   precipationRate(type: ElementType.instant, label: "Precipation rate"),
   pressure(type: ElementType.instant, label: "Pressure"),
@@ -85,6 +87,8 @@ enum SensorElement {
       case pressure:
         return Pressure.hpa;
       case temperature:
+      case windChill:
+      case dewPoint:
         return Temperature.celsius;
       case windSpeed:
         return WindSpeed.kmh;

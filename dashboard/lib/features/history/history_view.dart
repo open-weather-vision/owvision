@@ -33,6 +33,8 @@ class _HistoryPane extends State<HistoryView> {
     shared.SensorElement.snowHeight,
     shared.SensorElement.windSpeed,
     shared.SensorElement.windDirection,
+    shared.SensorElement.windChill,
+    shared.SensorElement.dewPoint,
   ];
 
   @override

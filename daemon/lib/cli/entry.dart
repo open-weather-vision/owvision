@@ -6,12 +6,15 @@ import 'package:daemon/cli/commands/config.dart';
 import 'package:daemon/cli/commands/gentoken.dart';
 import 'package:daemon/cli/commands/reset.dart';
 import 'package:daemon/cli/commands/init.dart';
+import 'package:daemon/cli/commands/restart.dart';
 import 'package:daemon/cli/commands/station.dart';
 import 'package:daemon/cli/commands/status.dart';
+import 'package:daemon/cli/commands/update.dart';
 import 'package:logging/logging.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
 import 'package:shared/logger/logger.dart';
 
+const daemonServiceName = "ow_daemon";
 final cliConfig = CliConfig();
 final daemonClient = OwvisionDaemonClientDart(
   basePathOverride: cliConfig.daemonHost,
@@ -30,7 +33,9 @@ Future<void> cliEntry(List<String> arguments) async {
     ..addCommand(ConfigCommand())
     ..addCommand(ResetCommand())
     ..addCommand(GenerateTokenCommand())
-    ..addCommand(StatusCommand());
+    ..addCommand(StatusCommand())
+    ..addCommand(UpdateCommand())
+    ..addCommand(RestartCommand());
 
   try {
     await runner.run(arguments);

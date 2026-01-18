@@ -110,7 +110,7 @@ class RunCommand extends Command<int> {
 
       await SystemCtlService.create(
         description: "owvision daemon",
-        name: "ow_daemon",
+        name: daemonServiceName,
         after: ["caddy.service"],
         wants: ["caddy.service"],
       );

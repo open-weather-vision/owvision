@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:chalkdart/chalkstrings.dart';
 import 'package:daemon/cli/cli_config.dart';
+import 'package:daemon/cli/entry.dart';
 import 'package:shared/service.dart';
 import 'package:shared/utils.dart';
 
@@ -20,7 +21,7 @@ class ResetCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     if (Platform.isLinux) {
-      await SystemCtlService("ow_daemon").remove();
+      await SystemCtlService(daemonServiceName).remove();
       await runShellCommand("sudo", ["caddy", "stop"]);
     }
     await CliConfig.removeConfigFile();

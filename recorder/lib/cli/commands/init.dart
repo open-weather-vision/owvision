@@ -71,7 +71,7 @@ class InitCommand extends Command<int> {
         exit(1);
       }
       await SystemCtlService.create(
-        name: "ow_recorder",
+        name: recorderServiceName,
         description: "owvision recorder",
       );
       PrettyPrinter.outputFn = (str) => print(chalk.green.bold(str));

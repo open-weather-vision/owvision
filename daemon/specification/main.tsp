@@ -11,7 +11,7 @@ using Versioning;
 namespace DaemonRestApi;
 
 enum Versions {
-  v1: "0.0.10"
+  v1: "0.0.11"
 }
 
 model WeatherStation {
@@ -39,7 +39,9 @@ enum SensorElement{
   windSpeed,
   windDirection,
   humidity,
-  weatherCode
+  weatherCode,
+  dewPoint,
+  windChill
 }
 
 @error

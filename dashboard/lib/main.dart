@@ -43,7 +43,7 @@ class DashboardApp extends StatelessWidget {
         fontFamily: 'Outfit',
       ),
 
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       home: RepositoryProvider(
         create: (ctx) => ConfigRepository(),
         child: MultiBlocProvider(

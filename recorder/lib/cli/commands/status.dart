@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:chalkdart/chalkstrings.dart';
+import 'package:recorder/cli/entry.dart';
 import 'package:shared/format_duration.dart';
+import 'package:shared/service.dart';
 import 'package:shared/utils.dart';
 
 import '../../models/recorder_status.dart';
@@ -18,14 +20,9 @@ class StatusCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    final recorderActive =
-        await runShellCommand(
-          "systemctl",
-          ["is-active", "ow_recorder"],
-          forwardOutput: false,
-          onCommandFail: FailAction.silent,
-        ) ==
-        0;
+    final recorderActive = await SystemCtlService(
+      recorderServiceName,
+    ).isActive();
     if (recorderActive) {
       final status = RecorderStatus.fromFileSync();
       final latestStationPingAgo = status.latestStationConnection != null

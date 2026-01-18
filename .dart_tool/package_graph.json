@@ -10,7 +10,7 @@
   "packages": [
     {
       "name": "owvision",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "dependencies": [],
       "devDependencies": [
         "args",
@@ -25,7 +25,7 @@
     },
     {
       "name": "daemon",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "dependencies": [
         "args",
         "chalkdart",
@@ -36,6 +36,7 @@
         "fixnum",
         "get_it",
         "grpc",
+        "http",
         "injectable",
         "interact",
         "json_annotation",
@@ -63,7 +64,7 @@
     },
     {
       "name": "recorder",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "dependencies": [
         "args",
         "chalkdart",
@@ -89,7 +90,7 @@
     },
     {
       "name": "shared",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "dependencies": [
         "chalkdart",
         "json_annotation",
@@ -106,7 +107,7 @@
     },
     {
       "name": "owvision_daemon_client_dart",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "dependencies": [
         "copy_with_extension",
         "dio",
@@ -121,7 +122,7 @@
     },
     {
       "name": "dashboard",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "dependencies": [
         "collection",
         "cupertino_icons",
@@ -572,6 +573,16 @@
       ]
     },
     {
+      "name": "http",
+      "version": "1.6.0",
+      "dependencies": [
+        "async",
+        "http_parser",
+        "meta",
+        "web"
+      ]
+    },
+    {
       "name": "sqlite3",
       "version": "2.9.4",
       "dependencies": [
@@ -812,16 +823,6 @@
         "flutter",
         "http",
         "vector_graphics_codec"
-      ]
-    },
-    {
-      "name": "http",
-      "version": "1.6.0",
-      "dependencies": [
-        "async",
-        "http_parser",
-        "meta",
-        "web"
       ]
     },
     {

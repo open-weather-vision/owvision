@@ -94,6 +94,63 @@ WantedBy=multi-user.target
     }
   }
 
+  Future<bool> isActive() async {
+    return await runShellCommand(
+          "systemctl",
+          ["is-active", name],
+          forwardOutput: false,
+          onCommandFail: FailAction.silent,
+        ) ==
+        0;
+  }
+
+  Future<bool> stop() async {
+    final res = await runShellCommand(
+      "sudo",
+      ["systemctl", "stop", name],
+      cwd: ".",
+      onCommandFail: FailAction.silent,
+    );
+    return res == 0;
+  }
+
+  Future<bool> restart() async {
+    final res = await runShellCommand(
+      "sudo",
+      ["systemctl", "restart", name],
+      cwd: ".",
+      onCommandFail: FailAction.silent,
+    );
+    return res == 0;
+  }
+
+  Future<String?> getExecutablePath() async {
+    final result = await Process.run('systemctl', [
+      'show',
+      '-p',
+      'ExecStart',
+      name,
+    ]);
+    if (result.exitCode != 0) {
+      return null;
+    }
+    final output = result.stdout.toString().trim();
+    final regExp = RegExp(r'path=([^;\s]+)');
+    final match = regExp.firstMatch(output);
+    return match?.group(1);
+  }
+
+  Future<bool> start() async {
+    final res = await runShellCommand(
+      "sudo",
+      ["systemctl", "start", name],
+      cwd: ".",
+      forwardOutput: false,
+      onCommandFail: FailAction.silent,
+    );
+    return res == 0;
+  }
+
   Future<bool> remove() async {
     try {
       await runShellCommand("sudo", [

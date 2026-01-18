@@ -1,5 +1,7 @@
 import 'package:args/command_runner.dart';
 import 'package:chalkdart/chalkstrings.dart';
+import 'package:recorder/cli/commands/restart.dart';
+import 'package:recorder/cli/commands/update.dart';
 import 'package:shared/logger/logger.dart';
 import 'package:logging/logging.dart';
 
@@ -10,6 +12,7 @@ import 'commands/init.dart';
 import 'commands/reset.dart';
 import 'commands/status.dart';
 
+const recorderServiceName = "ow_recorder";
 var recorderConfig = RecorderConfig.fromFileSync();
 
 Future<void> cliEntry(List<String> arguments) async {
@@ -19,7 +22,9 @@ Future<void> cliEntry(List<String> arguments) async {
     ..addCommand(AuthenticateCommand())
     ..addCommand(ResetCommand())
     ..addCommand(ConfigCommand())
-    ..addCommand(StatusCommand());
+    ..addCommand(StatusCommand())
+    ..addCommand(RestartCommand())
+    ..addCommand(UpdateCommand());
 
   try {
     await runner.run(arguments);
