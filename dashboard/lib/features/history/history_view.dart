@@ -115,7 +115,7 @@ class _HistoryPane extends State<HistoryView> {
     final result = <shared.SensorElement, List<SensorHistory>>{};
     for (final element in supportedSensorElements) {
       result[element] = [];
-      final sensors = station?.sensors.where(
+      final sensors = station?.sensors.reversed.where(
         (s) => s.element.value == element.name,
       );
       result[element] =

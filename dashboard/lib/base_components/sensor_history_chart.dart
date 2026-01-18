@@ -90,14 +90,17 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
   TextStyle _titleStyle(ThemeData theme) {
     return TextStyle(
       fontWeight: FontWeight.w500,
-      color: theme.brightness == Brightness.light ? Colors.black : Colors.white,
+      color: theme.brightness == Brightness.light
+          ? const Color.fromARGB(118, 0, 0, 0)
+          : const Color.fromARGB(118, 255, 255, 255),
     );
   }
 
-  SideTitles _leftTitles(ThemeData theme) {
+  SideTitles _leftTitles(ThemeData theme, double sampleValue) {
     return SideTitles(
       showTitles: true,
-      reservedSize: 50,
+      reservedSize:
+          sampleValue.toStringAsFixed(widget.precision).length * 9.5 + 12,
       maxIncluded: false,
       minIncluded: false,
       getTitlesWidget: (value, meta) => SideTitleWidget(
@@ -116,9 +119,9 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
     );
   }
 
-  FlTitlesData _titles(ThemeData theme) {
+  FlTitlesData _titles(ThemeData theme, double sampleValue) {
     return FlTitlesData(
-      leftTitles: AxisTitles(sideTitles: _leftTitles(theme)),
+      leftTitles: AxisTitles(sideTitles: _leftTitles(theme, sampleValue)),
       bottomTitles: AxisTitles(sideTitles: _bottomTitles(theme)),
       topTitles: AxisTitles(),
       rightTitles: AxisTitles(),
@@ -179,10 +182,27 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
         )
         .toList();
     final min = records.map((s) => s.value).whereType<double>().minOrNull ?? 0;
-    final max = records.map((s) => s.value).whereType<double>().maxOrNull ?? 0;
+    var max = records.map((s) => s.value).whereType<double>().maxOrNull ?? 0;
+
+    if (min == max) {
+      max = min + 1;
+    }
+
+    final gridLine = FlLine(
+      color: theme.brightness == Brightness.dark
+          ? const Color.fromARGB(41, 255, 255, 255)
+          : const Color.fromARGB(41, 0, 0, 0),
+      strokeWidth: 1,
+      dashArray: [8, 4],
+    );
     return LineChart(
       LineChartData(
         clipData: FlClipData.all(),
+        gridData: FlGridData(
+          getDrawingHorizontalLine: (value) => gridLine,
+          getDrawingVerticalLine: (value) => gridLine,
+        ),
+
         lineBarsData: [
           LineChartBarData(
             spots: spots,
@@ -213,7 +233,7 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
         maxX: widget.to.millisecondsSinceEpoch.toDouble(),
         minY: widget.type == ChartType.bar ? min : min - (max - min) * 0.1,
         maxY: max + (max - min) * 0.1,
-        titlesData: _titles(theme),
+        titlesData: _titles(theme, max),
         lineTouchData: _toolTips(theme),
       ),
     );

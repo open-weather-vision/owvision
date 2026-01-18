@@ -116,11 +116,13 @@ class _LivePane extends StatelessWidget {
       }
 
       // Temperature stats
-      final temperature = sensors.firstWhereOrNull(
-        (s) => s.sensor.element == SensorElement.temperature,
-      );
-      if (temperature != null) {
-        items.add(TemperatureComponent(temperature));
+      final temperatures = sensors
+          .where((s) => s.sensor.element == SensorElement.temperature)
+          .toList()
+          .reversed
+          .toList();
+      if (temperatures.isNotEmpty) {
+        items.add(TemperatureComponent(temperatures));
       }
 
       final pressure = sensors.firstWhereOrNull(

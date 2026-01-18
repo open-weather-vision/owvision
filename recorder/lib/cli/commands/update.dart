@@ -14,7 +14,7 @@ import 'package:shared/utils.dart';
 
 class UpdateCommand extends Command<int> {
   @override
-  String get description => "Updates owvi to the latest version.";
+  String get description => "Updates owrec to the latest version.";
 
   @override
   String get name => "update";
@@ -56,7 +56,7 @@ class UpdateCommand extends Command<int> {
     if (Platform.isLinux) {
       await runShellCommand("sudo", [
         "chmod",
-        "777",
+        "+x",
         newBinary.path,
       ], onCommandFail: FailAction.throwException);
       final recorder = SystemCtlService(recorderServiceName);

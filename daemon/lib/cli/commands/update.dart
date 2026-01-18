@@ -56,7 +56,7 @@ class UpdateCommand extends Command<int> {
     if (Platform.isLinux) {
       await runShellCommand("sudo", [
         "chmod",
-        "777",
+        "+x",
         newBinary.path,
       ], onCommandFail: FailAction.throwException);
       final daemon = SystemCtlService(daemonServiceName);

@@ -50,16 +50,16 @@ Color temperatureColor(double? value) {
 }
 
 class TemperatureComponent extends StatelessWidget {
-  final SensorAndState? _temperature;
+  final List<SensorAndState> _temperatures;
 
-  const TemperatureComponent(this._temperature, {super.key});
+  const TemperatureComponent(this._temperatures, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return SimpleLiveComponent(
-      _temperature,
+      _temperatures[0],
       temperatureColor(
-        _temperature?.state?.value?.to(Temperature.celsius).value,
+        _temperatures[0].state?.value?.to(Temperature.celsius).value,
       ),
     );
   }
