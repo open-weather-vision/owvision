@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Daemon REST API
-  version: 0.0.11
+  version: 0.0.12
 tags:
   - name: Token
   - name: Station
@@ -277,7 +277,7 @@ components:
     Versions:
       type: string
       enum:
-        - 0.0.11
+        - 0.0.12
     WeatherStation:
       type: object
       required:
