@@ -72,16 +72,20 @@ class DaemonRepository {
   }
 
   Future<StationAndSensors?> getStation(int id) async {
-    Log.info("Fetching station...");
+    Log.info("Fetching selected station...");
     final response = await _client.getStationApi().stationOne(id: id);
-    Log.info("Fetched station!");
+    Log.info(
+      "Fetched station: ${response.data?.sensors.length} sensor(s) available",
+    );
     return response.data;
   }
 
   Future<List<WeatherStation>> getStations() async {
     Log.info("Fetching stations...");
     final response = await _client.getStationApi().stationAll();
-    Log.info("Fetched stations!");
+    Log.info(
+      "Fetched stations: ${response.data?.length ?? 0} station(s) connected",
+    );
     return response.data ?? [];
   }
 
@@ -90,12 +94,13 @@ class DaemonRepository {
     DateTime from,
     DateTime to,
   ) async {
+    Log.info("Fetching history...");
     final response = await _client.getStationApi().stationHistory(
       id: id,
       from: from,
       to: to,
     );
-
+    Log.info("Fetched history!");
     return response.data ?? [];
   }
 

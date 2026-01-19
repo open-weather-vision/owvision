@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:dashboard/base_components/sensor_history_chart.dart';
+import 'package:dashboard/log.dart';
 import 'package:dashboard/repositories/daemon_repository.dart';
 import 'package:dashboard/utils/icon_by_element.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:shared/logger/logger.dart';
 import 'package:shared/models/sensor.dart' as shared;
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
 import 'package:shared/units/convert.dart';
@@ -63,7 +63,7 @@ class _HistoryPane extends State<HistoryView> {
     );
   }
 
-  void loadHistory() async {
+  Future<void> loadHistory() async {
     final daemon = await context.read<DaemonRepository>();
     try {
       final fetchedStation = await daemon.getStation(1);
@@ -81,7 +81,7 @@ class _HistoryPane extends State<HistoryView> {
         loaded = true;
       });
     } catch (err) {
-      logger.severe(err);
+      Log.error(err.toString());
       setState(() {
         history = [];
         station = null;
@@ -162,27 +162,35 @@ class _HistoryPane extends State<HistoryView> {
     );
   }
 
+  Future<void> _reload() async {
+    Log.info("Reloading...");
+    await loadHistory();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: _anyHistoryAvailable()
-          ? Padding(
-              padding: EdgeInsetsGeometry.fromLTRB(0, 0, 0, 10),
-              child: _renderCharts(theme),
-            )
-          : Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                spacing: 5,
-                children: [
-                  Icon(Symbols.indeterminate_question_box, size: 70),
-                  Text("No data available!"),
-                ],
+      body: RefreshIndicator(
+        child: _anyHistoryAvailable()
+            ? Padding(
+                padding: EdgeInsetsGeometry.fromLTRB(0, 0, 0, 10),
+                child: _renderCharts(theme),
+              )
+            : Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  spacing: 5,
+                  children: [
+                    Icon(Symbols.indeterminate_question_box, size: 70),
+                    Text("No data available!"),
+                  ],
+                ),
               ),
-            ),
+        onRefresh: _reload,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _pickDate(),
         child: Icon(Icons.date_range),

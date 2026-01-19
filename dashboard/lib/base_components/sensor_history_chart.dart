@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
 
@@ -46,6 +47,7 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
   void _selectSensor(int index) {
     setState(() {
       selectedSensorIndex = index;
+      HapticFeedback.lightImpact();
     });
   }
 
@@ -128,10 +130,25 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
     );
   }
 
+  int? previousTouchSpotIndex = null;
   LineTouchData _toolTips(ThemeData theme) {
     return LineTouchData(
       enabled: true,
       touchSpotThreshold: double.infinity,
+
+      touchCallback: (event, response) {
+        if (event is FlLongPressEnd || event is FlTapUpEvent) {
+          previousTouchSpotIndex = null;
+          return;
+        }
+        final spot = response?.lineBarSpots?.firstOrNull;
+        if (spot != null &&
+            spot.spotIndex != previousTouchSpotIndex &&
+            event.isInterestedForInteractions) {
+          previousTouchSpotIndex = spot.spotIndex;
+          HapticFeedback.lightImpact();
+        }
+      },
       getTouchLineEnd: (barData, spotIndex) => double.infinity,
       getTouchedSpotIndicator: (barData, spotIndexes) => spotIndexes
           .map(

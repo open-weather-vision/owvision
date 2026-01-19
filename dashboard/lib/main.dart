@@ -14,11 +14,32 @@ const seedColor = Color.fromARGB(255, 77, 169, 255);
 
 void main() {
   Bloc.observer = const AppStateObserver();
-  runApp(const DashboardApp());
+  runApp(
+    RepositoryProvider(
+      create: (ctx) => ConfigRepository(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(lazy: false, create: (context) => NavigationCubit()),
+          BlocProvider(
+            lazy: false,
+            create: (context) =>
+                SettingsCubit(context.read<ConfigRepository>()),
+          ),
+        ],
+        child: BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (ctx, state) => DashboardApp(
+            state.darkMode == true ? ThemeMode.dark : ThemeMode.light,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class DashboardApp extends StatelessWidget {
-  const DashboardApp({super.key});
+  final ThemeMode theme;
+
+  const DashboardApp(this.theme, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,21 +64,8 @@ class DashboardApp extends StatelessWidget {
         fontFamily: 'Outfit',
       ),
 
-      themeMode: ThemeMode.system,
-      home: RepositoryProvider(
-        create: (ctx) => ConfigRepository(),
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(lazy: false, create: (context) => NavigationCubit()),
-            BlocProvider(
-              lazy: false,
-              create: (context) =>
-                  SettingsCubit(context.read<ConfigRepository>()),
-            ),
-          ],
-          child: const HomePage(title: 'owvision Dashboard'),
-        ),
-      ),
+      themeMode: theme,
+      home: const HomePage(title: 'owvision Dashboard'),
     );
   }
 }

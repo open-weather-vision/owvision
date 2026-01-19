@@ -125,3 +125,6 @@ flutter:
     #
     # For details regarding fonts from package dependencies,
     # see https://flutter.dev/to/font-from-package
+
+scripts:
+    update_icon: dart run flutter_launcher_icons

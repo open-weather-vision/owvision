@@ -7,11 +7,13 @@ class SettingsState {
   final ConfigStatus status;
   final String? apiUrl;
   final String? apiToken;
+  final bool? darkMode;
 
   const SettingsState({
     this.status = ConfigStatus.initial,
     this.apiUrl,
     this.apiToken,
+    this.darkMode,
   });
 
   SettingsState copyWith({
@@ -19,11 +21,13 @@ class SettingsState {
     String? apiUrl,
     String? apiToken,
     String? errorMessage,
+    bool? darkMode,
   }) {
     return SettingsState(
       status: status ?? this.status,
       apiUrl: apiUrl ?? this.apiUrl,
       apiToken: apiToken ?? this.apiToken,
+      darkMode: darkMode ?? this.darkMode,
     );
   }
 }
@@ -40,8 +44,6 @@ class SettingsCubit extends Cubit<SettingsState> {
 
     try {
       final config = await _repository.loadConfig();
-
-      // 2. Erfolgszustand mit Daten setzen
       emit(
         state.copyWith(
           status: ConfigStatus.success,
@@ -50,7 +52,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         ),
       );
     } catch (e) {
-      // 3. Fehlerzustand setzen
       emit(
         state.copyWith(
           status: ConfigStatus.failure,
@@ -60,7 +61,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  Future<void> saveConfig(String newUrl, String newToken) async {
+  Future<void> saveConfig(String newUrl, String newToken, bool darkMode) async {
     emit(state.copyWith(status: ConfigStatus.loading));
 
     try {
@@ -72,6 +73,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           status: ConfigStatus.success,
           apiUrl: newUrl,
           apiToken: newToken,
+          darkMode: darkMode,
         ),
       );
     } catch (e) {
