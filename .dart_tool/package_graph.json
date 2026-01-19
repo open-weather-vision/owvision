@@ -130,6 +130,7 @@
         "fl_chart",
         "flutter",
         "flutter_bloc",
+        "flutter_colorpicker",
         "flutter_launcher_icons",
         "flutter_secure_storage",
         "flutter_spinkit",
@@ -191,6 +192,13 @@
       "version": "6.0.0",
       "dependencies": [
         "lints"
+      ]
+    },
+    {
+      "name": "flutter_colorpicker",
+      "version": "1.1.0",
+      "dependencies": [
+        "flutter"
       ]
     },
     {

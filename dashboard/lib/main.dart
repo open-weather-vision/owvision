@@ -10,7 +10,7 @@ import 'repositories/daemon_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-const seedColor = Color.fromARGB(255, 77, 169, 255);
+const defaultThemeColor = Color.fromARGB(255, 77, 169, 255);
 
 void main() {
   Bloc.observer = const AppStateObserver();
@@ -28,7 +28,8 @@ void main() {
         ],
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (ctx, state) => DashboardApp(
-            state.darkMode == true ? ThemeMode.dark : ThemeMode.light,
+            state.config.darkMode ? ThemeMode.dark : ThemeMode.light,
+            state.config.themeColor,
           ),
         ),
       ),
@@ -38,8 +39,9 @@ void main() {
 
 class DashboardApp extends StatelessWidget {
   final ThemeMode theme;
+  final Color themeColor;
 
-  const DashboardApp(this.theme, {super.key});
+  const DashboardApp(this.theme, this.themeColor, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class DashboardApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor,
+          seedColor: themeColor,
           brightness: Brightness.light,
         ),
         fontFamily: 'Outfit',
@@ -58,7 +60,7 @@ class DashboardApp extends StatelessWidget {
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor,
+          seedColor: themeColor,
           brightness: Brightness.dark,
         ),
         fontFamily: 'Outfit',

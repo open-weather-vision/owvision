@@ -1,33 +1,21 @@
 import 'package:dashboard/repositories/config_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum ConfigStatus { initial, loading, success, failure }
 
 class SettingsState {
   final ConfigStatus status;
-  final String? apiUrl;
-  final String? apiToken;
-  final bool? darkMode;
+  late final AppConfig config;
 
-  const SettingsState({
-    this.status = ConfigStatus.initial,
-    this.apiUrl,
-    this.apiToken,
-    this.darkMode,
-  });
+  SettingsState({this.status = ConfigStatus.initial, AppConfig? config}) {
+    this.config = config ?? AppConfig();
+  }
 
-  SettingsState copyWith({
-    ConfigStatus? status,
-    String? apiUrl,
-    String? apiToken,
-    String? errorMessage,
-    bool? darkMode,
-  }) {
+  SettingsState copyWith({ConfigStatus? status, AppConfig? config}) {
     return SettingsState(
       status: status ?? this.status,
-      apiUrl: apiUrl ?? this.apiUrl,
-      apiToken: apiToken ?? this.apiToken,
-      darkMode: darkMode ?? this.darkMode,
+      config: config ?? this.config,
     );
   }
 }
@@ -35,7 +23,7 @@ class SettingsState {
 class SettingsCubit extends Cubit<SettingsState> {
   final ConfigRepository _repository;
 
-  SettingsCubit(this._repository) : super(const SettingsState()) {
+  SettingsCubit(this._repository) : super(SettingsState()) {
     _loadConfig();
   }
 
@@ -44,45 +32,32 @@ class SettingsCubit extends Cubit<SettingsState> {
 
     try {
       final config = await _repository.loadConfig();
-      emit(
-        state.copyWith(
-          status: ConfigStatus.success,
-          apiUrl: config.apiUrl,
-          apiToken: config.apiToken,
-        ),
-      );
+      emit(state.copyWith(status: ConfigStatus.success, config: config));
     } catch (e) {
-      emit(
-        state.copyWith(
-          status: ConfigStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
+      emit(state.copyWith(status: ConfigStatus.failure));
     }
   }
 
-  Future<void> saveConfig(String newUrl, String newToken, bool darkMode) async {
+  Future<void> saveConfig(
+    String newUrl,
+    String newToken,
+    bool darkMode,
+    Color themeColor,
+  ) async {
     emit(state.copyWith(status: ConfigStatus.loading));
 
     try {
-      final config = AppConfig(apiUrl: newUrl, apiToken: newToken);
+      final config = AppConfig(
+        apiUrl: newUrl,
+        apiToken: newToken,
+        themeColor: themeColor,
+        darkMode: darkMode,
+      );
       await _repository.saveConfig(config);
 
-      emit(
-        state.copyWith(
-          status: ConfigStatus.success,
-          apiUrl: newUrl,
-          apiToken: newToken,
-          darkMode: darkMode,
-        ),
-      );
+      emit(state.copyWith(status: ConfigStatus.success, config: config));
     } catch (e) {
-      emit(
-        state.copyWith(
-          status: ConfigStatus.failure,
-          errorMessage: "Failed to save config: $e",
-        ),
-      );
+      emit(state.copyWith(status: ConfigStatus.failure));
     }
   }
 }

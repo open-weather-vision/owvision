@@ -93,7 +93,7 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
     return TextStyle(
       fontWeight: FontWeight.w500,
       color: theme.brightness == Brightness.light
-          ? const Color.fromARGB(118, 0, 0, 0)
+          ? const Color.fromARGB(132, 0, 0, 0)
           : const Color.fromARGB(118, 255, 255, 255),
     );
   }
@@ -117,7 +117,7 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
 
   FlBorderData _border(ThemeData theme) {
     return FlBorderData(
-      border: Border.all(color: theme.colorScheme.onSurface.withAlpha(50)),
+      border: Border.all(color: theme.colorScheme.onSurface.withAlpha(30)),
     );
   }
 
@@ -207,7 +207,7 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
 
     final gridLine = FlLine(
       color: theme.brightness == Brightness.dark
-          ? const Color.fromARGB(41, 255, 255, 255)
+          ? const Color.fromARGB(20, 255, 255, 255)
           : const Color.fromARGB(41, 0, 0, 0),
       strokeWidth: 1,
       dashArray: [8, 4],
@@ -219,10 +219,13 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
           getDrawingHorizontalLine: (value) => gridLine,
           getDrawingVerticalLine: (value) => gridLine,
         ),
-
+        backgroundColor: theme.brightness == Brightness.light
+            ? Color.fromARGB(120, 255, 255, 255)
+            : null,
         lineBarsData: [
           LineChartBarData(
             spots: spots,
+
             isStepLineChart: widget.type == ChartType.bar,
             lineChartStepData: LineChartStepData(stepDirection: 0),
             color: widget.graphColor,
@@ -265,19 +268,22 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
       return SizedBox.shrink();
     }
 
+    final Color titleFontColor = theme.brightness == Brightness.dark
+        ? Colors.white
+        : theme.colorScheme.onPrimaryContainer;
     return Container(
       margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
       height: 300,
       decoration: BoxDecoration(
         border: Border.all(
-          width: Theme.of(context).brightness == Brightness.dark ? 1.5 : 0,
+          width: Theme.of(context).brightness == Brightness.dark ? 0.5 : 0,
           color: (Theme.of(context).brightness == Brightness.dark
               ? Colors.white.withAlpha(50)
               : Colors.transparent),
         ),
         borderRadius: BorderRadius.circular(10),
         color: theme.brightness == Brightness.light
-            ? Colors.white
+            ? theme.colorScheme.primary.withAlpha(20)
             : const Color.fromARGB(255, 15, 15, 15),
       ),
       child: Column(
@@ -286,17 +292,18 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? const Color.fromARGB(255, 28, 29, 29)
-                  : const Color.fromARGB(255, 228, 228, 228),
+              color: theme.colorScheme.primaryContainer,
             ),
             child: Row(
               spacing: 10,
               children: [
-                Icon(widget.icon, size: 18),
+                Icon(widget.icon, size: 18, color: titleFontColor),
                 Text(
                   widget.label,
-                  style: TextStyle(fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: titleFontColor,
+                  ),
                 ),
                 Spacer(),
                 if (widget.histories.length > 1)

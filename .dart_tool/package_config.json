@@ -302,6 +302,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "flutter_colorpicker",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_colorpicker-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "flutter_launcher_icons",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.14.4",
       "packageUri": "lib/",

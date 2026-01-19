@@ -50,6 +50,7 @@ dependencies:
     flutter_launcher_icons: ^0.14.4
     fl_chart: ^1.1.1
     material_symbols_icons: ^4.2892.0
+    flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
     # The "flutter_lints" package below contains a set of recommended lints to

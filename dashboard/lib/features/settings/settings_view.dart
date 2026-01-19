@@ -1,9 +1,12 @@
 import 'package:dashboard/features/settings/settings_cubit.dart';
 import 'package:dashboard/log.dart';
+import 'package:dashboard/main.dart';
 import 'package:dashboard/repositories/daemon_repository.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -19,6 +22,7 @@ class _SettingsState extends State<SettingsView> {
   final _daemonApiTokenController = TextEditingController();
   var _darkMode = false;
   var _testingConnection = false;
+  Color _themeColor = Colors.blue;
 
   @override
   void dispose() {
@@ -32,9 +36,10 @@ class _SettingsState extends State<SettingsView> {
     super.initState();
 
     final settings = context.read<SettingsCubit>().state;
-    _daemonServerUrlController.text = settings.apiUrl ?? "";
-    _daemonApiTokenController.text = settings.apiToken ?? "";
-    _darkMode = settings.darkMode ?? false;
+    _daemonServerUrlController.text = settings.config.apiUrl;
+    _daemonApiTokenController.text = settings.config.apiToken;
+    _darkMode = settings.config.darkMode;
+    _themeColor = settings.config.themeColor;
   }
 
   void _testConnection() async {
@@ -87,6 +92,7 @@ class _SettingsState extends State<SettingsView> {
       _daemonServerUrlController.text,
       _daemonApiTokenController.text,
       _darkMode,
+      _themeColor,
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -96,6 +102,36 @@ class _SettingsState extends State<SettingsView> {
         duration: Duration(seconds: 2),
         showCloseIcon: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
+  void _pickColor() {
+    Color pickerColor = _themeColor;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: SingleChildScrollView(
+          child: ColorPicker(
+            pickerColor: pickerColor,
+            onColorChanged: (c) => pickerColor = c,
+            paletteType: PaletteType.hueWheel,
+            enableAlpha: false,
+            displayThumbColor: false,
+            labelTypes: [],
+          ),
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Choose'),
+            onPressed: () {
+              setState(() {
+                _themeColor = pickerColor;
+              });
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
     );
   }
@@ -114,116 +150,106 @@ class _SettingsState extends State<SettingsView> {
               child: Column(
                 spacing: 20,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-                    child: Row(
-                      spacing: 15,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Icon(Icons.dns, size: 30),
-                        Expanded(
-                          child: TextField(
-                            controller: _daemonServerUrlController,
-                            decoration: InputDecoration(
-                              labelText: 'Daemon server url',
-                              hintText: 'https://your.server.ip.address:8080/',
-                              border: InputBorder.none,
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: theme.colorScheme.primary,
-                                  width: 1.0,
-                                ),
-                              ),
-                              filled: false,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-                    child: Row(
-                      spacing: 15,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Icon(Icons.key, size: 30),
-                        Expanded(
-                          child: TextField(
-                            obscureText: true,
-                            controller: _daemonApiTokenController,
-                            decoration: InputDecoration(
-                              labelText: 'Daemon api token',
-
-                              hintText: 'e56dbd67-b336-44f9-8807-9fcfe1c9b721',
-                              border: InputBorder.none,
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: theme.colorScheme.primary,
-                                  width: 1.0,
-                                ),
-                              ),
-                              filled: false,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Opacity(
-                    opacity: _testingConnection ? 0.5 : 1,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.colorScheme.primaryContainer,
-                        foregroundColor: theme.colorScheme.onPrimaryContainer,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                        minimumSize: Size.fromHeight(60),
-                      ),
-                      icon: Icon(Icons.sensors, size: 18),
-                      onPressed: _testingConnection ? null : _testConnection,
-
-                      label: Text(
-                        _testingConnection
-                            ? "Connecting..."
-                            : "Test connection",
-                        style: TextStyle(fontSize: 16),
+                  _settingsContainer(theme, [
+                    TextField(
+                      controller: _daemonServerUrlController,
+                      decoration: InputDecoration(
+                        labelText: 'Daemon server url',
+                        hintText: 'https://your.server.ip.address:8080/',
+                        border: OutlineInputBorder(),
                       ),
                     ),
-                  ),
-                  Divider(),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(10),
+                    TextField(
+                      obscureText: true,
+                      controller: _daemonApiTokenController,
+
+                      decoration: InputDecoration(
+                        labelText: 'Daemon api token',
+                        hintText: 'e56dbd67-b336-44f9-8807-9fcfe1c9b721',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.color_lens),
-                        SizedBox(width: 15),
-                        Text("Use dark theme", style: TextStyle(fontSize: 17)),
-                        Spacer(),
-                        Switch(
-                          value: _darkMode,
-                          onChanged: (value) => {
-                            setState(() {
-                              _darkMode = value;
-                            }),
-                          },
+                    Opacity(
+                      opacity: _testingConnection ? 0.5 : 1,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor:
+                              theme.colorScheme.onSecondaryContainer,
+                          foregroundColor: theme.colorScheme.secondaryContainer,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                          minimumSize: Size.fromHeight(60),
                         ),
-                      ],
+                        icon: Icon(Icons.sensors, size: 18),
+                        onPressed: _testingConnection ? null : _testConnection,
+
+                        label: Text(
+                          _testingConnection
+                              ? "Connecting..."
+                              : "Test connection",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
                     ),
-                  ),
+                  ], "Server Connection"),
+                  _settingsContainer(theme, [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
+                      decoration: BoxDecoration(
+                        color: theme.brightness == Brightness.light
+                            ? Color.fromARGB(155, 255, 255, 255)
+                            : Color.fromARGB(50, 0, 0, 0),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Use dark theme",
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          Spacer(),
+                          Switch(
+                            value: _darkMode,
+                            onChanged: (value) => {
+                              setState(() {
+                                _darkMode = value;
+                              }),
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
+                      decoration: BoxDecoration(
+                        color: theme.brightness == Brightness.light
+                            ? Color.fromARGB(155, 255, 255, 255)
+                            : Color.fromARGB(50, 0, 0, 0),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        children: [
+                          Text("Color", style: TextStyle(fontSize: 17)),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: _pickColor,
+                            child: Container(
+                              width: 50,
+                              height: 35,
+                              margin: EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                color: _themeColor,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ], "Theme"),
+
                   Spacer(),
                   ElevatedButton.icon(
                     style: ButtonStyle(
@@ -244,6 +270,35 @@ class _SettingsState extends State<SettingsView> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _settingsContainer(
+    ThemeData theme,
+    List<Widget> children,
+    String label,
+  ) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: theme.colorScheme.secondaryContainer,
+      ),
+      child: Column(
+        spacing: 15,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsetsGeometry.only(bottom: 5),
+            child: Text(
+              label,
+              style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),
+            ),
+          ),
+
+          ...children,
         ],
       ),
     );

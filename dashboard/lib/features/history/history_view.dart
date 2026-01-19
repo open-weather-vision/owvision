@@ -172,6 +172,7 @@ class _HistoryPane extends State<HistoryView> {
     final theme = Theme.of(context);
     return Scaffold(
       body: RefreshIndicator(
+        onRefresh: _reload,
         child: _anyHistoryAvailable()
             ? Padding(
                 padding: EdgeInsetsGeometry.fromLTRB(0, 0, 0, 10),
@@ -184,12 +185,20 @@ class _HistoryPane extends State<HistoryView> {
                   mainAxisSize: MainAxisSize.max,
                   spacing: 5,
                   children: [
-                    Icon(Symbols.indeterminate_question_box, size: 70),
-                    Text("No data available!"),
+                    Icon(
+                      Symbols.indeterminate_question_box,
+                      size: 70,
+                      color: theme.colorScheme.onPrimaryFixedVariant,
+                    ),
+                    Text(
+                      "No data available!",
+                      style: TextStyle(
+                        color: theme.colorScheme.onPrimaryFixedVariant,
+                      ),
+                    ),
                   ],
                 ),
               ),
-        onRefresh: _reload,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _pickDate(),
