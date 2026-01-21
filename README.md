@@ -2,13 +2,13 @@
 
 **open weather vision** (_owvision_ in short) is a _software system_ that allows you to
 
--   record
--   archive
--   analyze
+- record
+- archive
+- analyze
 
 and
 
--   share
+- share
 
 the weather data of your _personal weather station(s)_. It is a self-hostable, open source solution. You only need a Raspberry Pi visible in your network (or in the whole world😉) to get started!
 
@@ -33,3 +33,14 @@ It comes packed with a _cli_ called **owrec**.
 The [**dashboard**](./dashboard/README.md) is the entry point for most users. Live and historic weather data is **visualized** in a modern, intuitive way by default✨. There is support for themes, light☀️ and dark mode🌙. Communicates with the "daemon" in the background.
 
 It also comes with an admin panel, that allows you to manage your weather stations and their data🛠️.
+
+## Development guide
+
+1. Install [protoc](https://protobuf.dev/installation/) (make sure you have java 21 installed)
+2. Install _derry_: `dart pub global activate derry`, make sure the bin folder is in your path
+3. Install protoc _dart plugin_: `dart pub global activate protoc_plugin`
+4. Get dependencies: `flutter pub get`
+5. Install [nodejs](https://nodejs.org/en)
+6. Build code: `dart run bin/manager.dart build -y`
+7. Compile binaries (backend): `dart run bin/manager.dart compile`
+8. Open the flutter app in `./dashboard` like any flutter app

@@ -57,13 +57,16 @@ class Sensor {
   Map<String, dynamic> toJson() => _$SensorToJson(this);
 }
 
-// Make sure to update the typespec specification and the the station-interface-ts support package when this changes
+// Make sure to update the typespec specification when this changes
 enum SensorElement {
   temperature(type: ElementType.instant, label: "Temperature"),
   windChill(type: ElementType.instant, label: "Wind chill"),
   dewPoint(type: ElementType.instant, label: "Dew point"),
-  precipationAccumulated(type: ElementType.accumulated, label: "Precipation"),
-  precipationRate(type: ElementType.instant, label: "Precipation rate"),
+  precipationAccumulated(
+    type: ElementType.accumulated,
+    label: "Precipitation",
+  ), // TODO: Fix spelling in backend
+  precipationRate(type: ElementType.instant, label: "Precipitation rate"),
   pressure(type: ElementType.instant, label: "Pressure"),
   windSpeed(type: ElementType.instant, label: "Wind speed"),
   windDirection(type: ElementType.instant, label: "Wind direction"),
