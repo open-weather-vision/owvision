@@ -1,5 +1,9 @@
 # Create your own weather control center, for free!
 
+```
+⚠️ Still in development! A first stable release will be published in December 2026. ⚠️
+```
+
 **open weather vision** (_owvision_ in short) is a _software system_ that allows you to
 
 - record
