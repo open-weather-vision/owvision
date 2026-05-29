@@ -1,6 +1,6 @@
 name: shared
 description: A sample command-line application.
-version: 0.0.12
+version: 0.0.13
 publish_to: "none"
 
 environment:
@@ -24,3 +24,4 @@ resolution: workspace
 
 scripts:
     "build": protoc --dart_out=grpc:lib/grpc -Iprotos protos/recorder.proto && dart run build_runner build
+    "clean": "dart run build_runner clean"

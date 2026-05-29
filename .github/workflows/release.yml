@@ -47,10 +47,10 @@ jobs:
               run: dart pub get
 
             - name: Build code
-              run: dart run ./bin/manager.dart build -y
+              run: dart run ./builder/bin/builder.dart build -y
 
             - name: Compile binaries
-              run: dart run ./bin/manager.dart compile
+              run: dart run ./builder/bin/builder.dart compile
 
             - name: Upload binaries
               uses: softprops/action-gh-release@v1

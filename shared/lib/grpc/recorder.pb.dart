@@ -257,12 +257,10 @@ class UpdateSensorRequest extends $pb.GeneratedMessage {
 
 class UpdateSensorsResponse extends $pb.GeneratedMessage {
   factory UpdateSensorsResponse({
-    $core.Iterable<$core.String>? errors,
-    $core.Iterable<$fixnum.Int64>? processed,
+    $core.Iterable<UpdateSensorResponse>? updates,
   }) {
     final result = create();
-    if (errors != null) result.errors.addAll(errors);
-    if (processed != null) result.processed.addAll(processed);
+    if (updates != null) result.updates.addAll(updates);
     return result;
   }
 
@@ -279,9 +277,8 @@ class UpdateSensorsResponse extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'UpdateSensorsResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'recorder'),
       createEmptyInstance: create)
-    ..pPS(1, _omitFieldNames ? '' : 'errors')
-    ..p<$fixnum.Int64>(
-        2, _omitFieldNames ? '' : 'processed', $pb.PbFieldType.K6)
+    ..pPM<UpdateSensorResponse>(1, _omitFieldNames ? '' : 'updates',
+        subBuilder: UpdateSensorResponse.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -305,10 +302,85 @@ class UpdateSensorsResponse extends $pb.GeneratedMessage {
   static UpdateSensorsResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $pb.PbList<$core.String> get errors => $_getList(0);
+  $pb.PbList<UpdateSensorResponse> get updates => $_getList(0);
+}
+
+class UpdateSensorResponse extends $pb.GeneratedMessage {
+  factory UpdateSensorResponse({
+    $fixnum.Int64? updateId,
+    $core.bool? success,
+    $core.String? error,
+  }) {
+    final result = create();
+    if (updateId != null) result.updateId = updateId;
+    if (success != null) result.success = success;
+    if (error != null) result.error = error;
+    return result;
+  }
+
+  UpdateSensorResponse._();
+
+  factory UpdateSensorResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateSensorResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateSensorResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'recorder'),
+      createEmptyInstance: create)
+    ..aInt64(1, _omitFieldNames ? '' : 'updateId', protoName: 'updateId')
+    ..aOB(2, _omitFieldNames ? '' : 'success')
+    ..aOS(3, _omitFieldNames ? '' : 'error')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSensorResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSensorResponse copyWith(void Function(UpdateSensorResponse) updates) =>
+      super.copyWith((message) => updates(message as UpdateSensorResponse))
+          as UpdateSensorResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateSensorResponse create() => UpdateSensorResponse._();
+  @$core.override
+  UpdateSensorResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static UpdateSensorResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateSensorResponse>(create);
+  static UpdateSensorResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get updateId => $_getI64(0);
+  @$pb.TagNumber(1)
+  set updateId($fixnum.Int64 value) => $_setInt64(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasUpdateId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUpdateId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $pb.PbList<$fixnum.Int64> get processed => $_getList(1);
+  $core.bool get success => $_getBF(1);
+  @$pb.TagNumber(2)
+  set success($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSuccess() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSuccess() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get error => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set error($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasError() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearError() => $_clearField(3);
 }
 
 class UpdateStationRequest extends $pb.GeneratedMessage {

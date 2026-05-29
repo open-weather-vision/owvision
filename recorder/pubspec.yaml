@@ -1,6 +1,6 @@
 name: recorder
 description: A sample command-line application.
-version: 0.0.12
+version: 0.0.13
 publish_to: "none"
 
 environment:
@@ -13,7 +13,7 @@ dependencies:
     fixnum: ^1.1.1
     get_it: ^9.2.0
     grpc: ^5.1.0
-    injectable: ^2.7.1+4
+    injectable: ^3.0.0
     interact: ^2.2.0
     json_annotation: ^4.9.0
     logging: ^1.3.0
@@ -25,7 +25,7 @@ dependencies:
 dev_dependencies:
     lints: ^6.0.0
     test: ^1.25.6
-    injectable_generator: ^2.6.1
+    injectable_generator: ^3.0.2
     build_runner: ^2.10.5
     json_serializable: ^6.11.4
 
@@ -33,3 +33,4 @@ resolution: workspace
 
 scripts:
     "build": "dart run build_runner build"
+    "clean": "dart run build_runner clean"

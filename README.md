@@ -45,6 +45,6 @@ It also comes with an admin panel, that allows you to manage your weather statio
 3. Install protoc _dart plugin_: `dart pub global activate protoc_plugin`
 4. Get dependencies: `flutter pub get`
 5. Install [nodejs](https://nodejs.org/en)
-6. Build code: `dart run bin/manager.dart build -y`
-7. Compile binaries (backend): `dart run bin/manager.dart compile`
+6. Build code: `dart run builder/bin/builder.dart build -y`
+7. Compile binaries (backend): `dart run builder/bin/builder.dart compile`
 8. Open the flutter app in `./dashboard` like any flutter app

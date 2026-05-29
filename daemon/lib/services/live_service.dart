@@ -179,36 +179,36 @@ class RecorderService extends grpc.DaemonServiceBase {
     ServiceCall call,
     grpc.UpdateSensorsRequest request,
   ) async {
-    final errors = <String>[];
-    final processed = <Int64>[];
+    final updates = <grpc.UpdateSensorResponse>[];
 
     for (final update in request.updates) {
-      try {
-        final sensor = await _sensorService.getById(
-          id: update.sensorId.toInt(),
+      final sensor = await _sensorService.getById(id: update.sensorId.toInt());
+      if (sensor == null) {
+        final message =
+            "Didn't find sensor for update (sensorId=${update.sensorId}, updateId=${update.updateId})";
+        logger.severe(message);
+        updates.add(
+          grpc.UpdateSensorResponse(
+            updateId: update.updateId,
+            success: false,
+            error: message,
+          ),
         );
-        if (sensor == null) {
-          logger.severe(
-            "Didn't find sensor for update (sensorId=${update.sensorId}, updateId=${update.updateId})",
-          );
-          continue;
-        }
+      } else {
         _events.emit(
           "sensor_update",
           SensorUpdate(sensor: sensor, request: update),
         );
-        processed.add(update.updateId);
-      } catch (e) {
-        final message = "Invalid sensor id '${update.sensorId}'!";
-        errors.add(message);
-        logger.warning("Failed to update sensor: $message");
-        continue;
+        updates.add(
+          grpc.UpdateSensorResponse(updateId: update.updateId, success: true),
+        );
       }
     }
+    final successCount = updates.where((u) => u.success).length;
     logger.info(
-      "Processed update batch: Successfully processed ${processed.length}/${request.updates.length} updates.",
+      "Processed update batch: Successfully processed $successCount/${request.updates.length} updates.",
     );
-    return grpc.UpdateSensorsResponse(errors: errors, processed: processed);
+    return grpc.UpdateSensorsResponse(updates: updates);
   }
 
   @override

@@ -18,10 +18,15 @@ import 'package:shared/weather_code.dart';
 import '../models/recorder_config.dart';
 
 @singleton
+/// Service responsible for managing the connection between the station interface and the central daemon.
+///
+/// It handles retrieving the station configuration, fetching sensor data at
+/// specified intervals, integrating virtual sensors (like Open-Meteo),
+/// buffering the results, and uploading them in batches via gRPC.
 class RecorderService {
   static const openMeteoCurrentWeatherVirtualSensor =
       "current_weather_openmeteo";
-  late grpc.StationInterfaceClient _stationInterfaceClient;
+  late grpc.StationInterfaceClient _localStationInterfaceClient;
   late grpc.DaemonServiceClient _daemonClient;
   late grpc.Station _station;
   late grpc.StationDefinition _definition;
@@ -34,7 +39,8 @@ class RecorderService {
 
   RecorderService(this._statusService);
 
-  grpc.StationInterfaceClient createStationInterfaceClient() {
+  /// Creates a gRPC client to communicate with the local station interface.
+  grpc.StationInterfaceClient createLocalStationInterfaceClient() {
     final channel = ClientChannel(
       recorderConfig.interfaceGrpcHost,
       port: recorderConfig.interfaceGrpcPort,
@@ -43,6 +49,11 @@ class RecorderService {
     return grpc.StationInterfaceClient(channel);
   }
 
+  /// Starts the recorder service.
+  ///
+  /// This connects to both the interface and the daemon, syncs the station
+  /// definition, sets up physical and virtual sensors, and schedules
+  /// background tasks for continuous data fetching and batch uploading.
   Future<void> start() async {
     if (running) {
       logger.severe("Already running!");
@@ -54,11 +65,11 @@ class RecorderService {
     logger.info(
       "Recorder active, trying to ping station interface on port ${recorderConfig.interfaceGrpcPort}",
     );
-    _stationInterfaceClient = createStationInterfaceClient();
+    _localStationInterfaceClient = createLocalStationInterfaceClient();
     _daemonClient = createDaemonClient();
 
     try {
-      _definition = await _stationInterfaceClient.getStationDefinition(
+      _definition = await _localStationInterfaceClient.getStationDefinition(
         grpc.GetStationDefinitionRequest(),
       );
       await _statusService.stationResponded();
@@ -135,6 +146,10 @@ class RecorderService {
     }
   }
 
+  /// Fetches the current value for a given [sensor] and enqueues an update.
+  ///
+  /// If the sensor is an Open-Meteo virtual sensor, it queries the weather API.
+  /// Otherwise, it requests the state from the connected station interface.
   Future<void> _fetchSensor(grpc.Sensor sensor) async {
     if (sensor.name == openMeteoCurrentWeatherVirtualSensor) {
       // Virtual open meteo server
@@ -176,7 +191,7 @@ class RecorderService {
     } else {
       // Common sensors
       try {
-        final state = await _stationInterfaceClient.getSensorState(
+        final state = await _localStationInterfaceClient.getSensorState(
           grpc.GetSensorStateRequest(name: sensor.name),
         );
         await _statusService.stationResponded();
@@ -192,28 +207,31 @@ class RecorderService {
     }
   }
 
+  /// Takes a batch from the queue and attempts to send it to the daemon.
+  ///
+  /// If successful, the transferred items are permanently removed from the queue.
   Future<void> _processLatestBatch() async {
     final batch = _queue.takeBatch();
     final processed = <Int64>[];
     if (batch.isNotEmpty) {
-      String? error;
       try {
         final response = await _daemonClient.updateSensors(
           grpc.UpdateSensorsRequest(updates: batch),
         );
         await _statusService.daemonResponded();
-        if (response.errors.isNotEmpty) {
-          error = response.errors.join("\n");
+
+        for (final updateResp in response.updates) {
+          processed.add(updateResp.updateId);
+          if (!updateResp.success) {
+            logger.warning(
+              "Update ${updateResp.updateId} failed via daemon: ${updateResp.error}",
+            );
+          }
         }
-        processed.addAll(response.processed);
-        await _statusService.daemonResponded();
       } catch (e) {
         await _statusService.daemonDidntRespond();
-        error = "Failed to connect to daemon server ($e)!";
-      }
-      if (error != null) {
         logger.warning(
-          "An error occurred while processing an update batch: $error",
+          "An error occurred while processing an update batch: $e",
         );
       }
       _queue.removeBatch(processed);
@@ -223,6 +241,7 @@ class RecorderService {
     }
   }
 
+  /// Pauses all recurring tasks and timers in the recorder service.
   void pause() {
     for (final timer in _timers) {
       timer.cancel();
@@ -232,12 +251,18 @@ class RecorderService {
   }
 }
 
+/// A local buffer for out-bound sensor updates before they reach the daemon.
+///
+/// The queue enforces a [maxQueueSize] and processes items in chunks of [maxBatchSize].
 class DataQueue {
   final Queue<grpc.UpdateSensorRequest> _buffer = Queue();
   static const int maxBatchSize = 20;
   static const int maxQueueSize = 5000;
   Int64 _currentUpdateIndex = Int64(0);
 
+  /// Enqueues a new update request, assigning it an incremental update index.
+  ///
+  /// If the buffer size exceeds [maxQueueSize], the oldest update is dropped.
   void enqueueUpdate(grpc.UpdateSensorRequest request) {
     request.updateId = _currentUpdateIndex++;
     if (_buffer.length >= maxQueueSize) {
@@ -247,10 +272,12 @@ class DataQueue {
     _buffer.addLast(request);
   }
 
+  /// Returns a chunk of up to [maxBatchSize] updates to be sent.
   List<grpc.UpdateSensorRequest> takeBatch() {
     return _buffer.take(maxBatchSize).toList();
   }
 
+  /// Removes updates from the buffer that have been successfully processed.
   void removeBatch(List<Int64> processedUpdates) {
     for (final updateId in processedUpdates) {
       _buffer.removeWhere((u) => u.updateId == updateId);

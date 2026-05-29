@@ -40,8 +40,13 @@ export interface UpdateSensorRequest {
 }
 
 export interface UpdateSensorsResponse {
-  errors: string[];
-  processed: number[];
+  updates: UpdateSensorResponse[];
+}
+
+export interface UpdateSensorResponse {
+  updateId: number;
+  success: boolean;
+  error: string;
 }
 
 export interface UpdateStationRequest {
@@ -363,19 +368,14 @@ export const UpdateSensorRequest: MessageFns<UpdateSensorRequest> = {
 };
 
 function createBaseUpdateSensorsResponse(): UpdateSensorsResponse {
-  return { errors: [], processed: [] };
+  return { updates: [] };
 }
 
 export const UpdateSensorsResponse: MessageFns<UpdateSensorsResponse> = {
   encode(message: UpdateSensorsResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.errors) {
-      writer.uint32(10).string(v!);
+    for (const v of message.updates) {
+      UpdateSensorResponse.encode(v!, writer.uint32(10).fork()).join();
     }
-    writer.uint32(18).fork();
-    for (const v of message.processed) {
-      writer.int64(v);
-    }
-    writer.join();
     return writer;
   },
 
@@ -391,26 +391,8 @@ export const UpdateSensorsResponse: MessageFns<UpdateSensorsResponse> = {
             break;
           }
 
-          message.errors.push(reader.string());
+          message.updates.push(UpdateSensorResponse.decode(reader, reader.uint32()));
           continue;
-        }
-        case 2: {
-          if (tag === 16) {
-            message.processed.push(longToNumber(reader.int64()));
-
-            continue;
-          }
-
-          if (tag === 18) {
-            const end2 = reader.uint32() + reader.pos;
-            while (reader.pos < end2) {
-              message.processed.push(longToNumber(reader.int64()));
-            }
-
-            continue;
-          }
-
-          break;
         }
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -423,20 +405,16 @@ export const UpdateSensorsResponse: MessageFns<UpdateSensorsResponse> = {
 
   fromJSON(object: any): UpdateSensorsResponse {
     return {
-      errors: globalThis.Array.isArray(object?.errors) ? object.errors.map((e: any) => globalThis.String(e)) : [],
-      processed: globalThis.Array.isArray(object?.processed)
-        ? object.processed.map((e: any) => globalThis.Number(e))
+      updates: globalThis.Array.isArray(object?.updates)
+        ? object.updates.map((e: any) => UpdateSensorResponse.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: UpdateSensorsResponse): unknown {
     const obj: any = {};
-    if (message.errors?.length) {
-      obj.errors = message.errors;
-    }
-    if (message.processed?.length) {
-      obj.processed = message.processed.map((e) => Math.round(e));
+    if (message.updates?.length) {
+      obj.updates = message.updates.map((e) => UpdateSensorResponse.toJSON(e));
     }
     return obj;
   },
@@ -446,8 +424,99 @@ export const UpdateSensorsResponse: MessageFns<UpdateSensorsResponse> = {
   },
   fromPartial<I extends Exact<DeepPartial<UpdateSensorsResponse>, I>>(object: I): UpdateSensorsResponse {
     const message = createBaseUpdateSensorsResponse();
-    message.errors = object.errors?.map((e) => e) || [];
-    message.processed = object.processed?.map((e) => e) || [];
+    message.updates = object.updates?.map((e) => UpdateSensorResponse.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseUpdateSensorResponse(): UpdateSensorResponse {
+  return { updateId: 0, success: false, error: "" };
+}
+
+export const UpdateSensorResponse: MessageFns<UpdateSensorResponse> = {
+  encode(message: UpdateSensorResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.updateId !== 0) {
+      writer.uint32(8).int64(message.updateId);
+    }
+    if (message.success !== false) {
+      writer.uint32(16).bool(message.success);
+    }
+    if (message.error !== "") {
+      writer.uint32(26).string(message.error);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): UpdateSensorResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateSensorResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.updateId = longToNumber(reader.int64());
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.error = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpdateSensorResponse {
+    return {
+      updateId: isSet(object.updateId) ? globalThis.Number(object.updateId) : 0,
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      error: isSet(object.error) ? globalThis.String(object.error) : "",
+    };
+  },
+
+  toJSON(message: UpdateSensorResponse): unknown {
+    const obj: any = {};
+    if (message.updateId !== 0) {
+      obj.updateId = Math.round(message.updateId);
+    }
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.error !== "") {
+      obj.error = message.error;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<UpdateSensorResponse>, I>>(base?: I): UpdateSensorResponse {
+    return UpdateSensorResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<UpdateSensorResponse>, I>>(object: I): UpdateSensorResponse {
+    const message = createBaseUpdateSensorResponse();
+    message.updateId = object.updateId ?? 0;
+    message.success = object.success ?? false;
+    message.error = object.error ?? "";
     return message;
   },
 };

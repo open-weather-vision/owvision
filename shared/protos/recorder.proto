@@ -30,8 +30,13 @@ message UpdateSensorRequest{
 }
 
 message UpdateSensorsResponse {
-    repeated string errors = 1;
-    repeated int64 processed = 2;
+    repeated UpdateSensorResponse updates = 1;
+}
+
+message UpdateSensorResponse{
+    int64 updateId = 1;
+    bool success = 2;
+    string error = 3;
 }
 
 message UpdateStationRequest{

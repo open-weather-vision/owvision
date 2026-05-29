@@ -2,3 +2,4 @@
 **/node_modules
 **/dist
 .admintoken
+.dart_tool
