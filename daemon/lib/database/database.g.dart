@@ -1416,6 +1416,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SensorTableTable sensorTable = $SensorTableTable(this);
   late final $TokenTableTable tokenTable = $TokenTableTable(this);
   late final $HistoryTableTable historyTable = $HistoryTableTable(this);
+  late final Index historySensorCreatedIdx = Index(
+    'history_sensor_created_idx',
+    'CREATE INDEX history_sensor_created_idx ON history_table (sensor_id, created_at)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1425,6 +1429,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     sensorTable,
     tokenTable,
     historyTable,
+    historySensorCreatedIdx,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([

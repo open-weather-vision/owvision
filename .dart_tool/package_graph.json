@@ -552,7 +552,7 @@
     },
     {
       "name": "drift_dev",
-      "version": "2.33.0",
+      "version": "2.31.0",
       "dependencies": [
         "analyzer",
         "args",
@@ -592,15 +592,11 @@
     },
     {
       "name": "sqlite3",
-      "version": "3.3.2",
+      "version": "2.9.4",
       "dependencies": [
-        "code_assets",
         "collection",
-        "crypto",
         "ffi",
-        "hooks",
         "meta",
-        "native_toolchain_c",
         "path",
         "typed_data",
         "web"
@@ -608,7 +604,7 @@
     },
     {
       "name": "drift",
-      "version": "2.33.0",
+      "version": "2.31.0",
       "dependencies": [
         "async",
         "collection",
@@ -801,7 +797,7 @@
     },
     {
       "name": "vector_graphics_compiler",
-      "version": "1.2.4",
+      "version": "1.2.5",
       "dependencies": [
         "args",
         "meta",
@@ -1059,7 +1055,7 @@
     },
     {
       "name": "analyzer",
-      "version": "12.0.0",
+      "version": "10.2.0",
       "dependencies": [
         "_fe_analyzer_shared",
         "collection",
@@ -1118,7 +1114,7 @@
     },
     {
       "name": "dart_style",
-      "version": "3.1.8",
+      "version": "3.1.7",
       "dependencies": [
         "analyzer",
         "args",
@@ -1317,7 +1313,7 @@
     },
     {
       "name": "sqlparser",
-      "version": "0.44.4",
+      "version": "0.43.1",
       "dependencies": [
         "charcode",
         "collection",
@@ -1329,39 +1325,6 @@
       "name": "charcode",
       "version": "1.4.0",
       "dependencies": []
-    },
-    {
-      "name": "native_toolchain_c",
-      "version": "0.19.1",
-      "dependencies": [
-        "code_assets",
-        "glob",
-        "hooks",
-        "logging",
-        "meta",
-        "pub_semver"
-      ]
-    },
-    {
-      "name": "code_assets",
-      "version": "1.2.0",
-      "dependencies": [
-        "collection",
-        "hooks"
-      ]
-    },
-    {
-      "name": "hooks",
-      "version": "2.0.0",
-      "dependencies": [
-        "collection",
-        "crypto",
-        "logging",
-        "meta",
-        "pub_semver",
-        "record_use",
-        "yaml"
-      ]
     },
     {
       "name": "ffi",
@@ -1487,7 +1450,7 @@
     },
     {
       "name": "_fe_analyzer_shared",
-      "version": "98.0.0",
+      "version": "96.0.0",
       "dependencies": [
         "meta",
         "source_span"
@@ -1543,15 +1506,6 @@
         "http",
         "meta",
         "stack_trace"
-      ]
-    },
-    {
-      "name": "record_use",
-      "version": "0.6.0",
-      "dependencies": [
-        "collection",
-        "meta",
-        "pub_semver"
       ]
     },
     {
@@ -1666,6 +1620,36 @@
         "package_config",
         "path",
         "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "hooks",
+      "version": "2.0.0",
+      "dependencies": [
+        "collection",
+        "crypto",
+        "logging",
+        "meta",
+        "pub_semver",
+        "record_use",
+        "yaml"
+      ]
+    },
+    {
+      "name": "code_assets",
+      "version": "1.2.0",
+      "dependencies": [
+        "collection",
+        "hooks"
+      ]
+    },
+    {
+      "name": "record_use",
+      "version": "0.6.0",
+      "dependencies": [
+        "collection",
+        "meta",
+        "pub_semver"
       ]
     }
   ],

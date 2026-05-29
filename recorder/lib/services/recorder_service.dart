@@ -32,6 +32,7 @@ class RecorderService {
   late grpc.StationDefinition _definition;
   final DataQueue _queue = DataQueue();
   final _timers = <DriftFreeTimer>[];
+  final Map<Int64, Future<void>> _sensorFetchLocks = {};
   final _openMeteo = WeatherApi(userAgent: "owvision_recorder");
   bool running = false;
 
@@ -151,58 +152,73 @@ class RecorderService {
   /// If the sensor is an Open-Meteo virtual sensor, it queries the weather API.
   /// Otherwise, it requests the state from the connected station interface.
   Future<void> _fetchSensor(grpc.Sensor sensor) async {
-    if (sensor.name == openMeteoCurrentWeatherVirtualSensor) {
-      // Virtual open meteo server
-      try {
-        logger.info("Requesting current weather from open meteo...");
-        final response = await _openMeteo.request(
-          locations: {
-            OpenMeteoLocation(
-              latitude: _definition.latitude,
-              longitude: _definition.longitude,
+    final previousLock = _sensorFetchLocks[sensor.id];
+    final completer = Completer<void>();
+    _sensorFetchLocks[sensor.id] = completer.future;
+
+    if (previousLock != null) {
+      await previousLock;
+    }
+
+    try {
+      if (sensor.name == openMeteoCurrentWeatherVirtualSensor) {
+        // Virtual open meteo server
+        try {
+          logger.info("Requesting current weather from open meteo...");
+          final response = await _openMeteo.request(
+            locations: {
+              OpenMeteoLocation(
+                latitude: _definition.latitude,
+                longitude: _definition.longitude,
+              ),
+            },
+            current: {WeatherCurrent.weather_code},
+          );
+          final code = response
+              .segments[0]
+              .currentData[WeatherCurrent.weather_code]!
+              .value;
+          logger.info(
+            "Open meteo responded: $code (${weatherCodeToString(code)})",
+          );
+          await _statusService.openMeteoResponded();
+          _queue.enqueueUpdate(
+            grpc.UpdateSensorRequest(
+              sensorId: sensor.id,
+              newState: grpc.SensorState(
+                createdAt: Int64(DateTime.now().millisecondsSinceEpoch),
+                value: code,
+                unitId: NoUnit.none.id,
+              ),
             ),
-          },
-          current: {WeatherCurrent.weather_code},
-        );
-        final code = response
-            .segments[0]
-            .currentData[WeatherCurrent.weather_code]!
-            .value;
-        logger.info(
-          "Open meteo responded: $code (${weatherCodeToString(code)})",
-        );
-        await _statusService.openMeteoResponded();
-        _queue.enqueueUpdate(
-          grpc.UpdateSensorRequest(
-            sensorId: sensor.id,
-            newState: grpc.SensorState(
-              createdAt: Int64(DateTime.now().millisecondsSinceEpoch),
-              value: code,
-              unitId: NoUnit.none.id,
-            ),
-          ),
-        );
-      } catch (e) {
-        logger.warning(
-          "Failed to get current weather conditions from open meteo! $e",
-        );
-        await _statusService.openMeteoDidntRespond();
+          );
+        } catch (e) {
+          logger.warning(
+            "Failed to get current weather conditions from open meteo! $e",
+          );
+          await _statusService.openMeteoDidntRespond();
+        }
+      } else {
+        // Common sensors
+        try {
+          final state = await _localStationInterfaceClient.getSensorState(
+            grpc.GetSensorStateRequest(name: sensor.name),
+          );
+          await _statusService.stationResponded();
+          _queue.enqueueUpdate(
+            grpc.UpdateSensorRequest(sensorId: sensor.id, newState: state),
+          );
+        } catch (e) {
+          await _statusService.stationDidntRespond();
+          logger.warning(
+            "Failed to get value from sensor ${sensor.name} (${_station.id}): $e",
+          );
+        }
       }
-    } else {
-      // Common sensors
-      try {
-        final state = await _localStationInterfaceClient.getSensorState(
-          grpc.GetSensorStateRequest(name: sensor.name),
-        );
-        await _statusService.stationResponded();
-        _queue.enqueueUpdate(
-          grpc.UpdateSensorRequest(sensorId: sensor.id, newState: state),
-        );
-      } catch (e) {
-        await _statusService.stationDidntRespond();
-        logger.warning(
-          "Failed to get value from sensor ${sensor.name} (${_station.id}): $e",
-        );
+    } finally {
+      completer.complete();
+      if (_sensorFetchLocks[sensor.id] == completer.future) {
+        _sensorFetchLocks.remove(sensor.id);
       }
     }
   }

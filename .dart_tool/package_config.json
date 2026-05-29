@@ -3,13 +3,13 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-98.0.0",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-96.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-12.0.0",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-10.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -207,7 +207,7 @@
     },
     {
       "name": "dart_style",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/dart_style-3.1.8",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/dart_style-3.1.7",
       "packageUri": "lib/",
       "languageVersion": "3.10"
     },
@@ -225,15 +225,15 @@
     },
     {
       "name": "drift",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/drift-2.33.0",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/drift-2.31.0",
       "packageUri": "lib/",
-      "languageVersion": "3.10"
+      "languageVersion": "3.5"
     },
     {
       "name": "drift_dev",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/drift_dev-2.33.0",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/drift_dev-2.31.0",
       "packageUri": "lib/",
-      "languageVersion": "3.10"
+      "languageVersion": "3.5"
     },
     {
       "name": "east_asian_width",
@@ -572,12 +572,6 @@
       "languageVersion": "3.2"
     },
     {
-      "name": "native_toolchain_c",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/native_toolchain_c-0.19.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
       "name": "nested",
       "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
       "packageUri": "lib/",
@@ -801,15 +795,15 @@
     },
     {
       "name": "sqlite3",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/sqlite3-3.3.2",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/sqlite3-2.9.4",
       "packageUri": "lib/",
-      "languageVersion": "3.9"
+      "languageVersion": "3.5"
     },
     {
       "name": "sqlparser",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/sqlparser-0.44.4",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/sqlparser-0.43.1",
       "packageUri": "lib/",
-      "languageVersion": "3.10"
+      "languageVersion": "3.5"
     },
     {
       "name": "stack_trace",
@@ -903,7 +897,7 @@
     },
     {
       "name": "vector_graphics_compiler",
-      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.2.4",
+      "rootUri": "file:///C:/Users/harry/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.2.5",
       "packageUri": "lib/",
       "languageVersion": "3.10"
     },

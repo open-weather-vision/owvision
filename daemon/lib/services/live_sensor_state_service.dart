@@ -15,6 +15,9 @@ import '../models/station_and_sensors.dart';
 /// Responsible for keeping the sensor state for each station in memory and transmitting it to any connected live websocket
 class LiveSensorStateService extends LiveBasedService {
   final Map<int, StationLiveState> _liveState = {};
+  final StreamController<int> _stationUpdateNotifier =
+      StreamController<int>.broadcast();
+
   LiveSensorStateService(super.liveService, super.stationService);
 
   @override
@@ -42,6 +45,8 @@ class LiveSensorStateService extends LiveBasedService {
       return;
     }
     stateForStation.update(update.sensor.name, update.state);
+    _stationUpdateNotifier.add(station.info.id);
+
     logger.info(
       "[live update] ${station.info.name} (id=${station.info.id}): ${update.sensor.name}=${update.state.value} (${update.state.createdAt})",
     );
@@ -63,16 +68,15 @@ class LiveSensorStateService extends LiveBasedService {
     } else {
       webSocket.sink.add(jsonEncode(currentLiveState.toJson()));
     }
-    final timer = Timer.periodic(Duration(seconds: 5), (_) {
-      final currentLiveState = _liveState[station.id];
-      if (currentLiveState == null) {
-        logger.severe(
-          "Live socket error: No live state available for station with id=${station.id}!",
-        );
-      } else {
-        webSocket.sink.add(jsonEncode(currentLiveState.toJson()));
-      }
-    });
+
+    final subscription = _stationUpdateNotifier.stream
+        .where((id) => id == station.id)
+        .listen((_) {
+          final updatedState = _liveState[station.id];
+          if (updatedState != null) {
+            webSocket.sink.add(jsonEncode(updatedState.toJson()));
+          }
+        });
 
     webSocket.stream.listen(
       (message) {},
@@ -80,11 +84,11 @@ class LiveSensorStateService extends LiveBasedService {
         logger.info(
           "User stopped listening to weather station live data of '${station.name}'",
         );
-        timer.cancel();
+        subscription.cancel();
       },
       onError: (error) {
         logger.warning("Live socket connection issue: $error");
-        timer.cancel();
+        subscription.cancel();
       },
     );
   }
