@@ -51,6 +51,13 @@ class WorkspaceBuilder {
     print(chalk.green.bold("Compiling..."));
     final daemonPackage = DartPackage("./daemon");
     final recorderPackage = DartPackage("./recorder");
+
+    final daemonOut = Directory("${daemonPackage.path}/out/");
+    if (daemonOut.existsSync()) daemonOut.deleteSync(recursive: true);
+
+    final recorderOut = Directory("${recorderPackage.path}/out/");
+    if (recorderOut.existsSync()) recorderOut.deleteSync(recursive: true);
+
     await daemonPackage.compile(
       "daemon",
       "owvi",

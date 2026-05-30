@@ -48,10 +48,9 @@ class DartPackage {
   }) async {
     name = name ?? binary;
     final outFolder = Directory("$path/out/");
-    if (await outFolder.exists()) {
-      await outFolder.delete(recursive: true);
+    if (!await outFolder.exists()) {
+      await outFolder.create(recursive: true);
     }
-    await outFolder.create(recursive: true);
     for (final arch in linuxArchs) {
       final binaryName = "${name}_lin$arch";
       try {
