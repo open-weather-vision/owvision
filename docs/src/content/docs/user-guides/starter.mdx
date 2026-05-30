@@ -68,50 +68,55 @@ And all this for free, in an easy to use modern user interface. That's the idea 
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_linarm"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_installer_linarm"
             >
-                Download daemon
+                Download daemon installer
             </LinkButton>
         </TabItem>
         <TabItem label="linux/arm64">
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_linarm64"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_installer_linarm64"
             >
-                Download daemon
+                Download daemon installer
             </LinkButton>
         </TabItem>
         <TabItem label="linux/x64">
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_linx64"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_installer_linx64"
             >
-                Download daemon
+                Download daemon installer
             </LinkButton>
         </TabItem>
         <TabItem label="windows/x64">
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_winx64.exe"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owvi_installer_winx64.exe"
             >
-                Download daemon
+                Download daemon installer
             </LinkButton>
         </TabItem>
     </Tabs>
 
 3.  **Start the daemon**
 
-    After downloading the binary simply run following command to initialize the daemon. This will run the setup guide. If you have any issues here, don't hesitate to ask for help on our [discord server]().
-    You need to run this command with admin privileges on windows.
+    After downloading the installer, simply run it to initialize the daemon. The installer will automatically download the correct binary, setup the background service, add it to your system's PATH, and walk you through the configuration process. If you have any issues here, don't hesitate to ask for help on our [discord server]().
+    The installer will prompt for admin privileges on windows if required.
+
+    **On Linux:**
 
     ```sh
-    owvi init
+    chmod +x owvi_installer_*
+    ./owvi_installer_*
     ```
 
-    <i style="font-size: 0.8rem">\*owvi refers to the previously downloaded binary.</i>
+    **On Windows:** Simply double click the downloaded `owvi_installer_winx64.exe` or run it from PowerShell.
+
+    <i style="font-size: 0.8rem">\*The `.owvision` folder will be created automatically.</i>
 
 4.  **Download the recorder (_owrec_)**
 
@@ -128,50 +133,55 @@ And all this for free, in an easy to use modern user interface. That's the idea 
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_linarm"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_installer_linarm"
             >
-                Download recorder
+                Download recorder installer
             </LinkButton>
         </TabItem>
         <TabItem label="linux/arm64">
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_linarm64"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_installer_linarm64"
             >
-                Download recorder
+                Download recorder installer
             </LinkButton>
         </TabItem>
         <TabItem label="linux/x64">
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_linx64"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_installer_linx64"
             >
-                Download recorder
+                Download recorder installer
             </LinkButton>
         </TabItem>
         <TabItem label="windows/x64">
             <LinkButton
                 icon="download"
                 iconPlacement="start"
-                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_winx64.exe"
+                href="https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_installer_winx64.exe"
             >
-                Download recorder
+                Download recorder installer
             </LinkButton>
         </TabItem>
     </Tabs>
 
 5.  **Start the recorder**
 
-    After downloading the binary simply run following command to initialize the recorder. This will run the setup guide. If you have any issues here, don't hesitate to ask for help on our [discord server]().
-    You need to run this command with admin privileges on windows.
+    After downloading the installer, simply run it to initialize the recorder. Similar to the daemon, this will download the core binary, create the service, and walk you through the setup. If you have any issues here, don't hesitate to ask for help on our [discord server]().
+    The installer will prompt for admin privileges on windows if required.
+
+    **On Linux:**
 
     ```sh
-    owrec init
+    chmod +x owrec_installer_*
+    ./owrec_installer_*
     ```
 
-    <i style="font-size: 0.8rem">\*owrec refers to the previously downloaded binary.</i>
+    **On Windows:** Simply double click the downloaded `owrec_installer_winx64.exe` or run it from PowerShell.
+
+    <i style="font-size: 0.8rem">\*The `.owvision` folder will be created automatically.</i>
 
 6.  **Find, download and start your interface**
 

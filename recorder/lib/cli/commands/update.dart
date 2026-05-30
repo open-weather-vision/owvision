@@ -7,9 +7,6 @@ import 'package:chalkdart/chalkdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:interact/interact.dart';
 import 'package:path/path.dart';
-import 'package:recorder/cli/entry.dart';
-import 'package:shared/pretty_print.dart';
-import 'package:shared/service.dart';
 import 'package:shared/utils.dart';
 
 class UpdateCommand extends Command<int> {
@@ -37,69 +34,48 @@ class UpdateCommand extends Command<int> {
             options: supportedArchitectures,
           ).interact()];
     }
-    print("⏳ Downloading latest version ($arch)...");
-    final newBinary = File(
-      'owrec${Platform.isWindows
-          ? ".exe"
-          : Platform.isLinux
-          ? "_tmp"
-          : ""}',
-    );
+    String ext = Platform.isWindows ? ".exe" : "";
+    String installerName = 'owrec_installer_$arch$ext';
 
-    final res = await http.get(
-      Uri.parse(
-        'https://github.com/open-weather-vision/owvision/releases/latest/download/owrec_$arch',
-      ),
-    );
-    await newBinary.writeAsBytes(res.bodyBytes);
-    print("✅ Downloaded latest binary to ${newBinary.absolute.path}!");
-    if (Platform.isLinux) {
-      await runShellCommand("sudo", [
-        "chmod",
-        "+x",
-        newBinary.path,
-      ], onCommandFail: FailAction.throwException);
-      final recorder = BackgroundService(recorderServiceName);
-      final executablePath = await recorder.getExecutablePath();
-      if (executablePath == null) {
+    print("⏳ Downloading updater ($installerName)...");
+    final tempDir = Directory.systemTemp.createTempSync('owrec_update_');
+    final installerFile = File(join(tempDir.path, installerName));
+
+    try {
+      final res = await http.get(
+        Uri.parse(
+          'https://github.com/open-weather-vision/owvision/releases/latest/download/$installerName',
+        ),
+      );
+
+      if (res.statusCode != 200 && res.statusCode != 302) {
         print(
-          chalk.red(
-            "⚠️  Failed to get current executable path. Failed to upgrade.",
-          ),
+          chalk.red("⚠️  Failed to download updater. HTTP ${res.statusCode}"),
         );
         exit(1);
       }
-      final wasRunning = await recorder.isActive();
-      if (wasRunning) {
-        await recorder.stop();
-        print("✅ Stopped service");
+      await installerFile.writeAsBytes(res.bodyBytes);
+      print("✅ Downloaded updater!");
+
+      if (!Platform.isWindows) {
+        await runShellCommand("chmod", [
+          "+x",
+          installerFile.path,
+        ], onCommandFail: FailAction.throwException);
       }
-      final oldBinary = File(executablePath);
-      await oldBinary.delete();
-      print("✅ Deleted old binary");
-      await newBinary.copy(oldBinary.path);
-      await newBinary.delete();
-      print("✅ Replaced with new binary");
-      if (wasRunning) {
-        final started = await recorder.start();
-        if (started) {
-          print("✅ Restarted service");
-        } else {
-          print(chalk.red("⚠️  Failed to restart service."));
-          exit(1);
-        }
-      }
-      PrettyPrinter.outputFn = print;
-      PrettyPrinter.output(
-        Box([
-          Text(
-            chalk.green(
-              "Upgraded ${chalk.bold("owrec")} to the latest version!",
-            ),
-          ),
-        ]),
+
+      print("🚀 Starting updater...\n");
+      await runShellCommand(
+        installerFile.path,
+        [],
+        interactive: true,
+        onCommandFail: FailAction.exit,
       );
-      exit(0);
+    } finally {
+      try {
+        if (installerFile.existsSync()) installerFile.deleteSync();
+        if (tempDir.existsSync()) tempDir.deleteSync();
+      } catch (_) {}
     }
     return 0;
   }
