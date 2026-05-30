@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:interact/interact.dart';
 import 'package:path/path.dart';
+import 'package:shared/one_line_output.dart';
 import 'package:shared/utils.dart';
 
 class UpdateCommand extends Command<int> {
@@ -34,7 +35,7 @@ class UpdateCommand extends Command<int> {
         .replaceFirst("_", "");
     const supportedArchitectures = ["winx64", "linx64", "linarm", "linarm64"];
     if (!supportedArchitectures.contains(arch)) {
-      print(
+      set_line(
         chalk.red("Couldn't automatically infer your system's architecture."),
       );
       arch =
@@ -46,7 +47,7 @@ class UpdateCommand extends Command<int> {
     String ext = Platform.isWindows ? ".exe" : "";
     String installerName = 'owrec_installer_$arch$ext';
 
-    print("⏳ Downloading updater ($installerName)...");
+    set_line("⏳ Downloading updater ($installerName)...");
     final tempDir = Directory.systemTemp.createTempSync('owrec_update_');
     final installerFile = File(join(tempDir.path, installerName));
 
@@ -61,7 +62,7 @@ class UpdateCommand extends Command<int> {
         headers: {'User-Agent': 'owvision-updater'},
       );
       if (metaRes.statusCode != 200) {
-        print(
+        set_line(
           chalk.red(
             "⚠️  Failed to fetch release info. HTTP ${metaRes.statusCode}",
           ),
@@ -82,22 +83,24 @@ class UpdateCommand extends Command<int> {
       );
 
       if (res.statusCode != 200 && res.statusCode != 302) {
-        print(
+        set_line(
           chalk.red("⚠️  Failed to download updater. HTTP ${res.statusCode}"),
         );
         exit(1);
       }
       await installerFile.writeAsBytes(res.bodyBytes);
-      print("✅ Downloaded updater!");
+      set_line("✅ Downloaded updater!");
 
       if (!Platform.isWindows) {
-        await runShellCommand("chmod", [
-          "+x",
-          installerFile.path,
-        ], onCommandFail: FailAction.throwException);
+        await runShellCommand(
+          "chmod",
+          ["+x", installerFile.path],
+          onCommandFail: FailAction.throwException,
+          forwardOutput: false,
+        );
       }
 
-      print("🚀 Starting updater...\n");
+      set_line("🚀 Starting updater...\n");
       final List<String> args = [];
       if (argResults?['prerelease'] == true) {
         args.add('--prerelease');

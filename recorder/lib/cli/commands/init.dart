@@ -9,6 +9,7 @@ import 'package:recorder/cli/entry.dart';
 import 'package:recorder/cli/ping_daemon.dart';
 import 'package:shared/current_version.dart';
 import 'package:shared/logger/logger.dart';
+import 'package:shared/one_line_output.dart';
 import 'package:shared/pretty_print.dart';
 import 'package:shared/service.dart';
 import 'package:shared/utils.dart';
@@ -64,9 +65,11 @@ class InitCommand extends Command<int> {
       );
       final success = await pingDaemon();
       if (success) {
-        print(chalk.green("✅ Connection test succeeded! Starting service..."));
+        set_line(
+          chalk.green("✅ Connection test succeeded! Starting service..."),
+        );
       } else {
-        print(
+        set_line(
           chalk.red(
             "⚠️ Connection test failed! Is your api token correct? Is your daemon running and visible in your network? Retry using ${chalk.italic("owrec reset && owrec init")}.",
           ),

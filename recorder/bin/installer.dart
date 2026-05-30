@@ -13,6 +13,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:chalkdart/chalkdart.dart';
 import 'package:interact/interact.dart';
+import 'package:shared/one_line_output.dart';
 import 'package:shared/service.dart';
 import 'package:shared/utils.dart';
 
@@ -50,7 +51,7 @@ Future<void> main(List<String> args) async {
     exit(0);
   }
 
-  print('Fetching latest release...');
+  set_line('Fetching latest release...');
   String? targetVersion = argResults['target'];
   bool usePrerelease = argResults['prerelease'];
 
@@ -66,7 +67,7 @@ Future<void> main(List<String> args) async {
   final response = await request.close();
 
   if (response.statusCode != 200) {
-    print(
+    set_line(
       chalk.red(
         'Failed to fetch release information. Status code: ${response.statusCode}',
       ),
@@ -97,7 +98,7 @@ Future<void> main(List<String> args) async {
     final arch = Platform.version.contains('arm') ? 'linarm64' : 'linx64';
     downloadName = 'owrec_$arch';
   } else {
-    print(chalk.red('Unsupported OS!'));
+    set_line(chalk.red('Unsupported OS!'));
     exit(1);
   }
 
@@ -119,7 +120,7 @@ Future<void> main(List<String> args) async {
   }
 
   if (currentVersion == null) {
-    print('owrec is not installed yet, creating application folder...');
+    set_line('owrec is not installed yet, creating application folder...');
     if (!installDir.existsSync()) {
       installDir.createSync(recursive: true);
     }
@@ -132,23 +133,24 @@ Future<void> main(List<String> args) async {
     );
     await ensureInPath(homeDir, binaryPath, binaryName);
 
-    print('Initializing owrec...');
+    set_line('Initializing owrec...');
     await runShellCommand(
       binaryPath,
       ['init'],
       interactive: true,
       onCommandFail: FailAction.exit,
     );
-    print(chalk.green('✅ Installed owrec@$releaseVersion!'));
+    clear_all();
+    set_line(chalk.green('✅ Installed owrec@$releaseVersion!'));
   } else {
-    print(
+    set_line(
       'owrec@$currentVersion is currently installed, latest release is owrec@$releaseVersion.',
     );
 
     if (currentVersion == releaseVersion && targetVersion == null) {
       // Ensure path is set even if up to date, just in case user missed it before
       await ensureInPath(homeDir, binaryPath, binaryName);
-      print(chalk.green('✅ owrec is up to date!'));
+      set_line(chalk.green('✅ owrec is up to date!'));
       exit(0);
     }
 
@@ -158,7 +160,7 @@ Future<void> main(List<String> args) async {
     ).interact();
 
     if (!upgradeConf) {
-      print(chalk.yellow('Upgrade aborted.'));
+      set_line(chalk.yellow('Upgrade aborted.'));
       exit(0);
     }
 
@@ -170,7 +172,7 @@ Future<void> main(List<String> args) async {
       releaseVersion,
     );
     await ensureInPath(homeDir, binaryPath, binaryName);
-    print(chalk.green('✅ Upgraded owrec to version $releaseVersion!'));
+    set_line(chalk.green('✅ Upgraded owrec to version $releaseVersion!'));
   }
 }
 
@@ -193,40 +195,40 @@ Future<void> ensureInPath(
       final currentPath = getPathResult.stdout.toString().trim();
 
       if (!currentPath.split(';').contains(homeDir)) {
-        print(chalk.dim('Adding $homeDir to your User PATH...'));
+        set_line(chalk.dim('Adding $homeDir to your User PATH...'));
         final newPath = currentPath.isEmpty ? homeDir : '$currentPath;$homeDir';
         await Process.run('powershell', [
           '-NoProfile',
           '-Command',
           '[Environment]::SetEnvironmentVariable("Path", "$newPath", "User")',
         ]);
-        print(
+        set_line(
           chalk.yellow(
-            '??  Please restart your terminal to apply the PATH changes!',
+            '⚠️ Please restart your terminal to apply the PATH changes!',
           ),
         );
       }
     } catch (e) {
-      print(
+      set_line(
         chalk.yellow(
-          '??  Could not update User PATH automatically. Please add $homeDir to your PATH.',
+          '⚠️ Could not update User PATH automatically. Please add $homeDir to your PATH.',
         ),
       );
     }
   } else if (Platform.isLinux) {
     final linkPath = '/usr/local/bin/$binaryName';
     try {
-      print(chalk.dim('Symlinking $binaryName to $linkPath...'));
-      await runShellCommand('sudo', [
-        'ln',
-        '-sf',
-        binaryPath,
-        linkPath,
-      ], onCommandFail: FailAction.logWarning);
+      set_line(chalk.dim('Symlinking $binaryName to $linkPath...'));
+      await runShellCommand(
+        'sudo',
+        ['ln', '-sf', binaryPath, linkPath],
+        onCommandFail: FailAction.logWarning,
+        forwardOutput: false,
+      );
     } catch (e) {
-      print(
+      set_line(
         chalk.yellow(
-          '??  Failed to create symlink. You might need to add $homeDir to your PATH manually.',
+          '⚠️ Failed to create symlink. You might need to add $homeDir to your PATH manually.',
         ),
       );
     }
@@ -251,25 +253,25 @@ Future<void> installBinary(
   String downloadUrl =
       'https://github.com/$repoOwner/$repoName/releases/download/$releaseTag/$downloadName';
 
-  print('Downloading owrec@$releaseVersion...');
+  set_line('Downloading owrec@$releaseVersion...');
 
   final service = BackgroundService(serviceName);
   var serviceRestartRequired = false;
 
   if (binaryFile.existsSync()) {
     if (await service.isActive()) {
-      print('Stopping owrec...');
-      serviceRestartRequired = await service.stop();
+      set_line('Stopping owrec...');
+      serviceRestartRequired = await service.stop(silent: true);
     }
   }
 
   try {
-    print('Moving binary to installation folder...');
+    set_line('Moving binary to installation folder...');
     final fileRequest = await client.getUrl(Uri.parse(downloadUrl));
     final fileResponse = await fileRequest.close();
 
     if (fileResponse.statusCode != 200 && fileResponse.statusCode != 302) {
-      print(chalk.red('Failed to download binary from $downloadUrl'));
+      set_line(chalk.red('Failed to download binary from $downloadUrl'));
       exit(1);
     }
 
@@ -287,15 +289,20 @@ Future<void> installBinary(
     tempFile.renameSync(binaryFile.path);
 
     if (Platform.isLinux || Platform.isMacOS) {
-      await Process.run('chmod', ['+x', binaryFile.path]);
+      await runShellCommand(
+        "chmod",
+        ["+x", binaryFile.path],
+        onCommandFail: FailAction.throwException,
+        forwardOutput: false,
+      );
     }
   } catch (e) {
-    print(chalk.red('Failed to install! $e'));
+    set_line(chalk.red('Failed to install! $e'));
     exit(1);
   }
 
   if (serviceRestartRequired) {
-    print('Starting owrec...');
-    await service.start();
+    set_line('Starting owrec...');
+    await service.start(silent: true);
   }
 }

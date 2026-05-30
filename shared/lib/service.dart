@@ -244,13 +244,16 @@ WantedBy=multi-user.target
         0;
   }
 
-  Future<bool> stop() async {
+  Future<bool> stop({bool silent = false}) async {
     if (Platform.isWindows) {
       return await runShellCommand(
             "nssm",
             ["stop", name],
-            onCommandFail: FailAction.silent,
+            onCommandFail: silent
+                ? FailAction.silent
+                : FailAction.throwException,
             preferWindowsPowerShell: true,
+            forwardOutput: !silent,
           ) ==
           0;
     }
@@ -258,18 +261,22 @@ WantedBy=multi-user.target
       "sudo",
       ["systemctl", "stop", name],
       cwd: ".",
-      onCommandFail: FailAction.silent,
+      onCommandFail: silent ? FailAction.silent : FailAction.throwException,
+      forwardOutput: !silent,
     );
     return res == 0;
   }
 
-  Future<bool> restart() async {
+  Future<bool> restart({bool silent = false}) async {
     if (Platform.isWindows) {
       return await runShellCommand(
             "nssm",
             ["restart", name],
-            onCommandFail: FailAction.silent,
+            onCommandFail: silent
+                ? FailAction.silent
+                : FailAction.throwException,
             preferWindowsPowerShell: true,
+            forwardOutput: !silent,
           ) ==
           0;
     }
@@ -277,7 +284,8 @@ WantedBy=multi-user.target
       "sudo",
       ["systemctl", "restart", name],
       cwd: ".",
-      onCommandFail: FailAction.silent,
+      onCommandFail: silent ? FailAction.silent : FailAction.throwException,
+      forwardOutput: !silent,
     );
     return res == 0;
   }
@@ -299,13 +307,16 @@ WantedBy=multi-user.target
     return match?.group(1);
   }
 
-  Future<bool> start() async {
+  Future<bool> start({bool silent = false}) async {
     if (Platform.isWindows) {
       return await runShellCommand(
             "nssm",
             ["start", name],
-            onCommandFail: FailAction.silent,
+            onCommandFail: silent
+                ? FailAction.silent
+                : FailAction.throwException,
             preferWindowsPowerShell: true,
+            forwardOutput: !silent,
           ) ==
           0;
     }
@@ -313,13 +324,13 @@ WantedBy=multi-user.target
       "sudo",
       ["systemctl", "start", name],
       cwd: ".",
-      forwardOutput: false,
-      onCommandFail: FailAction.silent,
+      forwardOutput: !silent,
+      onCommandFail: silent ? FailAction.silent : FailAction.throwException,
     );
     return res == 0;
   }
 
-  Future<bool> remove() async {
+  Future<bool> remove({bool silent = false}) async {
     if (!await isActive()) {
       print(
         chalk.yellow(
@@ -334,14 +345,16 @@ WantedBy=multi-user.target
         await runShellCommand(
           "nssm",
           ["stop", name],
-          onCommandFail: FailAction.silent,
+          onCommandFail: silent ? FailAction.silent : FailAction.throwException,
           preferWindowsPowerShell: true,
+          forwardOutput: !silent,
         );
         await runShellCommand(
           "nssm",
           ["remove", name, "confirm"],
-          onCommandFail: FailAction.throwException,
+          onCommandFail: silent ? FailAction.silent : FailAction.throwException,
           preferWindowsPowerShell: true,
+          forwardOutput: !silent,
         );
         return true;
       } catch (err) {
@@ -354,24 +367,30 @@ WantedBy=multi-user.target
       }
     } else if (Platform.isLinux) {
       try {
-        await runShellCommand("sudo", [
-          "systemctl",
-          "stop",
-          name,
-        ], onCommandFail: FailAction.throwException);
-        await runShellCommand("sudo", [
-          "systemctl",
-          "disable",
-          name,
-        ], onCommandFail: FailAction.throwException);
-        await runShellCommand("sudo", [
-          "systemctl",
-          "daemon-reload",
-        ], onCommandFail: FailAction.throwException);
-        await runShellCommand("sudo", [
-          "rm",
-          "/etc/systemd/system/$name.service",
-        ], onCommandFail: FailAction.throwException);
+        await runShellCommand(
+          "sudo",
+          ["systemctl", "stop", name],
+          onCommandFail: silent ? FailAction.silent : FailAction.throwException,
+          forwardOutput: !silent,
+        );
+        await runShellCommand(
+          "sudo",
+          ["systemctl", "disable", name],
+          onCommandFail: silent ? FailAction.silent : FailAction.throwException,
+          forwardOutput: !silent,
+        );
+        await runShellCommand(
+          "sudo",
+          ["systemctl", "daemon-reload"],
+          onCommandFail: silent ? FailAction.silent : FailAction.throwException,
+          forwardOutput: !silent,
+        );
+        await runShellCommand(
+          "sudo",
+          ["rm", "/etc/systemd/system/$name.service"],
+          onCommandFail: silent ? FailAction.silent : FailAction.throwException,
+          forwardOutput: !silent,
+        );
         return true;
       } catch (err) {
         print(

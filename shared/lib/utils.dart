@@ -163,9 +163,7 @@ Future<void> requireAdminOnWindows() async {
     final result = await Process.run('net', ['session']);
     if (result.exitCode != 0) {
       print(
-        chalk.yellow(
-          "\n⚠️  Administrator privileges are required for this action.",
-        ),
+        chalk.red("❌  Administrator privileges are required for this action."),
       );
       exit(1);
     }
