@@ -58,6 +58,13 @@ class WorkspaceBuilder {
       winArchs: winArchs,
     );
     print("✅ Compiled daemon (owvi)");
+    await daemonPackage.compile(
+      "installer",
+      "owvi_installer",
+      linuxArchs: linuxArchs,
+      winArchs: winArchs,
+    );
+    print("✅ Compiled daemon installer (owvi_installer)");
     await recorderPackage.compile(
       "recorder",
       "owrec",
@@ -65,6 +72,13 @@ class WorkspaceBuilder {
       winArchs: winArchs,
     );
     print("✅ Compiled recorder (owrec)");
+    await recorderPackage.compile(
+      "installer",
+      "owrec_installer",
+      linuxArchs: linuxArchs,
+      winArchs: winArchs,
+    );
+    print("✅ Compiled recorder installer (owrec_installer)");
   }
 
   Future<void> clean() async {

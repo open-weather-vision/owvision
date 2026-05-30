@@ -24,8 +24,10 @@ Future<int> runShellCommand(
   List<String> options, {
   String cwd = ".",
   bool forwardOutput = true,
+  bool interactive = false,
   FailAction onCommandFail = FailAction.logWarning,
   bool preferWindowsPowerShell = false,
+  bool dimOutput = true,
   void Function()? onError,
 }) async {
   late final runCommand;
@@ -36,6 +38,9 @@ Future<int> runShellCommand(
       ["-Command", command, ...options],
       workingDirectory: cwd,
       runInShell: true,
+      mode: interactive
+          ? ProcessStartMode.inheritStdio
+          : ProcessStartMode.normal,
     );
   } else {
     runCommand = await Process.start(
@@ -43,16 +48,19 @@ Future<int> runShellCommand(
       options,
       workingDirectory: cwd,
       runInShell: true,
+      mode: interactive
+          ? ProcessStartMode.inheritStdio
+          : ProcessStartMode.normal,
     );
   }
 
-  if (forwardOutput) {
+  if (forwardOutput && !interactive) {
     runCommand.stdout
         .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
+        .forEach((x) => print(dimOutput ? chalk.dim(x) : x));
     runCommand.stderr
         .transform(utf8.decoder)
-        .forEach((x) => print(chalk.dim(x)));
+        .forEach((x) => print(dimOutput ? chalk.dim(x) : x));
   }
   final result = await runCommand.exitCode;
   if (result != 0) {

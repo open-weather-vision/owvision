@@ -13,6 +13,7 @@ import 'package:daemon/cli/commands/update.dart';
 import 'package:logging/logging.dart';
 import 'package:owvision_daemon_client_dart/owvision_daemon_client_dart.dart';
 import 'package:shared/logger/logger.dart';
+import 'package:shared/current_version.dart';
 
 const daemonServiceName = "ow_daemon";
 final cliConfig = CliConfig();
@@ -21,12 +22,23 @@ final daemonClient = OwvisionDaemonClientDart(
 );
 
 Future<void> cliEntry(List<String> arguments) async {
+  if (arguments.contains('--version') || arguments.contains('-v')) {
+    print(currentVersion);
+    return;
+  }
+
   logger.level = Level.OFF;
   if (cliConfig.apiToken != null) {
     daemonClient.setBearerAuth("BearerAuth", cliConfig.apiToken!);
   }
 
   final runner = CommandRunner<int>('owvi', 'CLI for the owvision daemon')
+    ..argParser.addFlag(
+      'version',
+      abbr: 'v',
+      help: 'Print the current version.',
+      negatable: false,
+    )
     ..addCommand(RunCommand())
     ..addCommand(StationCommand())
     ..addCommand(AuthenticateCommand())

@@ -30,8 +30,8 @@ Currently it has four main features.
         <li>〽️ Navigate through your recorded historic weather data*</li>
         <li>🏆 Checkout historic highs and lows*</li>
         <li>
-            ☁️ View a 7 day forecast for your weather station's set up location
-            (via [Open-Meteo](https://open-meteo.com/))*
+            ☁️ View a 7 day forecast for your weather station's set up location (via
+            [Open-Meteo](https://open-meteo.com/))*
         </li>
     </ol>
     <i style="font-size:0.8em">*Still in development.</i>
@@ -61,7 +61,7 @@ And all this for free, in an easy to use modern user interface. That's the idea 
     _owvision_ is a software system, that consists of multiple components. The core component is the **daemon**. In short it manages the weather database and therefore should be always running. Don't install this component on your personal computer, instead prefer a Rapberry Pi or a (virtual) Linux server.
     Added to that this host should be visible in your network (or better the whole internet).
 
-    Currently only **debian based** systems are fully supported.
+    **OS-Support**: Debian based linux (Ubuntu, Raspberry Pi OS, ...), Windows 10/11
 
     <Tabs>
         <TabItem label="linux/arm">
@@ -105,14 +105,13 @@ And all this for free, in an easy to use modern user interface. That's the idea 
 3.  **Start the daemon**
 
     After downloading the binary simply run following command to initialize the daemon. This will run the setup guide. If you have any issues here, don't hesitate to ask for help on our [discord server]().
+    You need to run this command with admin privileges on windows.
 
     ```sh
     owvi init
     ```
 
-    <i style="font-size: 0.8rem">
-        \*owvi refers to the previously downloaded binary.
-    </i>
+    <i style="font-size: 0.8rem">\*owvi refers to the previously downloaded binary.</i>
 
 4.  **Download the recorder (_owrec_)**
 
@@ -122,7 +121,7 @@ And all this for free, in an easy to use modern user interface. That's the idea 
     Install this component on the device that is directly connected to your weather station. This may be your server, but this is not mandatory.
     The recorder pushes data to the daemon, so the daemon has to be visible to the recorder.
 
-    Currently only **debian based** systems are fully supported.
+    **OS-Support**: Debian based linux (Ubuntu, Raspberry Pi OS, ...), Windows 10/11
 
     <Tabs>
         <TabItem label="linux/arm">
@@ -166,14 +165,13 @@ And all this for free, in an easy to use modern user interface. That's the idea 
 5.  **Start the recorder**
 
     After downloading the binary simply run following command to initialize the recorder. This will run the setup guide. If you have any issues here, don't hesitate to ask for help on our [discord server]().
+    You need to run this command with admin privileges on windows.
 
     ```sh
     owrec init
     ```
 
-    <i style="font-size: 0.8rem">
-        \*owrec refers to the previously downloaded binary.
-    </i>
+    <i style="font-size: 0.8rem">\*owrec refers to the previously downloaded binary.</i>
 
 6.  **Find, download and start your interface**
 
