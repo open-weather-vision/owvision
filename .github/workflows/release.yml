@@ -62,7 +62,15 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish typescript interface support package
-              run: npm publish
+              shell: bash
+              run: |
+                  if [ "${{ github.event.release.prerelease }}" == "true" ]; then
+                      echo "Publishing as BETA..."
+                      npm publish --tag beta
+                  else
+                      echo "Publishing as LATEST..."
+                      npm publish
+                  fi
               working-directory: ./recorder/support-packages/station-interface-ts
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
