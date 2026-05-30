@@ -35,7 +35,12 @@ Future<void> main(List<String> args) async {
     ..addOption(
       'target',
       help:
-          'Target version to install (e.g., 0.0.2). If omitted, latest is fetched.',
+          'Target version to install (e.g., v0.0.2). If omitted, latest is fetched.',
+    )
+    ..addFlag(
+      'prerelease',
+      help: 'Allow installing the latest prerelease.',
+      negatable: false,
     )
     ..addFlag('help', abbr: 'h', negatable: false);
 
@@ -47,16 +52,16 @@ Future<void> main(List<String> args) async {
 
   print('Fetching latest release...');
   String? targetVersion = argResults['target'];
-  String fetchVersion = targetVersion != null
-      ? 'tags/$targetVersion'
-      : 'latest';
+  bool usePrerelease = argResults['prerelease'];
+
+  String apiUrl = targetVersion != null
+      ? 'https://api.github.com/repos/$repoOwner/$repoName/releases/tags/$targetVersion'
+      : (usePrerelease
+            ? 'https://api.github.com/repos/$repoOwner/$repoName/releases'
+            : 'https://api.github.com/repos/$repoOwner/$repoName/releases/latest');
 
   final client = HttpClient();
-  final request = await client.getUrl(
-    Uri.parse(
-      'https://api.github.com/repos/$repoOwner/$repoName/releases/$fetchVersion',
-    ),
-  );
+  final request = await client.getUrl(Uri.parse(apiUrl));
   request.headers.add('User-Agent', 'owvision-installer');
   final response = await request.close();
 
@@ -70,11 +75,13 @@ Future<void> main(List<String> args) async {
   }
 
   final responseBody = await response.transform(utf8.decoder).join();
-  final releaseData = jsonDecode(responseBody);
-  final String releaseVersion = releaseData['tag_name'].toString().replaceFirst(
-    'v',
-    '',
-  );
+  final decoded = jsonDecode(responseBody);
+  final Map<String, dynamic> releaseData = (decoded is List)
+      ? decoded.first
+      : decoded;
+
+  final String releaseTag = releaseData['tag_name'].toString();
+  final String releaseVersion = releaseTag.replaceFirst('v', '');
 
   final homeDir = getOwvisionHomeDirectory();
   final installDir = Directory(homeDir);
@@ -116,7 +123,13 @@ Future<void> main(List<String> args) async {
     if (!installDir.existsSync()) {
       installDir.createSync(recursive: true);
     }
-    await installBinary(client, downloadName, binaryFile, releaseVersion);
+    await installBinary(
+      client,
+      downloadName,
+      binaryFile,
+      releaseTag,
+      releaseVersion,
+    );
     await ensureInPath(homeDir, binaryPath, binaryName);
 
     print('Initializing owvi...');
@@ -126,7 +139,7 @@ Future<void> main(List<String> args) async {
       interactive: true,
       onCommandFail: FailAction.exit,
     );
-    print(chalk.green('? Installed owvi@$releaseVersion!'));
+    print(chalk.green('✅ Installed owvi@$releaseVersion!'));
   } else {
     print(
       'owvi@$currentVersion is currently installed, latest release is owvi@$releaseVersion.',
@@ -135,7 +148,7 @@ Future<void> main(List<String> args) async {
     if (currentVersion == releaseVersion && targetVersion == null) {
       // Ensure path is set even if up to date, just in case user missed it before
       await ensureInPath(homeDir, binaryPath, binaryName);
-      print(chalk.green('? owvi is up to date!'));
+      print(chalk.green('✅ owvi is up to date!'));
       exit(0);
     }
 
@@ -149,9 +162,15 @@ Future<void> main(List<String> args) async {
       exit(0);
     }
 
-    await installBinary(client, downloadName, binaryFile, releaseVersion);
+    await installBinary(
+      client,
+      downloadName,
+      binaryFile,
+      releaseTag,
+      releaseVersion,
+    );
     await ensureInPath(homeDir, binaryPath, binaryName);
-    print(chalk.green('? Upgraded owvi to version $releaseVersion!'));
+    print(chalk.green('✅ Upgraded owvi to version $releaseVersion!'));
   }
 }
 
@@ -226,10 +245,11 @@ Future<void> installBinary(
   HttpClient client,
   String downloadName,
   File binaryFile,
+  String releaseTag,
   String releaseVersion,
 ) async {
   String downloadUrl =
-      'https://github.com/$repoOwner/$repoName/releases/latest/download/$downloadName';
+      'https://github.com/$repoOwner/$repoName/releases/download/$releaseTag/$downloadName';
 
   print('Downloading owvi@$releaseVersion...');
 
