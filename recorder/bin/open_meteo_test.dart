@@ -5,9 +5,9 @@ import 'package:shared/logger/logger.dart';
 import 'package:shared/weather_code.dart';
 
 void main(List<String> args) async {
-  final _openMeteo = WeatherApi(userAgent: "owvision_recorder");
+  final openMeteo = WeatherApi(userAgent: "owvision_recorder");
   logger.info("Requesting current weather from open meteo...");
-  final response = await _openMeteo.request(
+  final response = await openMeteo.request(
     locations: {OpenMeteoLocation(latitude: 23, longitude: 11)},
     current: {WeatherCurrent.weather_code},
   );

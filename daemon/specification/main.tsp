@@ -31,8 +31,8 @@ model Sensor {
 }
 
 enum SensorElement{
-  precipationAccumulated,
-  precipationRate,
+  precipitationAccumulated,
+  precipitationRate,
   snowHeight,
   pressure,
   temperature,

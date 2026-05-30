@@ -20,7 +20,7 @@ class ResetCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     if (Platform.isLinux) {
-      await SystemCtlService(recorderServiceName).remove();
+      await BackgroundService(recorderServiceName).remove();
     }
     await RecorderConfig.removeConfigFile();
     RecorderStatus.removeFile();

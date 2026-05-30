@@ -3,8 +3,8 @@ import 'package:shared/units/convert.dart';
 import 'package:shared/units/humidity.dart';
 import 'package:shared/units/length.dart';
 import 'package:shared/units/nounit.dart';
-import 'package:shared/units/precipation.dart';
-import 'package:shared/units/precipation_rate.dart';
+import 'package:shared/units/precipitation.dart';
+import 'package:shared/units/precipitation_rate.dart';
 import 'package:shared/units/pressure.dart';
 import 'package:shared/units/temperature.dart';
 import 'package:shared/units/wind_direction.dart';
@@ -62,11 +62,11 @@ enum SensorElement {
   temperature(type: ElementType.instant, label: "Temperature"),
   windChill(type: ElementType.instant, label: "Wind chill"),
   dewPoint(type: ElementType.instant, label: "Dew point"),
-  precipationAccumulated(
+  precipitationAccumulated(
     type: ElementType.accumulated,
     label: "Precipitation",
   ), // TODO: Fix spelling in backend
-  precipationRate(type: ElementType.instant, label: "Precipitation rate"),
+  precipitationRate(type: ElementType.instant, label: "Precipitation rate"),
   pressure(type: ElementType.instant, label: "Pressure"),
   windSpeed(type: ElementType.instant, label: "Wind speed"),
   windDirection(type: ElementType.instant, label: "Wind direction"),
@@ -81,9 +81,9 @@ enum SensorElement {
 
   static Unit defaultUnit({required SensorElement element}) {
     switch (element) {
-      case precipationAccumulated:
+      case precipitationAccumulated:
         return Precipitation.mm;
-      case precipationRate:
+      case precipitationRate:
         return PrecipitationRate.mmph;
       case snowHeight:
         return Length.cm;

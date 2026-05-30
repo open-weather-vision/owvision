@@ -44,13 +44,26 @@ class WorkspaceBuilder {
   }
 
   // Compiles all owvision binaries and outputs them to the build folder.
-  Future<void> compile() async {
+  Future<void> compile({
+    List<String> linuxArchs = const ["arm64", "arm", "x64"],
+    List<String> winArchs = const ["x64"],
+  }) async {
     print(chalk.green.bold("Compiling..."));
     final daemonPackage = DartPackage("./daemon");
     final recorderPackage = DartPackage("./recorder");
-    await daemonPackage.compile("daemon", "owvi");
+    await daemonPackage.compile(
+      "daemon",
+      "owvi",
+      linuxArchs: linuxArchs,
+      winArchs: winArchs,
+    );
     print("✅ Compiled daemon (owvi)");
-    await recorderPackage.compile("recorder", "owrec");
+    await recorderPackage.compile(
+      "recorder",
+      "owrec",
+      linuxArchs: linuxArchs,
+      winArchs: winArchs,
+    );
     print("✅ Compiled recorder (owrec)");
   }
 

@@ -49,8 +49,8 @@ export interface Sensor {
   historyIntervalSeconds: bigint;
 }
 export enum SensorElement {
-  PrecipationAccumulated = "precipationAccumulated",
-  PrecipationRate = "precipationRate",
+  PrecipitationAccumulated = "precipitationAccumulated",
+  PrecipitationRate = "precipitationRate",
   SnowHeight = "snowHeight",
   Pressure = "pressure",
   Temperature = "temperature",

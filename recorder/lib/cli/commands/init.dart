@@ -11,6 +11,7 @@ import 'package:shared/current_version.dart';
 import 'package:shared/logger/logger.dart';
 import 'package:shared/pretty_print.dart';
 import 'package:shared/service.dart';
+import 'package:shared/utils.dart';
 import '../../locator.dart';
 import '../../services/recorder_service.dart';
 
@@ -35,6 +36,8 @@ class InitCommand extends Command<int> {
   FutureOr<int> run() async {
     final bool runTemporary = argResults!['temporary'];
     if (!runTemporary) {
+      await requireAdminOnWindows();
+
       recorderConfig.daemonGrpcHost = Input(
         prompt: "Please confirm the daemon's hostname (it's ip or domain)",
         defaultValue: recorderConfig.daemonGrpcHost,
@@ -70,7 +73,7 @@ class InitCommand extends Command<int> {
         );
         exit(1);
       }
-      await SystemCtlService.create(
+      await BackgroundService.create(
         name: recorderServiceName,
         description: "owvision recorder",
       );

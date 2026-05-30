@@ -12,9 +12,9 @@ IconData iconByElement(SensorElement? element) {
     case SensorElement.temperature:
     case SensorElement.windChill:
       return Icons.thermostat;
-    case SensorElement.precipationAccumulated:
+    case SensorElement.precipitationAccumulated:
       return Icons.water_drop;
-    case SensorElement.precipationRate:
+    case SensorElement.precipitationRate:
       return Symbols.rainy_light;
     case SensorElement.snowHeight:
       return Symbols.ac_unit;

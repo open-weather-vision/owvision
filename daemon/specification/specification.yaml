@@ -230,8 +230,8 @@ components:
     SensorElement:
       type: string
       enum:
-        - precipationAccumulated
-        - precipationRate
+        - precipitationAccumulated
+        - precipitationRate
         - snowHeight
         - pressure
         - temperature

@@ -20,7 +20,7 @@ class StatusCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    final recorderActive = await SystemCtlService(
+    final recorderActive = await BackgroundService(
       recorderServiceName,
     ).isActive();
     if (recorderActive) {

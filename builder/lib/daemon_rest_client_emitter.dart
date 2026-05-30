@@ -66,13 +66,12 @@ class DaemonRESTClientEmitter {
     await generatedDartCient.updatePubspec((yaml) {
       yaml.update(["environment", "sdk"], "^3.9.2");
       yaml.update(['resolution'], "workspace");
+      yaml.update(['dependencies', 'copy_with_extension'], '^15.0.1');
+      yaml.update(['dev_dependencies', 'copy_with_extension_gen'], '^15.0.1');
+      yaml.update(['dev_dependencies', 'json_serializable'], '^6.11.3');
     });
 
-    await generatedDartCient.runDartCommand([
-      "pub",
-      "upgrade",
-      "--major-versions",
-    ]);
+    await generatedDartCient.runDartCommand(["pub", "get"]);
 
     await generatedDartCient.runDartCommand(["run", "build_runner", "build"]);
   }

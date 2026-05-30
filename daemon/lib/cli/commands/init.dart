@@ -39,6 +39,8 @@ class RunCommand extends Command<int> {
       await runDaemon();
       return 0;
     } else {
+      await requireAdminOnWindows();
+
       final installDependencies = Confirm(
         prompt:
             "Do you want to try to automatically install required dependencies? (sqlite3, libsqlite3-dev, caddy)",
@@ -53,6 +55,21 @@ class RunCommand extends Command<int> {
           );
           await tryToInstallCommandUsingApt("caddy");
           await runShellCommand("sudo", ["ldconfig"]);
+        } else if (Platform.isWindows) {
+          await tryToInstallCommandUsingWinget("sqlite3", "SQLite.SQLite");
+          // await tryToInstallCommandUsingWinget(
+          //   "libsqlite3-dev",
+          //   "SQLite.Dev",
+          //   checkIfExists: false,
+          // );
+          await tryToInstallCommandUsingWinget("caddy", "CaddyServer.Caddy");
+
+          await BackgroundService.create(
+            description: "Caddy Web Server",
+            name: "caddy",
+            executablePath: "caddy.exe",
+            arguments: ["run"], // Caddy runs in foreground inside the service
+          );
         } else {
           print(
             chalk.yellow(
@@ -108,7 +125,7 @@ class RunCommand extends Command<int> {
       }
       await daemonConfig.saveToFile();
 
-      await SystemCtlService.create(
+      await BackgroundService.create(
         description: "owvision daemon",
         name: daemonServiceName,
         after: ["caddy.service"],

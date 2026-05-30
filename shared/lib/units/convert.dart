@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import "package:shared/units/convertible.dart";
 import "package:shared/units/nounit.dart";
-import "package:shared/units/precipation.dart";
-import "package:shared/units/precipation_rate.dart";
+import "package:shared/units/precipitation.dart";
+import "package:shared/units/precipitation_rate.dart";
 import "package:shared/units/wind_direction.dart";
 import "humidity.dart";
 import "length.dart";

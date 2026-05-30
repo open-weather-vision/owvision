@@ -20,9 +20,16 @@ class ResetCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    if (Platform.isLinux) {
-      await SystemCtlService(daemonServiceName).remove();
-      await runShellCommand("sudo", ["caddy", "stop"]);
+    await requireAdminOnWindows();
+    final removedDaemon = await BackgroundService(daemonServiceName).remove();
+    if (!removedDaemon) {
+      print(chalk.red("❌ Failed to reset daemon service."));
+      return 1;
+    }
+    final removedCaddy = await BackgroundService("caddy").remove();
+    if (!removedCaddy) {
+      print(chalk.red("❌ Failed to reset caddy service."));
+      return 1;
     }
     await CliConfig.removeConfigFile();
     await DaemonConfig.removeConfigFile();

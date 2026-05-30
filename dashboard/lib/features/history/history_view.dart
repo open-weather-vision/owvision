@@ -26,10 +26,10 @@ class _HistoryPane extends State<HistoryView> {
   bool loaded = false;
   static const supportedSensorElements = <shared.SensorElement>[
     shared.SensorElement.temperature,
-    shared.SensorElement.precipationAccumulated,
+    shared.SensorElement.precipitationAccumulated,
     shared.SensorElement.humidity,
     shared.SensorElement.pressure,
-    shared.SensorElement.precipationRate,
+    shared.SensorElement.precipitationRate,
     shared.SensorElement.snowHeight,
     shared.SensorElement.windSpeed,
     shared.SensorElement.windDirection,
@@ -154,7 +154,7 @@ class _HistoryPane extends State<HistoryView> {
           icon: iconByElement(element),
           unit: unit,
           graphColor: theme.colorScheme.primary,
-          type: element == shared.SensorElement.precipationAccumulated
+          type: element == shared.SensorElement.precipitationAccumulated
               ? ChartType.bar
               : ChartType.line,
         );

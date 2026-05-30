@@ -59,7 +59,7 @@ class UpdateCommand extends Command<int> {
         "+x",
         newBinary.path,
       ], onCommandFail: FailAction.throwException);
-      final recorder = SystemCtlService(recorderServiceName);
+      final recorder = BackgroundService(recorderServiceName);
       final executablePath = await recorder.getExecutablePath();
       if (executablePath == null) {
         print(

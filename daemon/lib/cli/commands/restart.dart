@@ -5,6 +5,7 @@ import 'package:args/command_runner.dart';
 import 'package:chalkdart/chalkstrings.dart';
 import 'package:daemon/cli/entry.dart';
 import 'package:shared/service.dart';
+import 'package:shared/utils.dart';
 
 class RestartCommand extends Command<int> {
   @override
@@ -15,11 +16,8 @@ class RestartCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    if (!Platform.isLinux) {
-      print(chalk.red("⚠️  Service commands are only supported on linux."));
-      exit(1);
-    }
-    final service = SystemCtlService(daemonServiceName);
+    await requireAdminOnWindows();
+    final service = BackgroundService(daemonServiceName);
     final result = await service.restart();
     if (result) {
       print(

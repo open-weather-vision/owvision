@@ -59,7 +59,7 @@ class UpdateCommand extends Command<int> {
         "+x",
         newBinary.path,
       ], onCommandFail: FailAction.throwException);
-      final daemon = SystemCtlService(daemonServiceName);
+      final daemon = BackgroundService(daemonServiceName);
       final executablePath = await daemon.getExecutablePath();
       if (executablePath == null) {
         print(

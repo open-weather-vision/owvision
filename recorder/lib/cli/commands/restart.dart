@@ -19,7 +19,7 @@ class RestartCommand extends Command<int> {
       print(chalk.red("⚠️  Service commands are only supported on linux."));
       exit(1);
     }
-    final service = SystemCtlService(recorderServiceName);
+    final service = BackgroundService(recorderServiceName);
     final result = await service.restart();
     if (result) {
       print(

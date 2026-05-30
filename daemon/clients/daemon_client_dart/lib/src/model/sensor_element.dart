@@ -7,10 +7,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 
 enum SensorElement {
-      @JsonValue(r'precipationAccumulated')
-      precipationAccumulated(r'precipationAccumulated'),
-      @JsonValue(r'precipationRate')
-      precipationRate(r'precipationRate'),
+      @JsonValue(r'precipitationAccumulated')
+      precipitationAccumulated(r'precipitationAccumulated'),
+      @JsonValue(r'precipitationRate')
+      precipitationRate(r'precipitationRate'),
       @JsonValue(r'snowHeight')
       snowHeight(r'snowHeight'),
       @JsonValue(r'pressure')

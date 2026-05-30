@@ -33,6 +33,7 @@ class SensorHistoryChart extends StatefulWidget {
     required this.unit,
     this.type = ChartType.bar,
     this.precision = 1,
+    super.key,
   });
 
   @override
@@ -130,7 +131,7 @@ class _SensorHistoryChart extends State<SensorHistoryChart> {
     );
   }
 
-  int? previousTouchSpotIndex = null;
+  int? previousTouchSpotIndex;
   LineTouchData _toolTips(ThemeData theme) {
     return LineTouchData(
       enabled: true,

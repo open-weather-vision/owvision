@@ -1,6 +1,6 @@
 import 'package:dashboard/base_components/connected_station_component.dart';
 import 'package:dashboard/base_components/humidity_component.dart';
-import 'package:dashboard/base_components/precipation_component.dart';
+import 'package:dashboard/base_components/precipitation_component.dart';
 import 'package:dashboard/base_components/pressure_component.dart';
 import 'package:dashboard/base_components/temperature_component.dart';
 import 'package:dashboard/features/settings/settings_cubit.dart';
@@ -89,7 +89,7 @@ class _LivePane extends StatelessWidget {
     } else {
       List<Widget> items = [];
 
-      final _currentConditions = sensors.firstWhereOrNull(
+      final currentConditions = sensors.firstWhereOrNull(
         (s) => s.sensor.element == SensorElement.weatherCode,
       );
 
@@ -98,21 +98,21 @@ class _LivePane extends StatelessWidget {
         ConnectedStationComponent(
           state.station?.info,
           latestUpdateTime: state.latestUpdateTime,
-          currentConditions: _currentConditions?.state,
+          currentConditions: currentConditions?.state,
           reconnecting:
               state.connectionState == StationConnectionState.reconnecting,
         ),
       );
 
-      // Precipation stats
-      final precipationAcc = sensors.firstWhereOrNull(
-        (s) => s.sensor.element == SensorElement.precipationAccumulated,
+      // Precipitation stats
+      final precipitationAcc = sensors.firstWhereOrNull(
+        (s) => s.sensor.element == SensorElement.precipitationAccumulated,
       );
-      final precipationRate = sensors.firstWhereOrNull(
-        (s) => s.sensor.element == SensorElement.precipationRate,
+      final precipitationRate = sensors.firstWhereOrNull(
+        (s) => s.sensor.element == SensorElement.precipitationRate,
       );
-      if (precipationRate != null || precipationAcc != null) {
-        items.add(PrecipationComponent(precipationAcc, precipationRate));
+      if (precipitationRate != null || precipitationAcc != null) {
+        items.add(PrecipitationComponent(precipitationAcc, precipitationRate));
       }
 
       // Temperature stats

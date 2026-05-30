@@ -17,19 +17,21 @@ class StatusCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    if (!Platform.isLinux) {
-      print(chalk.red("Only supported on linux systems!"));
-      exit(1);
-    }
-    final demonActive = await SystemCtlService(daemonServiceName).isActive();
-    final caddyActive =
-        await runShellCommand(
+    final demonActive = await BackgroundService(daemonServiceName).isActive();
+    
+    bool caddyActive;
+    if (Platform.isWindows) {
+      caddyActive = await BackgroundService("caddy").isActive();
+    } else {
+      caddyActive = await runShellCommand(
           "systemctl",
           ["is-active", "caddy"],
           forwardOutput: false,
           onCommandFail: FailAction.silent,
         ) ==
         0;
+    }
+    
     print(
       "${chalk.underline("daemon")}: ${chalk.bold(demonActive ? chalk.green("running") : chalk.red("not running"))}",
     );

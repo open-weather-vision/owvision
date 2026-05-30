@@ -433,9 +433,6 @@ class $SensorTableTable extends SensorTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES station_table (id) ON UPDATE CASCADE ON DELETE CASCADE',
-    ),
   );
   @override
   late final GeneratedColumnWithTypeConverter<SensorElement, String> element =
@@ -1135,9 +1132,6 @@ class $HistoryTableTable extends HistoryTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES sensor_table (id) ON UPDATE CASCADE ON DELETE CASCADE',
-    ),
   );
   static const VerificationMeta _valueMeta = const VerificationMeta('value');
   @override
@@ -1431,37 +1425,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     historyTable,
     historySensorCreatedIdx,
   ];
-  @override
-  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'station_table',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('sensor_table', kind: UpdateKind.delete)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'station_table',
-        limitUpdateKind: UpdateKind.update,
-      ),
-      result: [TableUpdate('sensor_table', kind: UpdateKind.update)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'sensor_table',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('history_table', kind: UpdateKind.delete)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'sensor_table',
-        limitUpdateKind: UpdateKind.update,
-      ),
-      result: [TableUpdate('history_table', kind: UpdateKind.update)],
-    ),
-  ]);
 }
 
 typedef $$StationTableTableCreateCompanionBuilder =
@@ -1482,33 +1445,6 @@ typedef $$StationTableTableUpdateCompanionBuilder =
       Value<double> latitude,
       Value<int> version,
     });
-
-final class $$StationTableTableReferences
-    extends
-        BaseReferences<_$AppDatabase, $StationTableTable, StationTableData> {
-  $$StationTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$SensorTableTable, List<SensorTableData>>
-  _sensorTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.sensorTable,
-    aliasName: $_aliasNameGenerator(
-      db.stationTable.id,
-      db.sensorTable.stationId,
-    ),
-  );
-
-  $$SensorTableTableProcessedTableManager get sensorTableRefs {
-    final manager = $$SensorTableTableTableManager(
-      $_db,
-      $_db.sensorTable,
-    ).filter((f) => f.stationId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_sensorTableRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
 
 class $$StationTableTableFilterComposer
     extends Composer<_$AppDatabase, $StationTableTable> {
@@ -1548,31 +1484,6 @@ class $$StationTableTableFilterComposer
     column: $table.version,
     builder: (column) => ColumnFilters(column),
   );
-
-  Expression<bool> sensorTableRefs(
-    Expression<bool> Function($$SensorTableTableFilterComposer f) f,
-  ) {
-    final $$SensorTableTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.sensorTable,
-      getReferencedColumn: (t) => t.stationId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$SensorTableTableFilterComposer(
-            $db: $db,
-            $table: $db.sensorTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$StationTableTableOrderingComposer
@@ -1641,31 +1552,6 @@ class $$StationTableTableAnnotationComposer
 
   GeneratedColumn<int> get version =>
       $composableBuilder(column: $table.version, builder: (column) => column);
-
-  Expression<T> sensorTableRefs<T extends Object>(
-    Expression<T> Function($$SensorTableTableAnnotationComposer a) f,
-  ) {
-    final $$SensorTableTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.sensorTable,
-      getReferencedColumn: (t) => t.stationId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$SensorTableTableAnnotationComposer(
-            $db: $db,
-            $table: $db.sensorTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$StationTableTableTableManager
@@ -1679,9 +1565,12 @@ class $$StationTableTableTableManager
           $$StationTableTableAnnotationComposer,
           $$StationTableTableCreateCompanionBuilder,
           $$StationTableTableUpdateCompanionBuilder,
-          (StationTableData, $$StationTableTableReferences),
+          (
+            StationTableData,
+            BaseReferences<_$AppDatabase, $StationTableTable, StationTableData>,
+          ),
           StationTableData,
-          PrefetchHooks Function({bool sensorTableRefs})
+          PrefetchHooks Function()
         > {
   $$StationTableTableTableManager(_$AppDatabase db, $StationTableTable table)
     : super(
@@ -1727,43 +1616,9 @@ class $$StationTableTableTableManager
                 version: version,
               ),
           withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$StationTableTableReferences(db, table, e),
-                ),
-              )
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({sensorTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (sensorTableRefs) db.sensorTable],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (sensorTableRefs)
-                    await $_getPrefetchedData<
-                      StationTableData,
-                      $StationTableTable,
-                      SensorTableData
-                    >(
-                      currentTable: table,
-                      referencedTable: $$StationTableTableReferences
-                          ._sensorTableRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$StationTableTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).sensorTableRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.stationId == item.id),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -1778,9 +1633,12 @@ typedef $$StationTableTableProcessedTableManager =
       $$StationTableTableAnnotationComposer,
       $$StationTableTableCreateCompanionBuilder,
       $$StationTableTableUpdateCompanionBuilder,
-      (StationTableData, $$StationTableTableReferences),
+      (
+        StationTableData,
+        BaseReferences<_$AppDatabase, $StationTableTable, StationTableData>,
+      ),
       StationTableData,
-      PrefetchHooks Function({bool sensorTableRefs})
+      PrefetchHooks Function()
     >;
 typedef $$SensorTableTableCreateCompanionBuilder =
     SensorTableCompanion Function({
@@ -1803,51 +1661,6 @@ typedef $$SensorTableTableUpdateCompanionBuilder =
       Value<int> historyIntervalSeconds,
     });
 
-final class $$SensorTableTableReferences
-    extends BaseReferences<_$AppDatabase, $SensorTableTable, SensorTableData> {
-  $$SensorTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static $StationTableTable _stationIdTable(_$AppDatabase db) =>
-      db.stationTable.createAlias(
-        $_aliasNameGenerator(db.sensorTable.stationId, db.stationTable.id),
-      );
-
-  $$StationTableTableProcessedTableManager get stationId {
-    final $_column = $_itemColumn<int>('station_id')!;
-
-    final manager = $$StationTableTableTableManager(
-      $_db,
-      $_db.stationTable,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_stationIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static MultiTypedResultKey<$HistoryTableTable, List<HistoryTableData>>
-  _historyTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.historyTable,
-    aliasName: $_aliasNameGenerator(
-      db.sensorTable.id,
-      db.historyTable.sensorId,
-    ),
-  );
-
-  $$HistoryTableTableProcessedTableManager get historyTableRefs {
-    final manager = $$HistoryTableTableTableManager(
-      $_db,
-      $_db.historyTable,
-    ).filter((f) => f.sensorId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_historyTableRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
-
 class $$SensorTableTableFilterComposer
     extends Composer<_$AppDatabase, $SensorTableTable> {
   $$SensorTableTableFilterComposer({
@@ -1859,6 +1672,11 @@ class $$SensorTableTableFilterComposer
   });
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get stationId => $composableBuilder(
+    column: $table.stationId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1887,54 +1705,6 @@ class $$SensorTableTableFilterComposer
     column: $table.historyIntervalSeconds,
     builder: (column) => ColumnFilters(column),
   );
-
-  $$StationTableTableFilterComposer get stationId {
-    final $$StationTableTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.stationId,
-      referencedTable: $db.stationTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$StationTableTableFilterComposer(
-            $db: $db,
-            $table: $db.stationTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  Expression<bool> historyTableRefs(
-    Expression<bool> Function($$HistoryTableTableFilterComposer f) f,
-  ) {
-    final $$HistoryTableTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyTable,
-      getReferencedColumn: (t) => t.sensorId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryTableTableFilterComposer(
-            $db: $db,
-            $table: $db.historyTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$SensorTableTableOrderingComposer
@@ -1948,6 +1718,11 @@ class $$SensorTableTableOrderingComposer
   });
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get stationId => $composableBuilder(
+    column: $table.stationId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1975,29 +1750,6 @@ class $$SensorTableTableOrderingComposer
     column: $table.historyIntervalSeconds,
     builder: (column) => ColumnOrderings(column),
   );
-
-  $$StationTableTableOrderingComposer get stationId {
-    final $$StationTableTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.stationId,
-      referencedTable: $db.stationTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$StationTableTableOrderingComposer(
-            $db: $db,
-            $table: $db.stationTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$SensorTableTableAnnotationComposer
@@ -2011,6 +1763,9 @@ class $$SensorTableTableAnnotationComposer
   });
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get stationId =>
+      $composableBuilder(column: $table.stationId, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<SensorElement, String> get element =>
       $composableBuilder(column: $table.element, builder: (column) => column);
@@ -2032,54 +1787,6 @@ class $$SensorTableTableAnnotationComposer
     column: $table.historyIntervalSeconds,
     builder: (column) => column,
   );
-
-  $$StationTableTableAnnotationComposer get stationId {
-    final $$StationTableTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.stationId,
-      referencedTable: $db.stationTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$StationTableTableAnnotationComposer(
-            $db: $db,
-            $table: $db.stationTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  Expression<T> historyTableRefs<T extends Object>(
-    Expression<T> Function($$HistoryTableTableAnnotationComposer a) f,
-  ) {
-    final $$HistoryTableTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyTable,
-      getReferencedColumn: (t) => t.sensorId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryTableTableAnnotationComposer(
-            $db: $db,
-            $table: $db.historyTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$SensorTableTableTableManager
@@ -2093,9 +1800,12 @@ class $$SensorTableTableTableManager
           $$SensorTableTableAnnotationComposer,
           $$SensorTableTableCreateCompanionBuilder,
           $$SensorTableTableUpdateCompanionBuilder,
-          (SensorTableData, $$SensorTableTableReferences),
+          (
+            SensorTableData,
+            BaseReferences<_$AppDatabase, $SensorTableTable, SensorTableData>,
+          ),
           SensorTableData,
-          PrefetchHooks Function({bool stationId, bool historyTableRefs})
+          PrefetchHooks Function()
         > {
   $$SensorTableTableTableManager(_$AppDatabase db, $SensorTableTable table)
     : super(
@@ -2145,81 +1855,9 @@ class $$SensorTableTableTableManager
                 historyIntervalSeconds: historyIntervalSeconds,
               ),
           withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$SensorTableTableReferences(db, table, e),
-                ),
-              )
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback:
-              ({stationId = false, historyTableRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (historyTableRefs) db.historyTable,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (stationId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.stationId,
-                                    referencedTable:
-                                        $$SensorTableTableReferences
-                                            ._stationIdTable(db),
-                                    referencedColumn:
-                                        $$SensorTableTableReferences
-                                            ._stationIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
-
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (historyTableRefs)
-                        await $_getPrefetchedData<
-                          SensorTableData,
-                          $SensorTableTable,
-                          HistoryTableData
-                        >(
-                          currentTable: table,
-                          referencedTable: $$SensorTableTableReferences
-                              ._historyTableRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$SensorTableTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).historyTableRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.sensorId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
-                  },
-                );
-              },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -2234,9 +1872,12 @@ typedef $$SensorTableTableProcessedTableManager =
       $$SensorTableTableAnnotationComposer,
       $$SensorTableTableCreateCompanionBuilder,
       $$SensorTableTableUpdateCompanionBuilder,
-      (SensorTableData, $$SensorTableTableReferences),
+      (
+        SensorTableData,
+        BaseReferences<_$AppDatabase, $SensorTableTable, SensorTableData>,
+      ),
       SensorTableData,
-      PrefetchHooks Function({bool stationId, bool historyTableRefs})
+      PrefetchHooks Function()
     >;
 typedef $$TokenTableTableCreateCompanionBuilder =
     TokenTableCompanion Function({
@@ -2393,31 +2034,6 @@ typedef $$HistoryTableTableUpdateCompanionBuilder =
       Value<DateTime> createdAt,
     });
 
-final class $$HistoryTableTableReferences
-    extends
-        BaseReferences<_$AppDatabase, $HistoryTableTable, HistoryTableData> {
-  $$HistoryTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static $SensorTableTable _sensorIdTable(_$AppDatabase db) =>
-      db.sensorTable.createAlias(
-        $_aliasNameGenerator(db.historyTable.sensorId, db.sensorTable.id),
-      );
-
-  $$SensorTableTableProcessedTableManager get sensorId {
-    final $_column = $_itemColumn<int>('sensor_id')!;
-
-    final manager = $$SensorTableTableTableManager(
-      $_db,
-      $_db.sensorTable,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_sensorIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-}
-
 class $$HistoryTableTableFilterComposer
     extends Composer<_$AppDatabase, $HistoryTableTable> {
   $$HistoryTableTableFilterComposer({
@@ -2432,6 +2048,11 @@ class $$HistoryTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<int> get sensorId => $composableBuilder(
+    column: $table.sensorId,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<double> get value => $composableBuilder(
     column: $table.value,
     builder: (column) => ColumnFilters(column),
@@ -2441,29 +2062,6 @@ class $$HistoryTableTableFilterComposer
     column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
   );
-
-  $$SensorTableTableFilterComposer get sensorId {
-    final $$SensorTableTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.sensorId,
-      referencedTable: $db.sensorTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$SensorTableTableFilterComposer(
-            $db: $db,
-            $table: $db.sensorTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$HistoryTableTableOrderingComposer
@@ -2480,6 +2078,11 @@ class $$HistoryTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get sensorId => $composableBuilder(
+    column: $table.sensorId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get value => $composableBuilder(
     column: $table.value,
     builder: (column) => ColumnOrderings(column),
@@ -2489,29 +2092,6 @@ class $$HistoryTableTableOrderingComposer
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
-
-  $$SensorTableTableOrderingComposer get sensorId {
-    final $$SensorTableTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.sensorId,
-      referencedTable: $db.sensorTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$SensorTableTableOrderingComposer(
-            $db: $db,
-            $table: $db.sensorTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$HistoryTableTableAnnotationComposer
@@ -2526,34 +2106,14 @@ class $$HistoryTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<int> get sensorId =>
+      $composableBuilder(column: $table.sensorId, builder: (column) => column);
+
   GeneratedColumn<double> get value =>
       $composableBuilder(column: $table.value, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  $$SensorTableTableAnnotationComposer get sensorId {
-    final $$SensorTableTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.sensorId,
-      referencedTable: $db.sensorTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$SensorTableTableAnnotationComposer(
-            $db: $db,
-            $table: $db.sensorTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$HistoryTableTableTableManager
@@ -2567,9 +2127,12 @@ class $$HistoryTableTableTableManager
           $$HistoryTableTableAnnotationComposer,
           $$HistoryTableTableCreateCompanionBuilder,
           $$HistoryTableTableUpdateCompanionBuilder,
-          (HistoryTableData, $$HistoryTableTableReferences),
+          (
+            HistoryTableData,
+            BaseReferences<_$AppDatabase, $HistoryTableTable, HistoryTableData>,
+          ),
           HistoryTableData,
-          PrefetchHooks Function({bool sensorId})
+          PrefetchHooks Function()
         > {
   $$HistoryTableTableTableManager(_$AppDatabase db, $HistoryTableTable table)
     : super(
@@ -2607,54 +2170,9 @@ class $$HistoryTableTableTableManager
                 createdAt: createdAt,
               ),
           withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$HistoryTableTableReferences(db, table, e),
-                ),
-              )
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({sensorId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (sensorId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.sensorId,
-                                referencedTable: $$HistoryTableTableReferences
-                                    ._sensorIdTable(db),
-                                referencedColumn: $$HistoryTableTableReferences
-                                    ._sensorIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
-
-                    return state;
-                  },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -2669,9 +2187,12 @@ typedef $$HistoryTableTableProcessedTableManager =
       $$HistoryTableTableAnnotationComposer,
       $$HistoryTableTableCreateCompanionBuilder,
       $$HistoryTableTableUpdateCompanionBuilder,
-      (HistoryTableData, $$HistoryTableTableReferences),
+      (
+        HistoryTableData,
+        BaseReferences<_$AppDatabase, $HistoryTableTable, HistoryTableData>,
+      ),
       HistoryTableData,
-      PrefetchHooks Function({bool sensorId})
+      PrefetchHooks Function()
     >;
 
 class $AppDatabaseManager {

@@ -152,8 +152,8 @@ Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
 };
 
 const _$SensorElementEnumMap = {
-  SensorElement.precipationAccumulated: 'precipationAccumulated',
-  SensorElement.precipationRate: 'precipationRate',
+  SensorElement.precipitationAccumulated: 'precipitationAccumulated',
+  SensorElement.precipitationRate: 'precipitationRate',
   SensorElement.snowHeight: 'snowHeight',
   SensorElement.pressure: 'pressure',
   SensorElement.temperature: 'temperature',

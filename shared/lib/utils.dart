@@ -25,14 +25,27 @@ Future<int> runShellCommand(
   String cwd = ".",
   bool forwardOutput = true,
   FailAction onCommandFail = FailAction.logWarning,
+  bool preferWindowsPowerShell = false,
   void Function()? onError,
 }) async {
-  final runCommand = await Process.start(
-    command,
-    options,
-    runInShell: true,
-    workingDirectory: cwd,
-  );
+  late final runCommand;
+
+  if (Platform.isWindows && preferWindowsPowerShell) {
+    runCommand = await Process.start(
+      "powershell",
+      ["-Command", command, ...options],
+      workingDirectory: cwd,
+      runInShell: true,
+    );
+  } else {
+    runCommand = await Process.start(
+      command,
+      options,
+      workingDirectory: cwd,
+      runInShell: true,
+    );
+  }
+
   if (forwardOutput) {
     runCommand.stdout
         .transform(utf8.decoder)
@@ -70,12 +83,23 @@ Future<int> runShellCommand(
 }
 
 Future<bool> checkIfShellCommandExists(String command) async {
-  final exitCode = await runShellCommand(
-    "which",
-    [command],
-    forwardOutput: false,
-    onCommandFail: FailAction.silent,
-  );
+  late final int exitCode;
+  if (Platform.isWindows) {
+    exitCode = await runShellCommand(
+      "Get-Command",
+      [command],
+      forwardOutput: false,
+      onCommandFail: FailAction.silent,
+      preferWindowsPowerShell: true,
+    );
+  } else {
+    exitCode = await runShellCommand(
+      "which",
+      [command],
+      forwardOutput: false,
+      onCommandFail: FailAction.silent,
+    );
+  }
 
   return exitCode == 0;
 }
@@ -97,5 +121,45 @@ Future<void> tryToInstallCommandUsingApt(
   if (exitCode != 0) {
     print(chalk.red("Cancelled: Failed to install ${chalk.bold(command)}!"));
     exit(1);
+  }
+}
+
+Future<void> tryToInstallCommandUsingWinget(
+  String commandName,
+  String packageName, {
+  bool checkIfExists = true,
+}) async {
+  if (checkIfExists && await checkIfShellCommandExists(commandName)) {
+    print(chalk.dim("${chalk.bold(commandName)} is already installed!"));
+    return;
+  }
+  final exitCode = await runShellCommand(
+    "winget",
+    ["install", "--id", packageName, "-e", "--silent"],
+    onCommandFail: FailAction.silent,
+    preferWindowsPowerShell: true,
+  );
+  if (exitCode != 0) {
+    print(
+      chalk.red(
+        "Cancelled: Failed to install ${chalk.bold(commandName)} (package: ${chalk.italic(packageName)})!",
+      ),
+    );
+    exit(1);
+  }
+}
+
+Future<void> requireAdminOnWindows() async {
+  if (Platform.isWindows) {
+    // Under Windows, 'net session' is only successful when running as Admin
+    final result = await Process.run('net', ['session']);
+    if (result.exitCode != 0) {
+      print(
+        chalk.yellow(
+          "\n⚠️  Administrator privileges are required for this action.",
+        ),
+      );
+      exit(1);
+    }
   }
 }

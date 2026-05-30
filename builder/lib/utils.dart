@@ -40,10 +40,13 @@ class DartPackage {
     });
   }
 
-  Future<void> compile(String binary, String? name) async {
+  Future<void> compile(
+    String binary,
+    String? name, {
+    List<String> linuxArchs = const ["arm64", "arm", "x64"],
+    List<String> winArchs = const ["x64"],
+  }) async {
     name = name ?? binary;
-    List<String> linuxArchs = ["arm64", "arm", "x64"];
-    List<String> winArchs = ["x64"];
     final outFolder = Directory("$path/out/");
     if (await outFolder.exists()) {
       await outFolder.delete(recursive: true);
@@ -74,7 +77,7 @@ class DartPackage {
           "exe",
           "--target-os=windows",
           "--target-arch=$arch",
-          "--output=out/$binaryName",
+          "--output=out/$binaryName.exe",
           "bin/$binary.dart",
         ], onCommandFail: FailAction.throwException);
         print("Created $binaryName");
