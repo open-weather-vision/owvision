@@ -28,7 +28,9 @@ Future<void> runDaemon() async {
 
   // configure caddy
   final caddyService = getIt<CaddyService>();
-  caddyService.tryToConfigure();
+  caddyService.tryToConfigure().catchError((err) {
+    logger.severe("Failed to configure caddy: $err");
+  });
 
   // start tracking stations state in ram
   final liveSensorStateService = getIt<LiveSensorStateService>();

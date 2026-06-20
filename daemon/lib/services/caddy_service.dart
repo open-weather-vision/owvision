@@ -20,7 +20,7 @@ class CaddyService {
   CaddyService(this._configService);
 
   /// Configures `caddy`.
-  void tryToConfigure() async {
+  Future<void> tryToConfigure() async {
     final caddyConfig = _configService.config.generateCaddyConfig();
     var configured = false;
     while (!configured) {

@@ -33,6 +33,7 @@ class LiveSensorStateService extends LiveBasedService {
     logger.info(
       "Stopped tracking sensor states of station with id=$stationId}!",
     );
+    _liveState.remove(stationId);
   }
 
   @override
@@ -52,7 +53,7 @@ class LiveSensorStateService extends LiveBasedService {
     );
   }
 
-  void handleWebsocketConnection(
+  Future<void> handleWebsocketConnection(
     WebSocketChannel webSocket,
     StationInfo station,
   ) async {

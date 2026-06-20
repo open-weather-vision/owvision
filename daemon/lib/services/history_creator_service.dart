@@ -16,24 +16,36 @@ class HistoryCreatorService extends LiveBasedService {
   HistoryCreatorService(super.liveService, super.stationService);
 
   @override
-  void onUpdate(StationAndSensors station, SensorUpdate update) {
+  Future<void> onUpdate(StationAndSensors station, SensorUpdate update) async {
     final historyState = _historyState[station.info.id];
     if (historyState == null) {
-      logger.warning(
-        "Failed to process sensor state of station with id=${station.info.id}. No history state available!",
+      logger.severe(
+        "Failed to update sensor state of station with id=${station.info.id}. No history state available!",
       );
       return;
     }
-    historyState.update(station, update);
+    try {
+      await historyState.update(station, update);
+    } catch (e) {
+      logger.severe(
+        "Failed to update sensor state of station with id=${station.info.id}: $e",
+      );
+    }
   }
 
   @override
-  void onStationTracked(StationAndSensors station) async {
-    _historyState[station.info.id] = await HistoryState.create(station);
+  Future<void> onStationTracked(StationAndSensors station) async {
+    try {
+      _historyState[station.info.id] = await HistoryState.create(station);
+    } catch (e) {
+      logger.severe(
+        "Failed to create history state for station with id=${station.info.id}: $e",
+      );
+    }
   }
 
   @override
-  void onStationUntracked(int stationId) {
+  Future<void> onStationUntracked(int stationId) async {
     _historyState.remove(stationId);
   }
 }
@@ -51,7 +63,7 @@ class HistoryState {
     );
   }
 
-  void update(StationAndSensors station, SensorUpdate update) async {
+  Future<void> update(StationAndSensors station, SensorUpdate update) async {
     final latestUpdateOfSensor = latestSensorUpdates[update.sensor.id];
     if (latestUpdateOfSensor == null ||
         update.state.createdAt.difference(latestUpdateOfSensor.createdAt) >

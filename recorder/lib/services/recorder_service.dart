@@ -262,6 +262,7 @@ class RecorderService {
     for (final timer in _timers) {
       timer.cancel();
     }
+    _timers.clear();
     running = false;
     logger.info("Paused recorder service");
   }

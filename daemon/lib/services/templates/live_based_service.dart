@@ -31,7 +31,6 @@ abstract class LiveBasedService extends StationBasedService {
 
   void onStationTracked(StationAndSensors station);
   void onStationUntracked(int stationId);
-
   void onUpdate(StationAndSensors station, SensorUpdate update);
 
   @override
@@ -39,5 +38,13 @@ abstract class LiveBasedService extends StationBasedService {
     _trackers[stationId]?.cancel();
     _trackers.remove(stationId);
     onStationUntracked(stationId);
+  }
+
+  @override
+  void onStationDeleteAll() {
+    for (final stationId in _trackers.keys) {
+      onStationDelete(stationId);
+    }
+    _trackers.clear();
   }
 }

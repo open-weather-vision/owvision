@@ -12,8 +12,7 @@ class TokenRouter {
   TokenRouter(this._tokenController);
 
   Handler get router {
-    final pipe = Pipeline();
-    pipe.addMiddleware(
+    final pipe = Pipeline().addMiddleware(
       requireRole([TokenRole.admin]),
     ); // only admins can generate tokens
 

@@ -140,7 +140,11 @@ class StationController {
     }
 
     final handler = webSocketHandler((webSocket, _) {
-      _liveSocketService.handleWebsocketConnection(webSocket, station);
+      _liveSocketService
+          .handleWebsocketConnection(webSocket, station)
+          .catchError((error) {
+            logger.severe("Live socket connection issue: $error");
+          });
     });
 
     return handler(request);

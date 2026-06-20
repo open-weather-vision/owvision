@@ -11,16 +11,20 @@ abstract class StationBasedService {
 
   Future<void> start() async {
     List<StationInfo> stations = await stationService.getAll();
-    for (final station in stations) {
-      onStationCreate(station.id);
-    }
+    final futures = stations.map((station) => onStationCreate(station.id));
+    await Future.wait(futures);
     stationService.watch(
       handler: (event, id) async {
-        int parsedId = int.parse(id);
         if (event == StationEvent.create) {
+          int parsedId = int.parse(id);
           onStationCreate(parsedId);
         } else {
-          onStationDelete(parsedId);
+          if (id == "*") {
+            onStationDeleteAll();
+          } else {
+            int parsedId = int.parse(id);
+            onStationDelete(parsedId);
+          }
         }
       },
     );
@@ -29,4 +33,6 @@ abstract class StationBasedService {
   Future<void> onStationCreate(int stationId);
 
   void onStationDelete(int stationId);
+
+  void onStationDeleteAll();
 }
