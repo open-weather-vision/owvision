@@ -7,21 +7,21 @@ import '../live_service.dart';
 
 /// A live based service is a service that needs to listen to all sensor updates coming from the recorder.
 abstract class LiveBasedService extends StationBasedService {
-  final Map<int, EventListener<SensorUpdate>> _trackers = {};
+  final Map<String, EventListener<SensorUpdate>> _trackers = {};
   final LiveService liveService;
 
   LiveBasedService(this.liveService, super.stationService);
 
   @override
-  Future<void> onStationCreate(int stationId) async {
-    final stationAndSensors = await stationService.getStationAndSensorsById(
-      id: stationId,
+  Future<void> onStationCreate(String stationUuid) async {
+    final stationAndSensors = await stationService.getStationAndSensorsByUuid(
+      id: stationUuid,
     );
     if (stationAndSensors == null) {
       return;
     }
-    _trackers[stationId] = await liveService.watchStation(
-      stationId: stationId,
+    _trackers[stationUuid] = await liveService.watchStation(
+      stationUuid: stationUuid,
       handler: (update) {
         onUpdate(stationAndSensors, update);
       },
@@ -30,20 +30,20 @@ abstract class LiveBasedService extends StationBasedService {
   }
 
   void onStationTracked(StationAndSensors station);
-  void onStationUntracked(int stationId);
+  void onStationUntracked(String stationUuid);
   void onUpdate(StationAndSensors station, SensorUpdate update);
 
   @override
-  void onStationDelete(int stationId) {
-    _trackers[stationId]?.cancel();
-    _trackers.remove(stationId);
-    onStationUntracked(stationId);
+  void onStationDelete(String stationUuid) {
+    _trackers[stationUuid]?.cancel();
+    _trackers.remove(stationUuid);
+    onStationUntracked(stationUuid);
   }
 
   @override
   void onStationDeleteAll() {
-    for (final stationId in _trackers.keys) {
-      onStationDelete(stationId);
+    for (final stationUuid in _trackers.keys) {
+      onStationDelete(stationUuid);
     }
     _trackers.clear();
   }

@@ -13,7 +13,7 @@ class SensorRepository {
   static Sensor fromResult({required SensorTableData result}) {
     return Sensor(
       id: result.id,
-      stationId: result.stationId,
+      stationUuid: result.stationUuid,
       element: result.element,
       name: result.name,
       storageUnit: Unit.fromId(result.storageUnitId),
@@ -24,15 +24,16 @@ class SensorRepository {
 
   SensorRepository(this._database);
 
-  Future<Sensor?> getByNameAndStationId({
-    required int stationId,
+  Future<Sensor?> getByNameAndStationUuid({
+    required String stationUuid,
     required String sensorName,
   }) async {
     try {
       final result =
           await (_database.select(_database.sensorTable)..where(
                 (s) =>
-                    s.stationId.equals(stationId) & s.name.equals(sensorName),
+                    s.stationUuid.equals(stationUuid) &
+                    s.name.equals(sensorName),
               ))
               .getSingle();
       return fromResult(result: result);
@@ -54,11 +55,11 @@ class SensorRepository {
     }
   }
 
-  Future<List<Sensor>> getByStationId({required int stationId}) async {
+  Future<List<Sensor>> getByStationUuid({required String stationUuid}) async {
     try {
       final result = await (_database.select(
         _database.sensorTable,
-      )..where((s) => s.stationId.equals(stationId))).get();
+      )..where((s) => s.stationUuid.equals(stationUuid))).get();
       return result.map((s) => fromResult(result: s)).toList();
     } catch (e) {
       logger.severe(e);

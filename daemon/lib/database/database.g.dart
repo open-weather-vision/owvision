@@ -9,28 +9,29 @@ class $StationTableTable extends StationTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $StationTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _uuidMeta = const VerificationMeta('uuid');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
+  late final GeneratedColumn<String> uuid = GeneratedColumn<String>(
+    'uuid',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 36,
+      maxTextLength: 36,
     ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
     'name',
     aliasedName,
-    false,
+    true,
     additionalChecks: GeneratedColumn.checkTextLength(minTextLength: 1),
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
@@ -51,9 +52,9 @@ class $StationTableTable extends StationTable
   late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
     'longitude',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.double,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _latitudeMeta = const VerificationMeta(
     'latitude',
@@ -62,29 +63,45 @@ class $StationTableTable extends StationTable
   late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
     'latitude',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.double,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
-  static const VerificationMeta _versionMeta = const VerificationMeta(
-    'version',
+  static const VerificationMeta _interfaceNameMeta = const VerificationMeta(
+    'interfaceName',
   );
   @override
-  late final GeneratedColumn<int> version = GeneratedColumn<int>(
-    'version',
+  late final GeneratedColumn<String> interfaceName = GeneratedColumn<String>(
+    'interface_name',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
+  );
+  static const VerificationMeta _configuredMeta = const VerificationMeta(
+    'configured',
+  );
+  @override
+  late final GeneratedColumn<bool> configured = GeneratedColumn<bool>(
+    'configured',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("configured" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
   );
   @override
   List<GeneratedColumn> get $columns => [
-    id,
+    uuid,
     name,
     createdAt,
     longitude,
     latitude,
-    version,
+    interfaceName,
+    configured,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -98,16 +115,19 @@ class $StationTableTable extends StationTable
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    if (data.containsKey('uuid')) {
+      context.handle(
+        _uuidMeta,
+        uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uuidMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
         _nameMeta,
         name.isAcceptableOrUnknown(data['name']!, _nameMeta),
       );
-    } else if (isInserting) {
-      context.missing(_nameMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -122,42 +142,47 @@ class $StationTableTable extends StationTable
         _longitudeMeta,
         longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
       );
-    } else if (isInserting) {
-      context.missing(_longitudeMeta);
     }
     if (data.containsKey('latitude')) {
       context.handle(
         _latitudeMeta,
         latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
       );
-    } else if (isInserting) {
-      context.missing(_latitudeMeta);
     }
-    if (data.containsKey('version')) {
+    if (data.containsKey('interface_name')) {
       context.handle(
-        _versionMeta,
-        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+        _interfaceNameMeta,
+        interfaceName.isAcceptableOrUnknown(
+          data['interface_name']!,
+          _interfaceNameMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_versionMeta);
+      context.missing(_interfaceNameMeta);
+    }
+    if (data.containsKey('configured')) {
+      context.handle(
+        _configuredMeta,
+        configured.isAcceptableOrUnknown(data['configured']!, _configuredMeta),
+      );
     }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => const {};
   @override
   StationTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return StationTableData(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
+      uuid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}uuid'],
       )!,
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
-      )!,
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -165,14 +190,18 @@ class $StationTableTable extends StationTable
       longitude: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}longitude'],
-      )!,
+      ),
       latitude: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}latitude'],
+      ),
+      interfaceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}interface_name'],
       )!,
-      version: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}version'],
+      configured: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}configured'],
       )!,
     );
   }
@@ -185,40 +214,54 @@ class $StationTableTable extends StationTable
 
 class StationTableData extends DataClass
     implements Insertable<StationTableData> {
-  final int id;
-  final String name;
+  final String uuid;
+  final String? name;
   final DateTime createdAt;
-  final double longitude;
-  final double latitude;
-  final int version;
+  final double? longitude;
+  final double? latitude;
+  final String interfaceName;
+  final bool configured;
   const StationTableData({
-    required this.id,
-    required this.name,
+    required this.uuid,
+    this.name,
     required this.createdAt,
-    required this.longitude,
-    required this.latitude,
-    required this.version,
+    this.longitude,
+    this.latitude,
+    required this.interfaceName,
+    required this.configured,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
+    map['uuid'] = Variable<String>(uuid);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
-    map['longitude'] = Variable<double>(longitude);
-    map['latitude'] = Variable<double>(latitude);
-    map['version'] = Variable<int>(version);
+    if (!nullToAbsent || longitude != null) {
+      map['longitude'] = Variable<double>(longitude);
+    }
+    if (!nullToAbsent || latitude != null) {
+      map['latitude'] = Variable<double>(latitude);
+    }
+    map['interface_name'] = Variable<String>(interfaceName);
+    map['configured'] = Variable<bool>(configured);
     return map;
   }
 
   StationTableCompanion toCompanion(bool nullToAbsent) {
     return StationTableCompanion(
-      id: Value(id),
-      name: Value(name),
+      uuid: Value(uuid),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       createdAt: Value(createdAt),
-      longitude: Value(longitude),
-      latitude: Value(latitude),
-      version: Value(version),
+      longitude: longitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(longitude),
+      latitude: latitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(latitude),
+      interfaceName: Value(interfaceName),
+      configured: Value(configured),
     );
   }
 
@@ -228,149 +271,179 @@ class StationTableData extends DataClass
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return StationTableData(
-      id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
+      uuid: serializer.fromJson<String>(json['uuid']),
+      name: serializer.fromJson<String?>(json['name']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      longitude: serializer.fromJson<double>(json['longitude']),
-      latitude: serializer.fromJson<double>(json['latitude']),
-      version: serializer.fromJson<int>(json['version']),
+      longitude: serializer.fromJson<double?>(json['longitude']),
+      latitude: serializer.fromJson<double?>(json['latitude']),
+      interfaceName: serializer.fromJson<String>(json['interfaceName']),
+      configured: serializer.fromJson<bool>(json['configured']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
+      'uuid': serializer.toJson<String>(uuid),
+      'name': serializer.toJson<String?>(name),
       'createdAt': serializer.toJson<DateTime>(createdAt),
-      'longitude': serializer.toJson<double>(longitude),
-      'latitude': serializer.toJson<double>(latitude),
-      'version': serializer.toJson<int>(version),
+      'longitude': serializer.toJson<double?>(longitude),
+      'latitude': serializer.toJson<double?>(latitude),
+      'interfaceName': serializer.toJson<String>(interfaceName),
+      'configured': serializer.toJson<bool>(configured),
     };
   }
 
   StationTableData copyWith({
-    int? id,
-    String? name,
+    String? uuid,
+    Value<String?> name = const Value.absent(),
     DateTime? createdAt,
-    double? longitude,
-    double? latitude,
-    int? version,
+    Value<double?> longitude = const Value.absent(),
+    Value<double?> latitude = const Value.absent(),
+    String? interfaceName,
+    bool? configured,
   }) => StationTableData(
-    id: id ?? this.id,
-    name: name ?? this.name,
+    uuid: uuid ?? this.uuid,
+    name: name.present ? name.value : this.name,
     createdAt: createdAt ?? this.createdAt,
-    longitude: longitude ?? this.longitude,
-    latitude: latitude ?? this.latitude,
-    version: version ?? this.version,
+    longitude: longitude.present ? longitude.value : this.longitude,
+    latitude: latitude.present ? latitude.value : this.latitude,
+    interfaceName: interfaceName ?? this.interfaceName,
+    configured: configured ?? this.configured,
   );
   StationTableData copyWithCompanion(StationTableCompanion data) {
     return StationTableData(
-      id: data.id.present ? data.id.value : this.id,
+      uuid: data.uuid.present ? data.uuid.value : this.uuid,
       name: data.name.present ? data.name.value : this.name,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       longitude: data.longitude.present ? data.longitude.value : this.longitude,
       latitude: data.latitude.present ? data.latitude.value : this.latitude,
-      version: data.version.present ? data.version.value : this.version,
+      interfaceName: data.interfaceName.present
+          ? data.interfaceName.value
+          : this.interfaceName,
+      configured: data.configured.present
+          ? data.configured.value
+          : this.configured,
     );
   }
 
   @override
   String toString() {
     return (StringBuffer('StationTableData(')
-          ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
           ..write('longitude: $longitude, ')
           ..write('latitude: $latitude, ')
-          ..write('version: $version')
+          ..write('interfaceName: $interfaceName, ')
+          ..write('configured: $configured')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, createdAt, longitude, latitude, version);
+  int get hashCode => Object.hash(
+    uuid,
+    name,
+    createdAt,
+    longitude,
+    latitude,
+    interfaceName,
+    configured,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is StationTableData &&
-          other.id == this.id &&
+          other.uuid == this.uuid &&
           other.name == this.name &&
           other.createdAt == this.createdAt &&
           other.longitude == this.longitude &&
           other.latitude == this.latitude &&
-          other.version == this.version);
+          other.interfaceName == this.interfaceName &&
+          other.configured == this.configured);
 }
 
 class StationTableCompanion extends UpdateCompanion<StationTableData> {
-  final Value<int> id;
-  final Value<String> name;
+  final Value<String> uuid;
+  final Value<String?> name;
   final Value<DateTime> createdAt;
-  final Value<double> longitude;
-  final Value<double> latitude;
-  final Value<int> version;
+  final Value<double?> longitude;
+  final Value<double?> latitude;
+  final Value<String> interfaceName;
+  final Value<bool> configured;
+  final Value<int> rowid;
   const StationTableCompanion({
-    this.id = const Value.absent(),
+    this.uuid = const Value.absent(),
     this.name = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.longitude = const Value.absent(),
     this.latitude = const Value.absent(),
-    this.version = const Value.absent(),
+    this.interfaceName = const Value.absent(),
+    this.configured = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   StationTableCompanion.insert({
-    this.id = const Value.absent(),
-    required String name,
+    required String uuid,
+    this.name = const Value.absent(),
     required DateTime createdAt,
-    required double longitude,
-    required double latitude,
-    required int version,
-  }) : name = Value(name),
+    this.longitude = const Value.absent(),
+    this.latitude = const Value.absent(),
+    required String interfaceName,
+    this.configured = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : uuid = Value(uuid),
        createdAt = Value(createdAt),
-       longitude = Value(longitude),
-       latitude = Value(latitude),
-       version = Value(version);
+       interfaceName = Value(interfaceName);
   static Insertable<StationTableData> custom({
-    Expression<int>? id,
+    Expression<String>? uuid,
     Expression<String>? name,
     Expression<DateTime>? createdAt,
     Expression<double>? longitude,
     Expression<double>? latitude,
-    Expression<int>? version,
+    Expression<String>? interfaceName,
+    Expression<bool>? configured,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
+      if (uuid != null) 'uuid': uuid,
       if (name != null) 'name': name,
       if (createdAt != null) 'created_at': createdAt,
       if (longitude != null) 'longitude': longitude,
       if (latitude != null) 'latitude': latitude,
-      if (version != null) 'version': version,
+      if (interfaceName != null) 'interface_name': interfaceName,
+      if (configured != null) 'configured': configured,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   StationTableCompanion copyWith({
-    Value<int>? id,
-    Value<String>? name,
+    Value<String>? uuid,
+    Value<String?>? name,
     Value<DateTime>? createdAt,
-    Value<double>? longitude,
-    Value<double>? latitude,
-    Value<int>? version,
+    Value<double?>? longitude,
+    Value<double?>? latitude,
+    Value<String>? interfaceName,
+    Value<bool>? configured,
+    Value<int>? rowid,
   }) {
     return StationTableCompanion(
-      id: id ?? this.id,
+      uuid: uuid ?? this.uuid,
       name: name ?? this.name,
       createdAt: createdAt ?? this.createdAt,
       longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
-      version: version ?? this.version,
+      interfaceName: interfaceName ?? this.interfaceName,
+      configured: configured ?? this.configured,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
+    if (uuid.present) {
+      map['uuid'] = Variable<String>(uuid.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -384,8 +457,14 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
     if (latitude.present) {
       map['latitude'] = Variable<double>(latitude.value);
     }
-    if (version.present) {
-      map['version'] = Variable<int>(version.value);
+    if (interfaceName.present) {
+      map['interface_name'] = Variable<String>(interfaceName.value);
+    }
+    if (configured.present) {
+      map['configured'] = Variable<bool>(configured.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -393,12 +472,14 @@ class StationTableCompanion extends UpdateCompanion<StationTableData> {
   @override
   String toString() {
     return (StringBuffer('StationTableCompanion(')
-          ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
           ..write('longitude: $longitude, ')
           ..write('latitude: $latitude, ')
-          ..write('version: $version')
+          ..write('interfaceName: $interfaceName, ')
+          ..write('configured: $configured, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -423,15 +504,15 @@ class $SensorTableTable extends SensorTable
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _stationIdMeta = const VerificationMeta(
-    'stationId',
+  static const VerificationMeta _stationUuidMeta = const VerificationMeta(
+    'stationUuid',
   );
   @override
-  late final GeneratedColumn<int> stationId = GeneratedColumn<int>(
-    'station_id',
+  late final GeneratedColumn<String> stationUuid = GeneratedColumn<String>(
+    'station_uuid',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   @override
@@ -488,7 +569,7 @@ class $SensorTableTable extends SensorTable
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    stationId,
+    stationUuid,
     element,
     storageUnitId,
     name,
@@ -510,13 +591,16 @@ class $SensorTableTable extends SensorTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('station_id')) {
+    if (data.containsKey('station_uuid')) {
       context.handle(
-        _stationIdMeta,
-        stationId.isAcceptableOrUnknown(data['station_id']!, _stationIdMeta),
+        _stationUuidMeta,
+        stationUuid.isAcceptableOrUnknown(
+          data['station_uuid']!,
+          _stationUuidMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_stationIdMeta);
+      context.missing(_stationUuidMeta);
     }
     if (data.containsKey('storage_unit_id')) {
       context.handle(
@@ -562,7 +646,7 @@ class $SensorTableTable extends SensorTable
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {stationId, name},
+    {stationUuid, name},
   ];
   @override
   SensorTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
@@ -572,9 +656,9 @@ class $SensorTableTable extends SensorTable
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      stationId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}station_id'],
+      stationUuid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}station_uuid'],
       )!,
       element: $SensorTableTable.$converterelement.fromSql(
         attachedDatabase.typeMapping.read(
@@ -612,7 +696,7 @@ class $SensorTableTable extends SensorTable
 
 class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   final int id;
-  final int stationId;
+  final String stationUuid;
   final SensorElement element;
   final String storageUnitId;
   final String name;
@@ -620,7 +704,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   final int historyIntervalSeconds;
   const SensorTableData({
     required this.id,
-    required this.stationId,
+    required this.stationUuid,
     required this.element,
     required this.storageUnitId,
     required this.name,
@@ -631,7 +715,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['station_id'] = Variable<int>(stationId);
+    map['station_uuid'] = Variable<String>(stationUuid);
     {
       map['element'] = Variable<String>(
         $SensorTableTable.$converterelement.toSql(element),
@@ -647,7 +731,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   SensorTableCompanion toCompanion(bool nullToAbsent) {
     return SensorTableCompanion(
       id: Value(id),
-      stationId: Value(stationId),
+      stationUuid: Value(stationUuid),
       element: Value(element),
       storageUnitId: Value(storageUnitId),
       name: Value(name),
@@ -663,7 +747,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SensorTableData(
       id: serializer.fromJson<int>(json['id']),
-      stationId: serializer.fromJson<int>(json['stationId']),
+      stationUuid: serializer.fromJson<String>(json['stationUuid']),
       element: $SensorTableTable.$converterelement.fromJson(
         serializer.fromJson<String>(json['element']),
       ),
@@ -682,7 +766,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'stationId': serializer.toJson<int>(stationId),
+      'stationUuid': serializer.toJson<String>(stationUuid),
       'element': serializer.toJson<String>(
         $SensorTableTable.$converterelement.toJson(element),
       ),
@@ -695,7 +779,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
 
   SensorTableData copyWith({
     int? id,
-    int? stationId,
+    String? stationUuid,
     SensorElement? element,
     String? storageUnitId,
     String? name,
@@ -703,7 +787,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
     int? historyIntervalSeconds,
   }) => SensorTableData(
     id: id ?? this.id,
-    stationId: stationId ?? this.stationId,
+    stationUuid: stationUuid ?? this.stationUuid,
     element: element ?? this.element,
     storageUnitId: storageUnitId ?? this.storageUnitId,
     name: name ?? this.name,
@@ -714,7 +798,9 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   SensorTableData copyWithCompanion(SensorTableCompanion data) {
     return SensorTableData(
       id: data.id.present ? data.id.value : this.id,
-      stationId: data.stationId.present ? data.stationId.value : this.stationId,
+      stationUuid: data.stationUuid.present
+          ? data.stationUuid.value
+          : this.stationUuid,
       element: data.element.present ? data.element.value : this.element,
       storageUnitId: data.storageUnitId.present
           ? data.storageUnitId.value
@@ -733,7 +819,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   String toString() {
     return (StringBuffer('SensorTableData(')
           ..write('id: $id, ')
-          ..write('stationId: $stationId, ')
+          ..write('stationUuid: $stationUuid, ')
           ..write('element: $element, ')
           ..write('storageUnitId: $storageUnitId, ')
           ..write('name: $name, ')
@@ -746,7 +832,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
   @override
   int get hashCode => Object.hash(
     id,
-    stationId,
+    stationUuid,
     element,
     storageUnitId,
     name,
@@ -758,7 +844,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
       identical(this, other) ||
       (other is SensorTableData &&
           other.id == this.id &&
-          other.stationId == this.stationId &&
+          other.stationUuid == this.stationUuid &&
           other.element == this.element &&
           other.storageUnitId == this.storageUnitId &&
           other.name == this.name &&
@@ -768,7 +854,7 @@ class SensorTableData extends DataClass implements Insertable<SensorTableData> {
 
 class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
   final Value<int> id;
-  final Value<int> stationId;
+  final Value<String> stationUuid;
   final Value<SensorElement> element;
   final Value<String> storageUnitId;
   final Value<String> name;
@@ -776,7 +862,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
   final Value<int> historyIntervalSeconds;
   const SensorTableCompanion({
     this.id = const Value.absent(),
-    this.stationId = const Value.absent(),
+    this.stationUuid = const Value.absent(),
     this.element = const Value.absent(),
     this.storageUnitId = const Value.absent(),
     this.name = const Value.absent(),
@@ -785,19 +871,19 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
   });
   SensorTableCompanion.insert({
     this.id = const Value.absent(),
-    required int stationId,
+    required String stationUuid,
     required SensorElement element,
     required String storageUnitId,
     required String name,
     this.recordIntervalSeconds = const Value.absent(),
     this.historyIntervalSeconds = const Value.absent(),
-  }) : stationId = Value(stationId),
+  }) : stationUuid = Value(stationUuid),
        element = Value(element),
        storageUnitId = Value(storageUnitId),
        name = Value(name);
   static Insertable<SensorTableData> custom({
     Expression<int>? id,
-    Expression<int>? stationId,
+    Expression<String>? stationUuid,
     Expression<String>? element,
     Expression<String>? storageUnitId,
     Expression<String>? name,
@@ -806,7 +892,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (stationId != null) 'station_id': stationId,
+      if (stationUuid != null) 'station_uuid': stationUuid,
       if (element != null) 'element': element,
       if (storageUnitId != null) 'storage_unit_id': storageUnitId,
       if (name != null) 'name': name,
@@ -819,7 +905,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
 
   SensorTableCompanion copyWith({
     Value<int>? id,
-    Value<int>? stationId,
+    Value<String>? stationUuid,
     Value<SensorElement>? element,
     Value<String>? storageUnitId,
     Value<String>? name,
@@ -828,7 +914,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
   }) {
     return SensorTableCompanion(
       id: id ?? this.id,
-      stationId: stationId ?? this.stationId,
+      stationUuid: stationUuid ?? this.stationUuid,
       element: element ?? this.element,
       storageUnitId: storageUnitId ?? this.storageUnitId,
       name: name ?? this.name,
@@ -845,8 +931,8 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (stationId.present) {
-      map['station_id'] = Variable<int>(stationId.value);
+    if (stationUuid.present) {
+      map['station_uuid'] = Variable<String>(stationUuid.value);
     }
     if (element.present) {
       map['element'] = Variable<String>(
@@ -876,7 +962,7 @@ class SensorTableCompanion extends UpdateCompanion<SensorTableData> {
   String toString() {
     return (StringBuffer('SensorTableCompanion(')
           ..write('id: $id, ')
-          ..write('stationId: $stationId, ')
+          ..write('stationUuid: $stationUuid, ')
           ..write('element: $element, ')
           ..write('storageUnitId: $storageUnitId, ')
           ..write('name: $name, ')
@@ -1429,21 +1515,25 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 typedef $$StationTableTableCreateCompanionBuilder =
     StationTableCompanion Function({
-      Value<int> id,
-      required String name,
+      required String uuid,
+      Value<String?> name,
       required DateTime createdAt,
-      required double longitude,
-      required double latitude,
-      required int version,
+      Value<double?> longitude,
+      Value<double?> latitude,
+      required String interfaceName,
+      Value<bool> configured,
+      Value<int> rowid,
     });
 typedef $$StationTableTableUpdateCompanionBuilder =
     StationTableCompanion Function({
-      Value<int> id,
-      Value<String> name,
+      Value<String> uuid,
+      Value<String?> name,
       Value<DateTime> createdAt,
-      Value<double> longitude,
-      Value<double> latitude,
-      Value<int> version,
+      Value<double?> longitude,
+      Value<double?> latitude,
+      Value<String> interfaceName,
+      Value<bool> configured,
+      Value<int> rowid,
     });
 
 class $$StationTableTableFilterComposer
@@ -1455,8 +1545,8 @@ class $$StationTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
+  ColumnFilters<String> get uuid => $composableBuilder(
+    column: $table.uuid,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1480,8 +1570,13 @@ class $$StationTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get version => $composableBuilder(
-    column: $table.version,
+  ColumnFilters<String> get interfaceName => $composableBuilder(
+    column: $table.interfaceName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get configured => $composableBuilder(
+    column: $table.configured,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1495,8 +1590,8 @@ class $$StationTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
+  ColumnOrderings<String> get uuid => $composableBuilder(
+    column: $table.uuid,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1520,8 +1615,13 @@ class $$StationTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get version => $composableBuilder(
-    column: $table.version,
+  ColumnOrderings<String> get interfaceName => $composableBuilder(
+    column: $table.interfaceName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get configured => $composableBuilder(
+    column: $table.configured,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -1535,8 +1635,8 @@ class $$StationTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<String> get uuid =>
+      $composableBuilder(column: $table.uuid, builder: (column) => column);
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
@@ -1550,8 +1650,15 @@ class $$StationTableTableAnnotationComposer
   GeneratedColumn<double> get latitude =>
       $composableBuilder(column: $table.latitude, builder: (column) => column);
 
-  GeneratedColumn<int> get version =>
-      $composableBuilder(column: $table.version, builder: (column) => column);
+  GeneratedColumn<String> get interfaceName => $composableBuilder(
+    column: $table.interfaceName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get configured => $composableBuilder(
+    column: $table.configured,
+    builder: (column) => column,
+  );
 }
 
 class $$StationTableTableTableManager
@@ -1585,35 +1692,43 @@ class $$StationTableTableTableManager
               $$StationTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
+                Value<String> uuid = const Value.absent(),
+                Value<String?> name = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
-                Value<double> longitude = const Value.absent(),
-                Value<double> latitude = const Value.absent(),
-                Value<int> version = const Value.absent(),
+                Value<double?> longitude = const Value.absent(),
+                Value<double?> latitude = const Value.absent(),
+                Value<String> interfaceName = const Value.absent(),
+                Value<bool> configured = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => StationTableCompanion(
-                id: id,
+                uuid: uuid,
                 name: name,
                 createdAt: createdAt,
                 longitude: longitude,
                 latitude: latitude,
-                version: version,
+                interfaceName: interfaceName,
+                configured: configured,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                required String name,
+                required String uuid,
+                Value<String?> name = const Value.absent(),
                 required DateTime createdAt,
-                required double longitude,
-                required double latitude,
-                required int version,
+                Value<double?> longitude = const Value.absent(),
+                Value<double?> latitude = const Value.absent(),
+                required String interfaceName,
+                Value<bool> configured = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => StationTableCompanion.insert(
-                id: id,
+                uuid: uuid,
                 name: name,
                 createdAt: createdAt,
                 longitude: longitude,
                 latitude: latitude,
-                version: version,
+                interfaceName: interfaceName,
+                configured: configured,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1643,7 +1758,7 @@ typedef $$StationTableTableProcessedTableManager =
 typedef $$SensorTableTableCreateCompanionBuilder =
     SensorTableCompanion Function({
       Value<int> id,
-      required int stationId,
+      required String stationUuid,
       required SensorElement element,
       required String storageUnitId,
       required String name,
@@ -1653,7 +1768,7 @@ typedef $$SensorTableTableCreateCompanionBuilder =
 typedef $$SensorTableTableUpdateCompanionBuilder =
     SensorTableCompanion Function({
       Value<int> id,
-      Value<int> stationId,
+      Value<String> stationUuid,
       Value<SensorElement> element,
       Value<String> storageUnitId,
       Value<String> name,
@@ -1675,8 +1790,8 @@ class $$SensorTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get stationId => $composableBuilder(
-    column: $table.stationId,
+  ColumnFilters<String> get stationUuid => $composableBuilder(
+    column: $table.stationUuid,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1721,8 +1836,8 @@ class $$SensorTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get stationId => $composableBuilder(
-    column: $table.stationId,
+  ColumnOrderings<String> get stationUuid => $composableBuilder(
+    column: $table.stationUuid,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1764,8 +1879,10 @@ class $$SensorTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get stationId =>
-      $composableBuilder(column: $table.stationId, builder: (column) => column);
+  GeneratedColumn<String> get stationUuid => $composableBuilder(
+    column: $table.stationUuid,
+    builder: (column) => column,
+  );
 
   GeneratedColumnWithTypeConverter<SensorElement, String> get element =>
       $composableBuilder(column: $table.element, builder: (column) => column);
@@ -1821,7 +1938,7 @@ class $$SensorTableTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<int> stationId = const Value.absent(),
+                Value<String> stationUuid = const Value.absent(),
                 Value<SensorElement> element = const Value.absent(),
                 Value<String> storageUnitId = const Value.absent(),
                 Value<String> name = const Value.absent(),
@@ -1829,7 +1946,7 @@ class $$SensorTableTableTableManager
                 Value<int> historyIntervalSeconds = const Value.absent(),
               }) => SensorTableCompanion(
                 id: id,
-                stationId: stationId,
+                stationUuid: stationUuid,
                 element: element,
                 storageUnitId: storageUnitId,
                 name: name,
@@ -1839,7 +1956,7 @@ class $$SensorTableTableTableManager
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required int stationId,
+                required String stationUuid,
                 required SensorElement element,
                 required String storageUnitId,
                 required String name,
@@ -1847,7 +1964,7 @@ class $$SensorTableTableTableManager
                 Value<int> historyIntervalSeconds = const Value.absent(),
               }) => SensorTableCompanion.insert(
                 id: id,
-                stationId: stationId,
+                stationUuid: stationUuid,
                 element: element,
                 storageUnitId: storageUnitId,
                 name: name,

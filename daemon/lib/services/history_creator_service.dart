@@ -17,10 +17,10 @@ class HistoryCreatorService extends LiveBasedService {
 
   @override
   Future<void> onUpdate(StationAndSensors station, SensorUpdate update) async {
-    final historyState = _historyState[station.info.id];
+    final historyState = _historyState[station.info.uuid];
     if (historyState == null) {
       logger.severe(
-        "Failed to update sensor state of station with id=${station.info.id}. No history state available!",
+        "Failed to update sensor state of station with id=${station.info.uuid}. No history state available!",
       );
       return;
     }
@@ -28,7 +28,7 @@ class HistoryCreatorService extends LiveBasedService {
       await historyState.update(station, update);
     } catch (e) {
       logger.severe(
-        "Failed to update sensor state of station with id=${station.info.id}: $e",
+        "Failed to update sensor state of station with id=${station.info.uuid}: $e",
       );
     }
   }
@@ -36,10 +36,10 @@ class HistoryCreatorService extends LiveBasedService {
   @override
   Future<void> onStationTracked(StationAndSensors station) async {
     try {
-      _historyState[station.info.id] = await HistoryState.create(station);
+      _historyState[station.info.uuid] = await HistoryState.create(station);
     } catch (e) {
       logger.severe(
-        "Failed to create history state for station with id=${station.info.id}: $e",
+        "Failed to create history state for station with id=${station.info.uuid}: $e",
       );
     }
   }
@@ -77,7 +77,7 @@ class HistoryState {
       if (success) {
         latestSensorUpdates[update.sensor.id] = newRecord;
         logger.info(
-          "[history record] ${station.info.name} (id=${station.info.id}): ${update.sensor.name}=${update.state.value} (${update.state.createdAt})",
+          "[history record] ${station.info.name} (id=${station.info.uuid}): ${update.sensor.name}=${update.state.value} (${update.state.createdAt})",
         );
       }
     }

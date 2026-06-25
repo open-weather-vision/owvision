@@ -7,20 +7,22 @@ part of 'station_info.dart';
 // **************************************************************************
 
 StationInfo _$StationInfoFromJson(Map<String, dynamic> json) => StationInfo(
-  id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
-  longitude: (json['longitude'] as num).toDouble(),
-  latitude: (json['latitude'] as num).toDouble(),
+  uuid: json['uuid'] as String,
+  name: json['name'] as String?,
+  longitude: (json['longitude'] as num?)?.toDouble(),
+  latitude: (json['latitude'] as num?)?.toDouble(),
   createdAt: DateTime.parse(json['createdAt'] as String),
-  version: (json['version'] as num).toInt(),
+  configured: json['configured'] as bool,
+  interfaceName: json['interfaceName'] as String,
 );
 
 Map<String, dynamic> _$StationInfoToJson(StationInfo instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'uuid': instance.uuid,
       'name': instance.name,
       'longitude': instance.longitude,
       'latitude': instance.latitude,
+      'interfaceName': instance.interfaceName,
       'createdAt': instance.createdAt.toIso8601String(),
-      'version': instance.version,
+      'configured': instance.configured,
     };

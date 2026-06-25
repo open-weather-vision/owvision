@@ -23,9 +23,11 @@ class LiveSensorStateService extends LiveBasedService {
   @override
   void onStationTracked(StationAndSensors station) {
     logger.info(
-      "Tracking sensor states of station with id=${station.info.id}!",
+      "Tracking sensor states of station with id=${station.info.uuid}!",
     );
-    _liveState[station.info.id] = StationLiveState.fromSensors(station.sensors);
+    _liveState[station.info.uuid] = StationLiveState.fromSensors(
+      station.sensors,
+    );
   }
 
   @override
@@ -38,18 +40,18 @@ class LiveSensorStateService extends LiveBasedService {
 
   @override
   void onUpdate(StationAndSensors station, SensorUpdate update) {
-    final stateForStation = _liveState[station.info.id];
+    final stateForStation = _liveState[station.info.uuid];
     if (stateForStation == null) {
       logger.warning(
-        "Failed to update sensor state of station with id=${station.info.id}. No state available!",
+        "Failed to update sensor state of station with id=${station.info.uuid}. No state available!",
       );
       return;
     }
     stateForStation.update(update.sensor.name, update.state);
-    _stationUpdateNotifier.add(station.info.id);
+    _stationUpdateNotifier.add(station.info.uuid);
 
     logger.info(
-      "[live update] ${station.info.name} (id=${station.info.id}): ${update.sensor.name}=${update.state.value} (${update.state.createdAt})",
+      "[live update] ${station.info.name} (id=${station.info.uuid}): ${update.sensor.name}=${update.state.value} (${update.state.createdAt})",
     );
   }
 
@@ -61,19 +63,19 @@ class LiveSensorStateService extends LiveBasedService {
       "User started listening to weather station live data of '${station.name}'",
     );
 
-    final currentLiveState = _liveState[station.id];
+    final currentLiveState = _liveState[station.uuid];
     if (currentLiveState == null) {
       logger.severe(
-        "Live socket error: No live state available for station with id ${station.id}!",
+        "Live socket error: No live state available for station with id ${station.uuid}!",
       );
     } else {
       webSocket.sink.add(jsonEncode(currentLiveState.toJson()));
     }
 
     final subscription = _stationUpdateNotifier.stream
-        .where((id) => id == station.id)
+        .where((id) => id == station.uuid)
         .listen((_) {
-          final updatedState = _liveState[station.id];
+          final updatedState = _liveState[station.uuid];
           if (updatedState != null) {
             webSocket.sink.add(jsonEncode(updatedState.toJson()));
           }

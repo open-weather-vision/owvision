@@ -15,7 +15,7 @@ part 'sensor.g.dart';
 @JsonSerializable()
 class Sensor {
   final int id;
-  final int stationId;
+  final String stationUuid;
   final SensorElement element;
   final String name;
   final int recordIntervalSeconds;
@@ -27,7 +27,7 @@ class Sensor {
   const Sensor({
     required this.id,
     required this.name,
-    required this.stationId,
+    required this.stationUuid,
     required this.element,
     required this.storageUnit,
     required this.recordIntervalSeconds,
@@ -35,6 +35,7 @@ class Sensor {
   });
 
   factory Sensor.create({
+    required String stationUuid,
     required String name,
     required SensorElement element,
     required Unit storageUnit,
@@ -46,7 +47,7 @@ class Sensor {
       storageUnit: storageUnit,
       name: name,
       id: -1,
-      stationId: -1,
+      stationUuid: stationUuid,
       recordIntervalSeconds: recordIntervalSeconds,
       historyIntervalSeconds: historyIntervalSeconds,
     );

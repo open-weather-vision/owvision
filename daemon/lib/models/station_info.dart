@@ -4,41 +4,60 @@ part 'station_info.g.dart';
 
 @JsonSerializable()
 class StationInfo {
-  final int id;
-  final String name;
-  final double longitude;
-  final double latitude;
+  final String uuid;
+  final String? name;
+  final double? longitude;
+  final double? latitude;
+  final String interfaceName;
   final DateTime createdAt;
-  final int version;
+  final bool configured;
 
   StationInfo({
-    required this.id,
+    required this.uuid,
     required this.name,
     required this.longitude,
     required this.latitude,
     required this.createdAt,
-    required this.version,
+    required this.configured,
+    required this.interfaceName,
   });
 
-  factory StationInfo.create({
+  factory StationInfo.createConfigured({
+    required String id,
     required String name,
     required double longitude,
     required double latitude,
-    required int version,
+    required String interfaceName,
   }) {
     return StationInfo(
-      id: -1,
+      uuid: id,
       name: name,
       longitude: longitude,
       latitude: latitude,
       createdAt: DateTime.now(),
-      version: version,
+      configured: true,
+      interfaceName: interfaceName,
+    );
+  }
+
+  factory StationInfo.createUnconfigured({
+    required String id,
+    required String interfaceName,
+  }) {
+    return StationInfo(
+      uuid: id,
+      name: null,
+      longitude: null,
+      latitude: null,
+      interfaceName: interfaceName,
+      createdAt: DateTime.now(),
+      configured: false,
     );
   }
 
   @override
   String toString() {
-    return "(id=$id, name=$name, longitude=$longitude, latitude=$latitude, createdAt=$createdAt)";
+    return "(id=$uuid, name=$name, longitude=$longitude, latitude=$latitude, interfaceName=$interfaceName, createdAt=$createdAt, configured=$configured)";
   }
 
   // Factory-Konstruktor für JSON -> Objekt

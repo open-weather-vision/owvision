@@ -4,11 +4,16 @@ package recorder;
 
 /* Interface to the grpc service running on the daemon. */
 service DaemonService {
-    rpc CreateStation (StationDefinition) returns (Station) {}
+    rpc SetStation (StationDefinition) returns (Station) {}
     rpc GetStation (GetStationRequest) returns (Station) {}
-    rpc UpdateStation (UpdateStationRequest) returns (Station) {}
     rpc UpdateSensors (UpdateSensorsRequest) returns (UpdateSensorsResponse) {}
     rpc Ping(PingMessage) returns (PingMessage){}
+}
+
+enum RecordIntervalConfigurationType{
+    NOT_CONFIGURABLE = 0;
+    FULLY_CONFIGURABLE = 1;
+    MULTIPLE_OF_DEFAULT = 2;
 }
 
 message PingMessage{
@@ -16,7 +21,7 @@ message PingMessage{
 }
 
 message GetStationRequest{
-    int64 stationId = 1;
+    string uuid = 1;
 }
 
 message UpdateSensorsRequest{
@@ -39,11 +44,6 @@ message UpdateSensorResponse{
     string error = 3;
 }
 
-message UpdateStationRequest{
-    int64 stationId = 1;
-    StationDefinition definition = 2; 
-}
-
 /* Interface to the grpc service running on the station interface. Minimalistic by design. */
 service StationInterface {
     rpc GetStationDefinition (GetStationDefinitionRequest) returns (StationDefinition) {}
@@ -55,31 +55,34 @@ message GetStationDefinitionRequest{
 }
 
 message StationDefinition{
-    string name = 1;
-    repeated SensorDefinition sensors = 2;
-    double longitude = 3;
-    double latitude = 4;
-    int32 version = 5;
+    string uuid = 1;
+    string interfaceName = 2;
+    repeated SensorDefinition sensors = 3;
 }
 
 message SensorDefinition{
     string name = 1;
     string element = 2;
-    optional int64 recordIntervalSeconds = 3;
-    optional int64 historyIntervalSeconds = 4;
+    int64 defaultRecordIntervalSeconds = 3;
+    RecordIntervalConfigurationType recordIntervalConfigurationType = 4;
+    int64 defaultHistoryIntervalSeconds = 5;
+    RecordIntervalConfigurationType historyIntervalConfigurationType = 6;
 }
 
 message Station{
-    int64 id = 1;
-    repeated Sensor sensors = 2;
-    int32 version = 3;
+    string uuid = 1;
+    string name = 2;
+    double longitude = 3;
+    double latitude = 4;
+    bool configured = 5;
+    repeated Sensor sensors = 6;
 }
 
 message Sensor{
     int64 id = 1;
     string name = 2;
-    int64 recordIntervalSeconds = 3;
-    int64 historyIntervalSeconds = 4;
+    int64 configuredRecordIntervalSeconds = 3;
+    int64 configuredHistoryIntervalSeconds = 4;
 }
 
 message GetSensorStateRequest{
@@ -89,5 +92,5 @@ message GetSensorStateRequest{
 message SensorState {
     string unitId = 2;
     int64 created_at = 4;
-    optional double value = 3;
+    double value = 3;
 }

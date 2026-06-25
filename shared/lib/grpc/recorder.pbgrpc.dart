@@ -33,11 +33,11 @@ class DaemonServiceClient extends $grpc.Client {
 
   DaemonServiceClient(super.channel, {super.options, super.interceptors});
 
-  $grpc.ResponseFuture<$0.Station> createStation(
+  $grpc.ResponseFuture<$0.Station> setStation(
     $0.StationDefinition request, {
     $grpc.CallOptions? options,
   }) {
-    return $createUnaryCall(_$createStation, request, options: options);
+    return $createUnaryCall(_$setStation, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Station> getStation(
@@ -45,13 +45,6 @@ class DaemonServiceClient extends $grpc.Client {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$getStation, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.Station> updateStation(
-    $0.UpdateStationRequest request, {
-    $grpc.CallOptions? options,
-  }) {
-    return $createUnaryCall(_$updateStation, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.UpdateSensorsResponse> updateSensors(
@@ -70,20 +63,15 @@ class DaemonServiceClient extends $grpc.Client {
 
   // method descriptors
 
-  static final _$createStation =
+  static final _$setStation =
       $grpc.ClientMethod<$0.StationDefinition, $0.Station>(
-          '/recorder.DaemonService/CreateStation',
+          '/recorder.DaemonService/SetStation',
           ($0.StationDefinition value) => value.writeToBuffer(),
           $0.Station.fromBuffer);
   static final _$getStation =
       $grpc.ClientMethod<$0.GetStationRequest, $0.Station>(
           '/recorder.DaemonService/GetStation',
           ($0.GetStationRequest value) => value.writeToBuffer(),
-          $0.Station.fromBuffer);
-  static final _$updateStation =
-      $grpc.ClientMethod<$0.UpdateStationRequest, $0.Station>(
-          '/recorder.DaemonService/UpdateStation',
-          ($0.UpdateStationRequest value) => value.writeToBuffer(),
           $0.Station.fromBuffer);
   static final _$updateSensors =
       $grpc.ClientMethod<$0.UpdateSensorsRequest, $0.UpdateSensorsResponse>(
@@ -102,8 +90,8 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   DaemonServiceBase() {
     $addMethod($grpc.ServiceMethod<$0.StationDefinition, $0.Station>(
-        'CreateStation',
-        createStation_Pre,
+        'SetStation',
+        setStation_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.StationDefinition.fromBuffer(value),
@@ -114,14 +102,6 @@ abstract class DaemonServiceBase extends $grpc.Service {
         false,
         false,
         ($core.List<$core.int> value) => $0.GetStationRequest.fromBuffer(value),
-        ($0.Station value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UpdateStationRequest, $0.Station>(
-        'UpdateStation',
-        updateStation_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) =>
-            $0.UpdateStationRequest.fromBuffer(value),
         ($0.Station value) => value.writeToBuffer()));
     $addMethod(
         $grpc.ServiceMethod<$0.UpdateSensorsRequest, $0.UpdateSensorsResponse>(
@@ -141,12 +121,12 @@ abstract class DaemonServiceBase extends $grpc.Service {
         ($0.PingMessage value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.Station> createStation_Pre($grpc.ServiceCall $call,
+  $async.Future<$0.Station> setStation_Pre($grpc.ServiceCall $call,
       $async.Future<$0.StationDefinition> $request) async {
-    return createStation($call, await $request);
+    return setStation($call, await $request);
   }
 
-  $async.Future<$0.Station> createStation(
+  $async.Future<$0.Station> setStation(
       $grpc.ServiceCall call, $0.StationDefinition request);
 
   $async.Future<$0.Station> getStation_Pre($grpc.ServiceCall $call,
@@ -156,14 +136,6 @@ abstract class DaemonServiceBase extends $grpc.Service {
 
   $async.Future<$0.Station> getStation(
       $grpc.ServiceCall call, $0.GetStationRequest request);
-
-  $async.Future<$0.Station> updateStation_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.UpdateStationRequest> $request) async {
-    return updateStation($call, await $request);
-  }
-
-  $async.Future<$0.Station> updateStation(
-      $grpc.ServiceCall call, $0.UpdateStationRequest request);
 
   $async.Future<$0.UpdateSensorsResponse> updateSensors_Pre(
       $grpc.ServiceCall $call,

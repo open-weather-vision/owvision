@@ -16,12 +16,13 @@ class StationRepository {
 
   StationInfo _fromResult({required StationTableData result}) {
     return StationInfo(
-      id: result.id,
+      uuid: result.uuid,
       name: result.name,
       createdAt: result.createdAt,
       latitude: result.latitude,
       longitude: result.longitude,
-      version: result.version,
+      interfaceName: result.interfaceName,
+      configured: result.configured,
     );
   }
 
@@ -37,14 +38,14 @@ class StationRepository {
   }
 
   /// Deletes a station.
-  Future<bool> deleteOne({required int id}) async {
+  Future<bool> deleteOne({required String uuid}) async {
     try {
       int deleted = await (_database.delete(
         _database.stationTable,
-      )..where((s) => s.id.equals(id))).go();
+      )..where((s) => s.uuid.equals(uuid))).go();
       await (_database.delete(
         _database.sensorTable,
-      )..where((s) => s.stationId.equals(id))).go();
+      )..where((s) => s.stationUuid.equals(uuid))).go();
       return deleted != 0;
     } catch (e) {
       logger.severe(e);
@@ -52,17 +53,17 @@ class StationRepository {
     }
   }
 
-  /// Checks if a station with the passed name already exists.
-  Future<bool> exists({required String name}) async {
-    return (await getByName(name: name)) != null;
+  /// Checks if a station with the passed uuid already exists.
+  Future<bool> exists({required String uuid}) async {
+    return (await getByUuid(uuid: uuid)) != null;
   }
 
-  // Gets a station by name.
-  Future<StationInfo?> getByName({required String name}) async {
+  // Gets a station by uuid.
+  Future<StationInfo?> getByUuid({required String uuid}) async {
     try {
       final result = await (_database.select(
         _database.stationTable,
-      )..where((station) => station.name.equals(name))).getSingleOrNull();
+      )..where((station) => station.uuid.equals(uuid))).getSingleOrNull();
       return result != null ? _fromResult(result: result) : null;
     } catch (e) {
       logger.severe(e);
@@ -70,29 +71,18 @@ class StationRepository {
     }
   }
 
-  // Gets a station by id.
-  Future<StationInfo?> getById({required int id}) async {
+  // Gets a station by uuid.
+  Future<StationAndSensors?> getStationAndSensorsByUuid({
+    required String uuid,
+  }) async {
     try {
-      final result = await (_database.select(
-        _database.stationTable,
-      )..where((station) => station.id.equals(id))).getSingleOrNull();
-      return result != null ? _fromResult(result: result) : null;
-    } catch (e) {
-      logger.severe(e);
-      return null;
-    }
-  }
-
-  // Gets a station by id.
-  Future<StationAndSensors?> getStationAndSensorsById({required int id}) async {
-    try {
-      final station = await getById(id: id);
+      final station = await getByUuid(uuid: uuid);
       if (station == null) {
         return null;
       }
       final result = await (_database.select(
         _database.sensorTable,
-      )..where((s) => s.stationId.equals(id))).get();
+      )..where((s) => s.stationUuid.equals(uuid))).get();
       final sensors = result
           .map((s) => SensorRepository.fromResult(result: s))
           .toList();
@@ -104,31 +94,25 @@ class StationRepository {
   }
 
   /// Creates a weather station and its sensors in a single atomic transaction.
-  Future<StationAndSensors?> create({
+  Future<StationAndSensors> create({
     required StationInfo station,
     required List<Sensor> sensors,
   }) async {
     try {
       return await _database.transaction(() async {
-        final stationId = await _database
+        await _database
             .into(_database.stationTable)
             .insert(
               StationTableCompanion.insert(
-                name: station.name,
+                name: Value(station.name),
+                interfaceName: station.interfaceName,
+                uuid: station.uuid,
+                configured: Value(station.configured),
                 createdAt: station.createdAt,
-                longitude: station.longitude,
-                latitude: station.latitude,
-                version: station.version,
+                longitude: Value(station.longitude),
+                latitude: Value(station.latitude),
               ),
             );
-        final createdStation = StationInfo(
-          id: stationId,
-          createdAt: station.createdAt,
-          latitude: station.latitude,
-          longitude: station.longitude,
-          name: station.name,
-          version: station.version,
-        );
         final insertedSensors = <Sensor>[];
         for (final sensor in sensors) {
           final sensorId = await _database
@@ -136,7 +120,7 @@ class StationRepository {
               .insert(
                 SensorTableCompanion.insert(
                   name: sensor.name,
-                  stationId: stationId,
+                  stationUuid: station.uuid,
                   element: sensor.element,
                   storageUnitId: sensor.storageUnit.id,
                   recordIntervalSeconds: Value(sensor.recordIntervalSeconds),
@@ -147,7 +131,7 @@ class StationRepository {
             Sensor(
               id: sensorId,
               name: sensor.name,
-              stationId: stationId,
+              stationUuid: station.uuid,
               element: sensor.element,
               storageUnit: sensor.storageUnit,
               recordIntervalSeconds: sensor.recordIntervalSeconds,
@@ -155,14 +139,11 @@ class StationRepository {
             ),
           );
         }
-        return StationAndSensors(
-          info: createdStation,
-          sensors: insertedSensors,
-        );
+        return StationAndSensors(info: station, sensors: insertedSensors);
       });
     } catch (e) {
       logger.severe(e);
-      return null;
+      throw Exception("Failed to create station and sensors: ${e.toString()}");
     }
   }
 

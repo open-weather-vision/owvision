@@ -68,15 +68,15 @@ class LiveService {
 
   /// Registers a handler that gets executed everytime the recorder sends a new sensor update.
   Future<EventListener<SensorUpdate>> watchStation({
-    required int stationId,
+    required String stationUuid,
     required Function(SensorUpdate) handler,
   }) async {
-    final station = await getIt<StationService>().getById(id: stationId);
+    final station = await getIt<StationService>().getByUuid(uuid: stationUuid);
     if (station == null) {
-      throw StationNotFoundException(stationId);
+      throw StationNotFoundException(stationUuid);
     }
     final listener = EventListener("sensor_update", (SensorUpdate update) {
-      if (update.sensor.stationId == station.id) {
+      if (update.sensor.stationUuid == station.uuid) {
         handler(update);
       }
     });
@@ -117,7 +117,7 @@ Future<GrpcError?> authInterceptor(
   return null;
 }
 
-/// Implementation of the RemoveRecorderService
+/// Implementation of the DaemonService defined in the proto file. This service gets called by the recorder to send new sensor updates and create requests for new stations.
 class RecorderService extends grpc.DaemonServiceBase {
   final StationService _stationService;
   final SensorService _sensorService;
@@ -126,51 +126,67 @@ class RecorderService extends grpc.DaemonServiceBase {
   RecorderService(this._stationService, this._sensorService, this._events);
 
   @override
-  Future<grpc.Station> createStation(
+  Future<grpc.Station> setStation(
     ServiceCall call,
     grpc.StationDefinition request,
   ) async {
+    // Check if station exists (by Uuid). If not, create it.
     try {
-      final result = await _stationService.create(
-        station: StationInfo.create(
-          name: request.name,
-          longitude: request.longitude,
-          latitude: request.latitude,
-          version: request.version,
-        ),
-        sensors: request.sensors.map((sensor) {
+      if (!await _stationService.exists(uuid: request.uuid)) {
+        logger.info(
+          "Creating station '${request.name}' with uuid '${request.uuid}' and ${request.sensors.length} sensors.",
+        );
+        final station = StationInfo.createUnconfigured(
+          id: request.uuid,
+          interfaceName: request.interfaceName,
+        );
+        final sensors = request.sensors.map((sensor) {
           final element = SensorElement.values.byName(sensor.element);
           return Sensor.create(
             name: sensor.name,
+            stationUuid: station.uuid,
             element: element,
             storageUnit: SensorElement.defaultUnit(element: element),
-            recordIntervalSeconds: sensor.hasRecordIntervalSeconds()
-                ? sensor.recordIntervalSeconds.toInt()
-                : defaultRecordIntervalSeconds,
-            historyIntervalSeconds: sensor.hasHistoryIntervalSeconds()
-                ? sensor.historyIntervalSeconds.toInt()
-                : defaultHistoryIntervalSeconds,
+            recordIntervalSeconds: sensor.defaultHistoryIntervalSeconds.toInt(),
+            historyIntervalSeconds: sensor.defaultHistoryIntervalSeconds
+                .toInt(),
           );
-        }).toList(),
-      );
-      if (result == null) {
-        throw Exception("Internal error!");
-      }
-      return grpc.Station(
-        id: Int64(result.info.id),
-        version: result.info.version,
-        sensors: result.sensors.map(
-          (sensor) => grpc.Sensor(
-            id: Int64(sensor.id),
-            name: sensor.name,
-            recordIntervalSeconds: Int64(sensor.recordIntervalSeconds),
-            historyIntervalSeconds: Int64(sensor.historyIntervalSeconds),
+        }).toList();
+        final result = await _stationService.create(
+          station: station,
+          sensors: sensors,
+        );
+        return grpc.Station(
+          configured: result.info.configured,
+          latitude: result.info.latitude,
+          longitude: result.info.longitude,
+          name: result.info.name,
+          uuid: result.info.uuid,
+          sensors: result.sensors.map(
+            (sensor) => grpc.Sensor(
+              id: Int64(sensor.id),
+              name: sensor.name,
+              configuredRecordIntervalSeconds: Int64(
+                sensor.recordIntervalSeconds,
+              ),
+              configuredHistoryIntervalSeconds: Int64(
+                sensor.historyIntervalSeconds,
+              ),
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        logger.info(
+          "Station with uuid '${request.uuid}' already exists. Updating station info and sensors.",
+        );
+        logger.warning("Not implemented yet!");
+        throw GrpcError.unimplemented(
+          "Updating station info and sensors is not implemented yet!",
+        );
+      }
     } catch (e) {
-      logger.warning("Failed to create station: ${e.toString()}");
-      throw GrpcError.internal("Failed to create station: ${e.toString()}");
+      logger.warning("Failed to set station: ${e.toString()}");
+      throw GrpcError.internal("Failed to set station: ${e.toString()}");
     }
   }
 
@@ -216,7 +232,7 @@ class RecorderService extends grpc.DaemonServiceBase {
     ServiceCall call,
     grpc.GetStationRequest request,
   ) async {
-    final result = await _stationService.getStationAndSensorsById(
+    final result = await _stationService.getStationAndSensorsByUuid(
       id: request.stationId.toInt(),
     );
     if (result == null) {
@@ -225,7 +241,7 @@ class RecorderService extends grpc.DaemonServiceBase {
       );
     }
     return grpc.Station(
-      id: Int64(result.info.id),
+      id: Int64(result.info.uuid),
       version: result.info.version,
       sensors: result.sensors.map(
         (sensor) => grpc.Sensor(
@@ -282,6 +298,6 @@ class SensorUpdate {
 
   @override
   String toString() {
-    return "${sensor.name}@${sensor.stationId}: $state";
+    return "${sensor.name}@${sensor.stationUuid}: $state";
   }
 }

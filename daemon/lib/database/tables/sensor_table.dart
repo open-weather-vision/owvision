@@ -7,9 +7,9 @@ const defaultHistoryIntervalSeconds = 3600;
 
 class SensorTable extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get stationId => integer().references(
+  TextColumn get stationUuid => text().references(
     StationTable,
-    #id,
+    #uuid,
     onDelete: KeyAction.cascade,
     onUpdate: KeyAction.cascade,
   )();
@@ -23,6 +23,6 @@ class SensorTable extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-    {stationId, name},
+    {stationUuid, name},
   ];
 }

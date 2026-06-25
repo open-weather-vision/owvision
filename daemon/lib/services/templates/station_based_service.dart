@@ -11,7 +11,7 @@ abstract class StationBasedService {
 
   Future<void> start() async {
     List<StationInfo> stations = await stationService.getAll();
-    final futures = stations.map((station) => onStationCreate(station.id));
+    final futures = stations.map((station) => onStationCreate(station.uuid));
     await Future.wait(futures);
     stationService.watch(
       handler: (event, id) async {
@@ -30,9 +30,9 @@ abstract class StationBasedService {
     );
   }
 
-  Future<void> onStationCreate(int stationId);
+  Future<void> onStationCreate(String stationUuid);
 
-  void onStationDelete(int stationId);
+  void onStationDelete(String stationUuid);
 
   void onStationDeleteAll();
 }

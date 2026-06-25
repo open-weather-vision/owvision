@@ -15,7 +15,11 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'recorder.pbenum.dart';
+
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
+export 'recorder.pbenum.dart';
 
 class PingMessage extends $pb.GeneratedMessage {
   factory PingMessage({
@@ -73,10 +77,10 @@ class PingMessage extends $pb.GeneratedMessage {
 
 class GetStationRequest extends $pb.GeneratedMessage {
   factory GetStationRequest({
-    $fixnum.Int64? stationId,
+    $core.String? uuid,
   }) {
     final result = create();
-    if (stationId != null) result.stationId = stationId;
+    if (uuid != null) result.uuid = uuid;
     return result;
   }
 
@@ -93,7 +97,7 @@ class GetStationRequest extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'GetStationRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'recorder'),
       createEmptyInstance: create)
-    ..aInt64(1, _omitFieldNames ? '' : 'stationId', protoName: 'stationId')
+    ..aOS(1, _omitFieldNames ? '' : 'uuid')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -116,13 +120,13 @@ class GetStationRequest extends $pb.GeneratedMessage {
   static GetStationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $fixnum.Int64 get stationId => $_getI64(0);
+  $core.String get uuid => $_getSZ(0);
   @$pb.TagNumber(1)
-  set stationId($fixnum.Int64 value) => $_setInt64(0, value);
+  set uuid($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasStationId() => $_has(0);
+  $core.bool hasUuid() => $_has(0);
   @$pb.TagNumber(1)
-  void clearStationId() => $_clearField(1);
+  void clearUuid() => $_clearField(1);
 }
 
 class UpdateSensorsRequest extends $pb.GeneratedMessage {
@@ -383,75 +387,6 @@ class UpdateSensorResponse extends $pb.GeneratedMessage {
   void clearError() => $_clearField(3);
 }
 
-class UpdateStationRequest extends $pb.GeneratedMessage {
-  factory UpdateStationRequest({
-    $fixnum.Int64? stationId,
-    StationDefinition? definition,
-  }) {
-    final result = create();
-    if (stationId != null) result.stationId = stationId;
-    if (definition != null) result.definition = definition;
-    return result;
-  }
-
-  UpdateStationRequest._();
-
-  factory UpdateStationRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(data, registry);
-  factory UpdateStationRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateStationRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'recorder'),
-      createEmptyInstance: create)
-    ..aInt64(1, _omitFieldNames ? '' : 'stationId', protoName: 'stationId')
-    ..aOM<StationDefinition>(2, _omitFieldNames ? '' : 'definition',
-        subBuilder: StationDefinition.create)
-    ..hasRequiredFields = false;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateStationRequest clone() => deepCopy();
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateStationRequest copyWith(void Function(UpdateStationRequest) updates) =>
-      super.copyWith((message) => updates(message as UpdateStationRequest))
-          as UpdateStationRequest;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static UpdateStationRequest create() => UpdateStationRequest._();
-  @$core.override
-  UpdateStationRequest createEmptyInstance() => create();
-  @$core.pragma('dart2js:noInline')
-  static UpdateStationRequest getDefault() => _defaultInstance ??=
-      $pb.GeneratedMessage.$_defaultFor<UpdateStationRequest>(create);
-  static UpdateStationRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $fixnum.Int64 get stationId => $_getI64(0);
-  @$pb.TagNumber(1)
-  set stationId($fixnum.Int64 value) => $_setInt64(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasStationId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearStationId() => $_clearField(1);
-
-  @$pb.TagNumber(2)
-  StationDefinition get definition => $_getN(1);
-  @$pb.TagNumber(2)
-  set definition(StationDefinition value) => $_setField(2, value);
-  @$pb.TagNumber(2)
-  $core.bool hasDefinition() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearDefinition() => $_clearField(2);
-  @$pb.TagNumber(2)
-  StationDefinition ensureDefinition() => $_ensure(1);
-}
-
 class GetStationDefinitionRequest extends $pb.GeneratedMessage {
   factory GetStationDefinitionRequest() => create();
 
@@ -495,18 +430,14 @@ class GetStationDefinitionRequest extends $pb.GeneratedMessage {
 
 class StationDefinition extends $pb.GeneratedMessage {
   factory StationDefinition({
-    $core.String? name,
+    $core.String? uuid,
+    $core.String? interfaceName,
     $core.Iterable<SensorDefinition>? sensors,
-    $core.double? longitude,
-    $core.double? latitude,
-    $core.int? version,
   }) {
     final result = create();
-    if (name != null) result.name = name;
+    if (uuid != null) result.uuid = uuid;
+    if (interfaceName != null) result.interfaceName = interfaceName;
     if (sensors != null) result.sensors.addAll(sensors);
-    if (longitude != null) result.longitude = longitude;
-    if (latitude != null) result.latitude = latitude;
-    if (version != null) result.version = version;
     return result;
   }
 
@@ -523,12 +454,10 @@ class StationDefinition extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'StationDefinition',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'recorder'),
       createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..pPM<SensorDefinition>(2, _omitFieldNames ? '' : 'sensors',
+    ..aOS(1, _omitFieldNames ? '' : 'uuid')
+    ..aOS(2, _omitFieldNames ? '' : 'interfaceName', protoName: 'interfaceName')
+    ..pPM<SensorDefinition>(3, _omitFieldNames ? '' : 'sensors',
         subBuilder: SensorDefinition.create)
-    ..aD(3, _omitFieldNames ? '' : 'longitude')
-    ..aD(4, _omitFieldNames ? '' : 'latitude')
-    ..aI(5, _omitFieldNames ? '' : 'version')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -551,59 +480,48 @@ class StationDefinition extends $pb.GeneratedMessage {
   static StationDefinition? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get name => $_getSZ(0);
+  $core.String get uuid => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String value) => $_setString(0, value);
+  set uuid($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasName() => $_has(0);
+  $core.bool hasUuid() => $_has(0);
   @$pb.TagNumber(1)
-  void clearName() => $_clearField(1);
+  void clearUuid() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $pb.PbList<SensorDefinition> get sensors => $_getList(1);
+  $core.String get interfaceName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set interfaceName($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasInterfaceName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearInterfaceName() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.double get longitude => $_getN(2);
-  @$pb.TagNumber(3)
-  set longitude($core.double value) => $_setDouble(2, value);
-  @$pb.TagNumber(3)
-  $core.bool hasLongitude() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearLongitude() => $_clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.double get latitude => $_getN(3);
-  @$pb.TagNumber(4)
-  set latitude($core.double value) => $_setDouble(3, value);
-  @$pb.TagNumber(4)
-  $core.bool hasLatitude() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearLatitude() => $_clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.int get version => $_getIZ(4);
-  @$pb.TagNumber(5)
-  set version($core.int value) => $_setSignedInt32(4, value);
-  @$pb.TagNumber(5)
-  $core.bool hasVersion() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearVersion() => $_clearField(5);
+  $pb.PbList<SensorDefinition> get sensors => $_getList(2);
 }
 
 class SensorDefinition extends $pb.GeneratedMessage {
   factory SensorDefinition({
     $core.String? name,
     $core.String? element,
-    $fixnum.Int64? recordIntervalSeconds,
-    $fixnum.Int64? historyIntervalSeconds,
+    $fixnum.Int64? defaultRecordIntervalSeconds,
+    RecordIntervalConfigurationType? recordIntervalConfigurationType,
+    $fixnum.Int64? defaultHistoryIntervalSeconds,
+    RecordIntervalConfigurationType? historyIntervalConfigurationType,
   }) {
     final result = create();
     if (name != null) result.name = name;
     if (element != null) result.element = element;
-    if (recordIntervalSeconds != null)
-      result.recordIntervalSeconds = recordIntervalSeconds;
-    if (historyIntervalSeconds != null)
-      result.historyIntervalSeconds = historyIntervalSeconds;
+    if (defaultRecordIntervalSeconds != null)
+      result.defaultRecordIntervalSeconds = defaultRecordIntervalSeconds;
+    if (recordIntervalConfigurationType != null)
+      result.recordIntervalConfigurationType = recordIntervalConfigurationType;
+    if (defaultHistoryIntervalSeconds != null)
+      result.defaultHistoryIntervalSeconds = defaultHistoryIntervalSeconds;
+    if (historyIntervalConfigurationType != null)
+      result.historyIntervalConfigurationType =
+          historyIntervalConfigurationType;
     return result;
   }
 
@@ -622,10 +540,18 @@ class SensorDefinition extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'element')
-    ..aInt64(3, _omitFieldNames ? '' : 'recordIntervalSeconds',
-        protoName: 'recordIntervalSeconds')
-    ..aInt64(4, _omitFieldNames ? '' : 'historyIntervalSeconds',
-        protoName: 'historyIntervalSeconds')
+    ..aInt64(3, _omitFieldNames ? '' : 'defaultRecordIntervalSeconds',
+        protoName: 'defaultRecordIntervalSeconds')
+    ..aE<RecordIntervalConfigurationType>(
+        4, _omitFieldNames ? '' : 'recordIntervalConfigurationType',
+        protoName: 'recordIntervalConfigurationType',
+        enumValues: RecordIntervalConfigurationType.values)
+    ..aInt64(5, _omitFieldNames ? '' : 'defaultHistoryIntervalSeconds',
+        protoName: 'defaultHistoryIntervalSeconds')
+    ..aE<RecordIntervalConfigurationType>(
+        6, _omitFieldNames ? '' : 'historyIntervalConfigurationType',
+        protoName: 'historyIntervalConfigurationType',
+        enumValues: RecordIntervalConfigurationType.values)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -666,34 +592,63 @@ class SensorDefinition extends $pb.GeneratedMessage {
   void clearElement() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $fixnum.Int64 get recordIntervalSeconds => $_getI64(2);
+  $fixnum.Int64 get defaultRecordIntervalSeconds => $_getI64(2);
   @$pb.TagNumber(3)
-  set recordIntervalSeconds($fixnum.Int64 value) => $_setInt64(2, value);
+  set defaultRecordIntervalSeconds($fixnum.Int64 value) => $_setInt64(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasRecordIntervalSeconds() => $_has(2);
+  $core.bool hasDefaultRecordIntervalSeconds() => $_has(2);
   @$pb.TagNumber(3)
-  void clearRecordIntervalSeconds() => $_clearField(3);
+  void clearDefaultRecordIntervalSeconds() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $fixnum.Int64 get historyIntervalSeconds => $_getI64(3);
+  RecordIntervalConfigurationType get recordIntervalConfigurationType =>
+      $_getN(3);
   @$pb.TagNumber(4)
-  set historyIntervalSeconds($fixnum.Int64 value) => $_setInt64(3, value);
+  set recordIntervalConfigurationType(RecordIntervalConfigurationType value) =>
+      $_setField(4, value);
   @$pb.TagNumber(4)
-  $core.bool hasHistoryIntervalSeconds() => $_has(3);
+  $core.bool hasRecordIntervalConfigurationType() => $_has(3);
   @$pb.TagNumber(4)
-  void clearHistoryIntervalSeconds() => $_clearField(4);
+  void clearRecordIntervalConfigurationType() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get defaultHistoryIntervalSeconds => $_getI64(4);
+  @$pb.TagNumber(5)
+  set defaultHistoryIntervalSeconds($fixnum.Int64 value) =>
+      $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasDefaultHistoryIntervalSeconds() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDefaultHistoryIntervalSeconds() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  RecordIntervalConfigurationType get historyIntervalConfigurationType =>
+      $_getN(5);
+  @$pb.TagNumber(6)
+  set historyIntervalConfigurationType(RecordIntervalConfigurationType value) =>
+      $_setField(6, value);
+  @$pb.TagNumber(6)
+  $core.bool hasHistoryIntervalConfigurationType() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearHistoryIntervalConfigurationType() => $_clearField(6);
 }
 
 class Station extends $pb.GeneratedMessage {
   factory Station({
-    $fixnum.Int64? id,
+    $core.String? uuid,
+    $core.String? name,
+    $core.double? longitude,
+    $core.double? latitude,
+    $core.bool? configured,
     $core.Iterable<Sensor>? sensors,
-    $core.int? version,
   }) {
     final result = create();
-    if (id != null) result.id = id;
+    if (uuid != null) result.uuid = uuid;
+    if (name != null) result.name = name;
+    if (longitude != null) result.longitude = longitude;
+    if (latitude != null) result.latitude = latitude;
+    if (configured != null) result.configured = configured;
     if (sensors != null) result.sensors.addAll(sensors);
-    if (version != null) result.version = version;
     return result;
   }
 
@@ -710,10 +665,13 @@ class Station extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'Station',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'recorder'),
       createEmptyInstance: create)
-    ..aInt64(1, _omitFieldNames ? '' : 'id')
-    ..pPM<Sensor>(2, _omitFieldNames ? '' : 'sensors',
+    ..aOS(1, _omitFieldNames ? '' : 'uuid')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aD(3, _omitFieldNames ? '' : 'longitude')
+    ..aD(4, _omitFieldNames ? '' : 'latitude')
+    ..aOB(5, _omitFieldNames ? '' : 'configured')
+    ..pPM<Sensor>(6, _omitFieldNames ? '' : 'sensors',
         subBuilder: Sensor.create)
-    ..aI(3, _omitFieldNames ? '' : 'version')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -735,41 +693,69 @@ class Station extends $pb.GeneratedMessage {
   static Station? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $fixnum.Int64 get id => $_getI64(0);
+  $core.String get uuid => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($fixnum.Int64 value) => $_setInt64(0, value);
+  set uuid($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasUuid() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => $_clearField(1);
+  void clearUuid() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $pb.PbList<Sensor> get sensors => $_getList(1);
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.int get version => $_getIZ(2);
+  $core.double get longitude => $_getN(2);
   @$pb.TagNumber(3)
-  set version($core.int value) => $_setSignedInt32(2, value);
+  set longitude($core.double value) => $_setDouble(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasVersion() => $_has(2);
+  $core.bool hasLongitude() => $_has(2);
   @$pb.TagNumber(3)
-  void clearVersion() => $_clearField(3);
+  void clearLongitude() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.double get latitude => $_getN(3);
+  @$pb.TagNumber(4)
+  set latitude($core.double value) => $_setDouble(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasLatitude() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearLatitude() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get configured => $_getBF(4);
+  @$pb.TagNumber(5)
+  set configured($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasConfigured() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearConfigured() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $pb.PbList<Sensor> get sensors => $_getList(5);
 }
 
 class Sensor extends $pb.GeneratedMessage {
   factory Sensor({
     $fixnum.Int64? id,
     $core.String? name,
-    $fixnum.Int64? recordIntervalSeconds,
-    $fixnum.Int64? historyIntervalSeconds,
+    $fixnum.Int64? configuredRecordIntervalSeconds,
+    $fixnum.Int64? configuredHistoryIntervalSeconds,
   }) {
     final result = create();
     if (id != null) result.id = id;
     if (name != null) result.name = name;
-    if (recordIntervalSeconds != null)
-      result.recordIntervalSeconds = recordIntervalSeconds;
-    if (historyIntervalSeconds != null)
-      result.historyIntervalSeconds = historyIntervalSeconds;
+    if (configuredRecordIntervalSeconds != null)
+      result.configuredRecordIntervalSeconds = configuredRecordIntervalSeconds;
+    if (configuredHistoryIntervalSeconds != null)
+      result.configuredHistoryIntervalSeconds =
+          configuredHistoryIntervalSeconds;
     return result;
   }
 
@@ -788,10 +774,10 @@ class Sensor extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aInt64(3, _omitFieldNames ? '' : 'recordIntervalSeconds',
-        protoName: 'recordIntervalSeconds')
-    ..aInt64(4, _omitFieldNames ? '' : 'historyIntervalSeconds',
-        protoName: 'historyIntervalSeconds')
+    ..aInt64(3, _omitFieldNames ? '' : 'configuredRecordIntervalSeconds',
+        protoName: 'configuredRecordIntervalSeconds')
+    ..aInt64(4, _omitFieldNames ? '' : 'configuredHistoryIntervalSeconds',
+        protoName: 'configuredHistoryIntervalSeconds')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -831,22 +817,24 @@ class Sensor extends $pb.GeneratedMessage {
   void clearName() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $fixnum.Int64 get recordIntervalSeconds => $_getI64(2);
+  $fixnum.Int64 get configuredRecordIntervalSeconds => $_getI64(2);
   @$pb.TagNumber(3)
-  set recordIntervalSeconds($fixnum.Int64 value) => $_setInt64(2, value);
+  set configuredRecordIntervalSeconds($fixnum.Int64 value) =>
+      $_setInt64(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasRecordIntervalSeconds() => $_has(2);
+  $core.bool hasConfiguredRecordIntervalSeconds() => $_has(2);
   @$pb.TagNumber(3)
-  void clearRecordIntervalSeconds() => $_clearField(3);
+  void clearConfiguredRecordIntervalSeconds() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $fixnum.Int64 get historyIntervalSeconds => $_getI64(3);
+  $fixnum.Int64 get configuredHistoryIntervalSeconds => $_getI64(3);
   @$pb.TagNumber(4)
-  set historyIntervalSeconds($fixnum.Int64 value) => $_setInt64(3, value);
+  set configuredHistoryIntervalSeconds($fixnum.Int64 value) =>
+      $_setInt64(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasHistoryIntervalSeconds() => $_has(3);
+  $core.bool hasConfiguredHistoryIntervalSeconds() => $_has(3);
   @$pb.TagNumber(4)
-  void clearHistoryIntervalSeconds() => $_clearField(4);
+  void clearConfiguredHistoryIntervalSeconds() => $_clearField(4);
 }
 
 class GetSensorStateRequest extends $pb.GeneratedMessage {

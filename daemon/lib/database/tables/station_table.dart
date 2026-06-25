@@ -1,10 +1,12 @@
 import 'package:drift/drift.dart';
+import 'package:shared/pretty_print.dart';
 
 class StationTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text().unique().withLength(min: 1)();
+  TextColumn get uuid => text().unique().withLength(max: 36, min: 36)();
+  TextColumn get name => text().nullable().unique().withLength(min: 1)();
   DateTimeColumn get createdAt => dateTime()();
-  RealColumn get longitude => real()();
-  RealColumn get latitude => real()();
-  IntColumn get version => integer()();
+  RealColumn get longitude => real().nullable()();
+  RealColumn get latitude => real().nullable()();
+  TextColumn get interfaceName => text()();
+  BoolColumn get configured => boolean().withDefault(const Constant(false))();
 }

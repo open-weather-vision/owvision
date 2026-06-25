@@ -14,8 +14,8 @@ class StationService {
 
   StationService(this._stationRepository);
 
-  Future<StationInfo?> getById({required int id}) {
-    return _stationRepository.getById(id: id);
+  Future<StationInfo?> getByUuid({required String uuid}) {
+    return _stationRepository.getByUuid(uuid: uuid);
   }
 
   /// Gets all weather stations.
@@ -23,8 +23,10 @@ class StationService {
     return await _stationRepository.getAll();
   }
 
-  Future<StationAndSensors?> getStationAndSensorsById({required int id}) async {
-    return await _stationRepository.getStationAndSensorsById(id: id);
+  Future<StationAndSensors?> getStationAndSensorsByUuid({
+    required String uuid,
+  }) async {
+    return await _stationRepository.getStationAndSensorsByUuid(uuid: uuid);
   }
 
   /// Deletes all weather stations.
@@ -34,21 +36,25 @@ class StationService {
     return result;
   }
 
-  Future<bool> deleteOne({required int id}) async {
-    final result = await _stationRepository.deleteOne(id: id);
-    _events.emit("station_delete", id.toString());
+  Future<bool> deleteOne({required String uuid}) async {
+    final result = await _stationRepository.deleteOne(uuid: uuid);
+    _events.emit("station_delete", uuid);
     return result;
+  }
+
+  Future<bool> exists({required String uuid}) async {
+    return await _stationRepository.exists(uuid: uuid);
   }
 
   Set<EventListener<String>> watch({
     required Function(StationEvent, String) handler,
   }) {
-    final createListener = EventListener("station_create", (String id) {
-      handler(StationEvent.create, id);
+    final createListener = EventListener("station_create", (String uuid) {
+      handler(StationEvent.create, uuid);
     });
     _events.addEventListener(createListener);
-    final deleteListener = EventListener("station_delete", (String id) {
-      handler(StationEvent.delete, id);
+    final deleteListener = EventListener("station_delete", (String uuid) {
+      handler(StationEvent.delete, uuid);
     });
     _events.addEventListener(deleteListener);
     return {createListener, deleteListener};
@@ -61,12 +67,12 @@ class StationService {
   }
 
   /// Creates a weather station and its sensors.
-  Future<StationAndSensors?> create({
+  Future<StationAndSensors> create({
     required StationInfo station,
     required List<Sensor> sensors,
   }) async {
-    if (await _stationRepository.exists(name: station.name)) {
-      throw Exception("Station with name '${station.name}' already exists!");
+    if (await _stationRepository.exists(uuid: station.uuid)) {
+      throw Exception("Station with uuid '${station.uuid}' already exists!");
     } else {
       final result = await _stationRepository.create(
         station: station,
@@ -75,9 +81,7 @@ class StationService {
       logger.info(
         "Created station '${station.name}' with ${sensors.length} sensors",
       );
-      if (result != null) {
-        _events.emit("station_create", result.info.id.toString());
-      }
+      _events.emit("station_create", result.info.uuid.toString());
       return result;
     }
   }

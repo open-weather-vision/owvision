@@ -65,7 +65,7 @@ class StationController {
     }
 
     sensors ??=
-        (await _stationService.getStationAndSensorsById(
+        (await _stationService.getStationAndSensorsByUuid(
           id: idParsed,
         ))?.sensors.map((s) => s.name).toList() ??
         [];
@@ -102,7 +102,7 @@ class StationController {
         ),
       );
     }
-    final stationAndSensors = await _stationService.getStationAndSensorsById(
+    final stationAndSensors = await _stationService.getStationAndSensorsByUuid(
       id: idParsed,
     );
 
@@ -130,7 +130,7 @@ class StationController {
         ),
       );
     }
-    final station = await _stationService.getById(id: idParsed);
+    final station = await _stationService.getByUuid(id: idParsed);
     if (station == null) {
       return Response.notFound(
         jsonEncode(
